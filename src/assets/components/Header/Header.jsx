@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./header.css";
+
 import { IoMdPeople } from "react-icons/io";
 import { IoHome } from "react-icons/io5";
 import { GiArchiveResearch } from "react-icons/gi";
@@ -24,7 +24,7 @@ function Header() {
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
         <div className="flex items-center text-xl font-bold space-x-2">
           <img
-            className="w-16 h-16 md:w-20 md:h-20 transition-transform duration-500 transform rotate-x"
+            className="w-16 h-16 md:w-20 md:h-20 transition-transform duration-500 transform "
             src="https://nitsri.ac.in/images/nit-logo.png"
             alt=""
           />
