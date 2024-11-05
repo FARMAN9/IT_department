@@ -23,7 +23,7 @@ function Header() {
 
   return (
     <header className="fixed lg:static bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded border-gray-300 font-sans border z-50">
-      <div className="container mx-auto flex justify-between items-center md:p-2 py-2 px-4 ">
+      <div className="container mx-auto flex justify-between items-center md py-3 px-4">
         <div className="flex items-center text-lg font-bold space-x-2">
           <img
             className="w-16 h-16 md:w-20 md:h-20 transition-transform duration-500 transform "
@@ -31,7 +31,7 @@ function Header() {
             alt=""
           />
           <div className="md:flex-col self-center text-center md:text-left">
-            <a href="#" className="text-pretty md:text-4xl text-lg text-glow ">
+            <a href="#" className="text-pretty md:text-4xl text-lg">
               INFORMATION TECHNOLOGY
             </a>
             <hr className="" />

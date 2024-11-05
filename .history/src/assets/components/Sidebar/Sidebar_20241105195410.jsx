@@ -88,7 +88,7 @@ const AcademicSidebar = () => {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className="lg:hidden fixed top-5 right-1 z-50 p-2  rounded-md shadow-md  text-white ">
+        className="lg:hidden fixed top-5 right- z-50 p-2 bg- rounded-md shadow-md  bg-gradient-to-r from-blue-500 to-blue-500 text-white ">
         {isMobileOpen ? (
           <X className="w-6 h-6" />
         ) : (
@@ -107,12 +107,12 @@ const AcademicSidebar = () => {
       {/* Sidebar */}
       <div
         className={`
-        fixed lg:static  right-100  z-40 rounded-md shadow-md shadow-inner p-0 mt-20 md:mt-0  text-white rounded 
+        fixed lg:static  right-100  z-40 rounded-md shadow-md shadow-inner p-1 mt-20 md:mt-1  text-white rounded
         transform ${
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-10"
         }
         transition-transform duration-300 ease-in-out
-        md:w-80 w-full bg-white border-r border-gray-300 border-b border-gray-300 
+        w-100 bg-white border-r border-gray-300 border-b border-gray-300 
         overflow-y-auto
       `}>
         <nav className="flex flex-col h-full">
