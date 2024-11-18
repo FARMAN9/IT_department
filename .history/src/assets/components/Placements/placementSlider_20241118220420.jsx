@@ -128,9 +128,9 @@ const PlacementSlider = () => {
                   className={`p-4 inline ${
                     cardsToShow === 3
                       ? "w-1/3 "
-                      : cardsToShow === 4
+                      : cardsToShow === 2
                       ? "w-1/2 h-full"
-                      : "w-full"
+                      : "w-1/3"
                   } flex-shrink-0`}>
                   <div
                     className={` text-center space-y-4 sm:space-y-6 p-4 sm:p-6 ${

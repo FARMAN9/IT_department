@@ -116,7 +116,7 @@ const PlacementSlider = () => {
           </button>
 
           {/* Placement Cards */}
-          <div className="overflow-hidden w-[320px]   h-auto md:w-full lg:w-full ">
+          <div className="overflow-hidden w-[px]   h-auto md:w-full lg:w-full ">
             <div
               className="flex  m-5 transition-transform duration-500 ease-in-out"
               style={{
@@ -128,7 +128,7 @@ const PlacementSlider = () => {
                   className={`p-4 inline ${
                     cardsToShow === 3
                       ? "w-1/3 "
-                      : cardsToShow === 4
+                      : cardsToShow === 2
                       ? "w-1/2 h-full"
                       : "w-full"
                   } flex-shrink-0`}>
