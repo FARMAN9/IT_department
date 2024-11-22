@@ -12,6 +12,7 @@ import {
   House,
   X,
 } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 function Header() {
   const toggleMenu = (setMenu) => {
@@ -31,11 +32,11 @@ function Header() {
             alt=""
           />
           <div className="md:flex-col self-center text-center md:text-left">
-            <a
-              href="#"
+            <NavLink
+              to ="/"
               className="text-pretty md:text-4xl text-sm font-semibold text-glow  ">
               INFORMATION TECHNOLOGY
-            </a>
+            </NavLink>
             <hr className="" />
             <p className="md:text-sm text-xs text-glow  font-semibold ">
               National Institute of Technology Srinagar,Jammu & Kashmir

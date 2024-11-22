@@ -18,33 +18,12 @@ function Main() {
       <div className="min-h-auto flex lg:mr-10">
         <AcademicSidebar />
         <main className="flex-1 lg:ml-10  p-2 lg:p-6  ">
-          <ImageSlide />
-          <hr className="mt-2" />
-          <div className="flex flex-col md:flex-row-2 lg:flex-row xl:flex-row  gap-4">
-            <div className="flex-1">
-              <DepartmentOfItInfo />
-            </div>
-            <hr className="hidden md:block lg:block xl:block w-px bg-gray-300" />
-            <div className="flex-1">
-              <Mission_and_Vision />
-            </div>
-          </div>
-          <hr className="mt-2" />
-          <div className="flex flex-col md:flex-row-2 lg:flex-row xl:flex-row p-3 gap-4">
-            <div className="flex-1">
-              <Card title={name} />
-            </div>
-            <hr className="hidden md:block lg:block xl:block w-px bg-gray-300" />
-            <div className="flex-1">
-              <Card title={name2} />
-            </div>
-          </div>
-          <hr className="mt-2" />
-          <HodCard />
-          <hr className="mt-2" />
-          <PlacementSlider />
+        
+          
+          
+         
 
-          {/* Your main content 
+          
           <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
            
             <img
@@ -54,7 +33,7 @@ function Main() {
                shadow-lg transform transition-transform hover:shadow-2xl hover:scale-105"
             />
               </div>
-            */}
+         
         </main>
       </div>
     </>
