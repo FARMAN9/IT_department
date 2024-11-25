@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const HodCard = () => {
   return (
@@ -36,9 +37,10 @@ const HodCard = () => {
           and last but not least, our students.
         </p>
         <div className="self-start mt-4">
-          <button className="bg-blue-600 text-white font-sans h-10 hover:cursor shadow-xl shadow-blue-200 hover:bg-blue-700 rounded-lg p-2">
+          
+          <NavLink to="/about/hod-message" className="bg-blue-600 text-white font-sans h-10 hover:cursor shadow-xl shadow-blue-200 hover:bg-blue-700 rounded-lg p-2">
             Read more
-          </button>
+          </NavLink>
         </div>
       </div>
     </div>

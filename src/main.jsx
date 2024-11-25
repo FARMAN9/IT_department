@@ -7,6 +7,8 @@ import Main from './assets/components/Main/main.jsx';
 import Layout from './Layout.jsx';
 import HodMain from './assets/components/Main/HODMain.jsx';
 import VisionAndMissionMain from './assets/components/Main/VisionAndMissionMain.jsx';
+import AchievementMain from './assets/components/Main/AchievementMain.jsx';
+import ContactMain from './assets/components/Main/ContactMain.jsx';
 
 
 const router = createBrowserRouter([
@@ -29,7 +31,7 @@ const router = createBrowserRouter([
       ,
       {
         path:"/about/achievements",
-        element: <VisionAndMissionMain />,
+        element: <AchievementMain/>,
       },
       {
         path:"/about/infrastructure",
@@ -37,7 +39,7 @@ const router = createBrowserRouter([
       },
       {
         path:"/about/contact",
-        element: <VisionAndMissionMain />,
+        element: <ContactMain />,
       }
       ,
       {

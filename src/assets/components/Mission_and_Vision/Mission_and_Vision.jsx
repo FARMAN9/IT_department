@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 function MissionAndVision() {
   const mission =
@@ -11,12 +12,7 @@ function MissionAndVision() {
     "To inspire and empower students to pursue their passions and contribute to the global community",
     "To create a positive impact on the world through sustainable practices and innovative technologies",
     "To foster a culture of continuous learning and growth among students",
-    "To contribute to the development of the national infrastructure and resources required for the successful implementation of technology",
-    "To create a competitive and inclusive learning environment",
-    "To support and empower students to develop their skills and capabilities",
-    "To create a sense of belonging and pride in the students' achievements",
-    "To create a culture of collaboration and mutual support among students and faculty",
-    "To create a sense of community and camaraderie among students and faculty",
+   
   ];
   return (
     <div className=" mx-auto mt-3 bg-white rounded-lg shadow-lg text-lg   overflow-hidden">
@@ -47,6 +43,16 @@ function MissionAndVision() {
             <li key={index}>{item}</li>
           ))}
         </ul>
+        <div className="flex justify-center mt-4">
+          <NavLink to="/about/vision">
+            <button className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded-2xl item-left">
+              Read More
+            </button>
+          </NavLink>
+        </div>
+        
+          
+        
       </div>
     </div>
   );
