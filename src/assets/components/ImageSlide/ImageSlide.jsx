@@ -45,7 +45,7 @@ export default function ImageSlider() {
 
   return (
     <div
-      className="relative flex justify-center items-center w-full h-[400px] perspective-[1000px] border rounded-md shadow-lg "
+      className="relative justify-center items-center w-full h-[400px] perspective-[100px] border  rounded-md shadow-lg "
       onMouseEnter={stopAutoSlide}
       onMouseLeave={startAutoSlide}>
       {/* Slider Wrapper */}
@@ -58,7 +58,7 @@ export default function ImageSlider() {
           {images.map((src, index) => (
             <div
               key={index}
-              className="min-w-full h-full transform transition-all duration-700"
+              className="min-w-full h-full transform transition-all duration-700  rounded-md shadow-lg"
               style={{
                 transform: `rotateY(${(index - currentIndex) * 30}deg) scale(${
                   index === currentIndex ? 1 : 0.9
@@ -68,7 +68,7 @@ export default function ImageSlider() {
               <img
                 src={src}
                 alt={`Slide ${index + 1}`}
-                className="w-full h-full object-cover rounded-lg shadow-lg"
+                className="w-full h-full object-cover rounded-md shadow-lg bg-blue-200 "
               />
             </div>
           ))}
