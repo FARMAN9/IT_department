@@ -17,7 +17,7 @@ function Main() {
   return (
     <>
       <div className="min-h-screen flex lg:mr-10">
-        <AcademicSidebar />
+        
         <main className="flex-1 lg:ml-10 p-2 lg:p-6">
           <div className="max-w-6xl mx-auto p-6">
             {/* Header */}

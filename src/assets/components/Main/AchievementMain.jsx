@@ -27,7 +27,7 @@ function Main() {
   return (
     <>
       <div className="min-h-auto flex lg:mr-10">
-        <AcademicSidebar />
+        
         <main className="flex-1 lg:ml-10  p-2 lg:p-6  ">
       
         

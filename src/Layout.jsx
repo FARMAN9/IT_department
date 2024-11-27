@@ -5,18 +5,21 @@ import Sidebar from "./assets/components/Sidebar/Sidebar";
 import Footer from "./assets/components/Footer/Footer";
 import { Outlet } from "react-router-dom";
 
-
-
 const Layout = () => {
-    return (
-      <>
-       <Header></Header>
-       <Outlet/>
-       
-       <Footer></Footer>
-
-      </>
-    );
+  return (
+    <>
+      <Header />
+      <div className="min-h-screen flex flex-col">
+        <div className="flex flex-1">
+          <Sidebar />
+          <main className="flex-1 p-6">
+            <Outlet />
+          </main>
+        </div>
+        <Footer />
+      </div>
+    </>
+  );
 };
 
 export default Layout;

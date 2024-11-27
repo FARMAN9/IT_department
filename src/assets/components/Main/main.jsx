@@ -15,7 +15,7 @@ function Main() {
     <>
       <div className="min-h-auto flex flex-col lg:flex-row lg:mr-10">
         {/* Sidebar */}
-        <AcademicSidebar />
+        
 
         {/* Main Content */}
         <main className="flex-1 lg:ml-10 p-4 lg:p-6 ">

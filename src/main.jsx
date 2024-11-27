@@ -9,6 +9,10 @@ import HodMain from './assets/components/Main/HODMain.jsx';
 import VisionAndMissionMain from './assets/components/Main/VisionAndMissionMain.jsx';
 import AchievementMain from './assets/components/Main/AchievementMain.jsx';
 import ContactMain from './assets/components/Main/ContactMain.jsx';
+import ProgramMain from './assets/components/Main/ProgramesMain.jsx';
+import CoordinatorMain from './assets/components/Main/CoordinatorMain.jsx';
+import SyllabusMain from './assets/components/Main/SyllabusMain.jsx';
+import TimeTableMain from './assets/components/Main/TimeTablemain.jsx';
 
 
 const router = createBrowserRouter([
@@ -44,19 +48,19 @@ const router = createBrowserRouter([
       ,
       {
         path: "/academic/programmes",
-        element: <VisionAndMissionMain />,
+        element: <ProgramMain />,
       },
       {
         path: "/academic/coordinators",
-        element: <VisionAndMissionMain />,
+        element: <CoordinatorMain />,
       },
       {
         path: "/academic/syllabus",
-        element: <VisionAndMissionMain />,
+        element: <SyllabusMain />,
       },
       {
         path: "/academic/timetable",
-        element: <VisionAndMissionMain />,
+        element: <TimeTableMain />,
       },
       {
         path: "/academic/calendar",
@@ -76,7 +80,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/people/alumni",
-        element: <VisionAndMissionMain />,
+        element: <TimeTableMain />,
       },
       {
         path: "/people/staff",
@@ -124,7 +128,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <RouterProvider router={router}
+    future={{
+      v7_startTransition: true}} />
     {/* <App /> */}
   </StrictMode>,
 )

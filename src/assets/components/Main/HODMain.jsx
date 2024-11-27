@@ -13,7 +13,7 @@ function Main() {
   return (
     <>
       <div className="flex flex-col lg:flex-row min-h-screen">
-        <AcademicSidebar />
+       
         <main className="flex-1 lg:ml-10 p-4 lg:p-6">
           <div className="max-w-6xl mx-auto p-4 space-y-8 bg-white">
             {/* Profile Section */}
