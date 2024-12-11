@@ -13,6 +13,9 @@ import ProgramMain from './assets/components/Main/ProgramesMain.jsx';
 import CoordinatorMain from './assets/components/Main/CoordinatorMain.jsx';
 import SyllabusMain from './assets/components/Main/SyllabusMain.jsx';
 import TimeTableMain from './assets/components/Main/TimeTablemain.jsx';
+import FacultyList from './assets/components/Main/facultymain.jsx';
+import studentMain from './assets/components/Main/studentMain.jsx';
+import PublishMain from './assets/components/Main/PublishMain.jsx';
 
 
 const router = createBrowserRouter([
@@ -68,15 +71,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/people/faculty",
-        element: <VisionAndMissionMain />,
+        element: <FacultyList />,
       },
       {
         path: "/people/phd-scholars",
-        element: <VisionAndMissionMain />,
+        element:  <FacultyList />,
       },
       {
         path: "/people/students",
-        element: <VisionAndMissionMain />,
+        element: < studentMain />,
       },
       {
         path: "/people/alumni",
@@ -84,7 +87,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/people/staff",
-        element: <VisionAndMissionMain />,
+        element: <FacultyList />,
       },
       {
         path: "/research/areas",
@@ -96,7 +99,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/research/publications",
-        element: <VisionAndMissionMain />,
+        element: <PublishMain />,
       },
       {
         path: "/research/projects",
