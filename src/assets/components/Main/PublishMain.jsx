@@ -8,37 +8,42 @@ const PublicationsTable = () => {
   const publications = [
     {
       name: 'Security and Privacy, Wiley',
-      authorsTitle: 'Ravi Kumar, Samayveer Singh, Deepti Singh, Mohit Kumar, Sukhpal Singh Gill "A robust and secure user authentication scheme based on multifactor and multi-gateway in IoT enabled sensor networks"',
+      authorsTitle:
+        'Ravi Kumar, Samayveer Singh, Deepti Singh, Mohit Kumar, Sukhpal Singh Gill "A robust and secure user authentication scheme based on multifactor and multi-gateway in IoT enabled sensor networks"',
       year: 2024,
-      link: '#'
+      link: '#',
     },
     {
       name: 'Multimedia Tools and Applications, SCI [IF=3.6]',
-      authorsTitle: 'Mohit Kumar, Atul Rai, Surbhit, Neeraj Kumar "Autonomic edge cloud-assisted framework for heart disease prediction using RF-LRG algorithm"',
+      authorsTitle:
+        'Mohit Kumar, Atul Rai, Surbhit, Neeraj Kumar "Autonomic edge cloud-assisted framework for heart disease prediction using RF-LRG algorithm"',
       year: 2024,
-      link: '#'
+      link: '#',
     },
     {
       name: 'IEEE Transactions on Sustainable Computing, 2024, (IEEE IF = 2.456)',
-      authorsTitle: 'Mohit Kumar, Avadh Kishor, P K Singh and Kalka Dubey "Deadline-aware Cost and Energy Efficient Offloading in Mobile Edge Computing"',
+      authorsTitle:
+        'Mohit Kumar, Avadh Kishor, P K Singh and Kalka Dubey "Deadline-aware Cost and Energy Efficient Offloading in Mobile Edge Computing"',
       year: 2024,
-      link: '#'
+      link: '#',
     },
     {
       name: 'Computers in Human Behavior, Elsevier (SCI IF=9.0)',
-      authorsTitle: 'Mansi Gupta, Mohit Kumar and Yash Gupta, "A Blockchain-Empowered Federated Learning-based Framework for Data Privacy in Lung Disease Detection System"',
+      authorsTitle:
+        'Mansi Gupta, Mohit Kumar and Yash Gupta, "A Blockchain-Empowered Federated Learning-based Framework for Data Privacy in Lung Disease Detection System"',
       year: 2024,
-      link: '#'
+      link: '#',
     },
     {
       name: 'IEEE Transaction of Consumer Electronics (IEEE IF=4.3)',
-      authorsTitle: 'Prabal Verma, Mohit Kumar, S S Gill and Wu Huaming, "Data Driven Stochastic Game Network-based Smart Home Monitoring System using IoT-enabled Edge Computing Environments"',
+      authorsTitle:
+        'Prabal Verma, Mohit Kumar, S S Gill and Wu Huaming, "Data Driven Stochastic Game Network-based Smart Home Monitoring System using IoT-enabled Edge Computing Environments"',
       year: 2024,
-      link: '#'
-    }
+      link: '#',
+    },
   ];
 
-  const filteredPublications = publications.filter(pub =>
+  const filteredPublications = publications.filter((pub) =>
     pub.name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -61,23 +66,23 @@ const PublicationsTable = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-2xl font-bold text-gray-800 border border-teal-600 rounded-xl mb-6">Faculty</h2>
-      <div className="flex flex-wrap -mx-4"></div>
-
+    <div className="container mx-auto p-4 max-w-full">
+      <h2 className="text-2xl font-bold text-gray-800 border border-teal-600 rounded-xl mb-6">
+        Faculty
+      </h2>
       <div className="bg-white rounded-lg shadow-md">
-        <div className="px-4 py-3 flex justify-between items-center">
+        <div className="px-4 py-3 flex flex-col sm:flex-row sm:justify-between items-center gap-4">
+          <input
+            type="text"
+            className="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
           <div>
-            <input
-              type="text"
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor="rows-per-page" className="mr-2">Rows per page:</label>
+            <label htmlFor="rows-per-page" className="mr-2">
+              Rows per page:
+            </label>
             <select
               id="rows-per-page"
               className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -91,7 +96,7 @@ const PublicationsTable = () => {
           </div>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full table-auto">
+          <table className="min-w-full table-auto">
             <thead>
               <tr className="bg-gray-200 text-gray-700 font-bold">
                 <th className="py-3 px-4 text-left">Name</th>
@@ -102,7 +107,10 @@ const PublicationsTable = () => {
             </thead>
             <tbody>
               {currentRows.map((pub, index) => (
-                <tr key={index} className={`border-b ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}>
+                <tr
+                  key={index}
+                  className={`border-b ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}
+                >
                   <td className="py-3 px-4 text-gray-800">{pub.name}</td>
                   <td className="py-3 px-4 text-gray-800">{pub.authorsTitle}</td>
                   <td className="py-3 px-4 text-center text-gray-800">{pub.year}</td>
@@ -116,29 +124,25 @@ const PublicationsTable = () => {
             </tbody>
           </table>
         </div>
-        <div className="px-4 py-3 flex justify-end">
-          <nav>
-            <ul className="flex">
-              {pageNumbers.map((pageNumber) => (
-                <li
-                  key={pageNumber}
-                  className={`px-3 py-2 border rounded-md ${
-                    pageNumber === currentPage
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-200'
-                  }`}
-                  onClick={() => handlePageChange(pageNumber)}
-                >
-                  {pageNumber}
-                </li>
-              ))}
-            </ul>
+        <div className="px-4 py-3 flex justify-between items-center flex-wrap gap-2">
+          <nav className="flex flex-wrap gap-2">
+            {pageNumbers.map((pageNumber) => (
+              <button
+                key={pageNumber}
+                className={`px-3 py-2 border rounded-md ${
+                  pageNumber === currentPage
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-white text-gray-700 hover:bg-gray-200'
+                }`}
+                onClick={() => handlePageChange(pageNumber)}
+              >
+                {pageNumber}
+              </button>
+            ))}
           </nav>
         </div>
       </div>
-
-      </div>
-      
+    </div>
   );
 };
 

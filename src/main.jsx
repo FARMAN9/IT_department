@@ -16,6 +16,7 @@ import TimeTableMain from './assets/components/Main/TimeTablemain.jsx';
 import FacultyList from './assets/components/Main/facultymain.jsx';
 import studentMain from './assets/components/Main/studentMain.jsx';
 import PublishMain from './assets/components/Main/PublishMain.jsx';
+import ResearchAreas from './assets/components/Main/ResearchAreaMain.jsx';
 
 
 const router = createBrowserRouter([
@@ -91,11 +92,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/research/areas",
-        element: <VisionAndMissionMain />,
+        element: <ResearchAreas />,
       },
       {
         path: "/research/labs",
-        element: <VisionAndMissionMain />,
+        element: <ResearchAreas />,
       },
       {
         path: "/research/publications",
