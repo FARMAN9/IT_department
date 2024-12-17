@@ -23,7 +23,7 @@ function DepartmentOfItInfo() {
         </h2>
 
         {/* Scrollable Content Section */}
-        <div className="text-gray-700 text-lg mt-6  overflow-y-auto">
+        <div className="text-gray-700 text-sm sm:text-base lg:text-lg  mt-6  overflow-y-auto">
           <p>
             The Department of IT provides an array of educational and technical
             resources to equip students for a career in the tech industry. Lorem

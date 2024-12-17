@@ -65,7 +65,7 @@ function Main() {
                 <div className="h-1 w-32 bg-emerald-600 mt-2"></div>
               </div>
 
-              <div className="bg-white shadow-md rounded-lg">
+              <div className="bg-white shadow-md rounded-lg border-l-4 border-teal-600">
                 <div className="p-6">
                   <p className="text-gray-700 leading-relaxed">
                     The Department of Information Technology welcomes you to join the thriving computer community and become visionaries and change-makers of the future. Established in 2013 with an initial intake of 30 students, the department now offers 120 seats in its undergraduate program (B.Tech.). In 2023, we introduced an M.Tech. in Data Analytics, offering 30 seats (20 through GATE and 10 self-sponsored). Our distinguished faculty provides a diverse range of learning experiences, from fundamental core concepts to emerging technologies such as AI, Cloud Computing, Blockchain, IoT, Big Data, and Soft Computing. Our students have an excellent placement record, securing positions in reputed companies, making our department one of the most preferred.

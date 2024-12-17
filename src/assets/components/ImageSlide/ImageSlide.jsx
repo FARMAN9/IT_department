@@ -45,7 +45,7 @@ export default function ImageSlider() {
 
   return (
     <div
-      className="relative justify-center items-center w-full h-[400px] perspective-[100px] border  rounded-md shadow-lg "
+      className="relative justify-center items-center w-full h-[300px] perspective-[50px] border  rounded-md shadow-lg "
       onMouseEnter={stopAutoSlide}
       onMouseLeave={startAutoSlide}>
       {/* Slider Wrapper */}
