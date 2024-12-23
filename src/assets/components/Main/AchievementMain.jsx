@@ -5,9 +5,6 @@ import ImageSlide from "../ImageSlide/ImageSlide";
 import DepartmentOfItInfo from "../Department_of_It/Department_of_it_info";
 import Mission_and_Vision from "../Mission_and_Vision/Mission_and_Vision";
 import { Lightbulb } from 'lucide-react';
-
-
-
 import { FileText, Award, Quote, Users, MapPin, Trophy } from 'lucide-react';
 
 const AchievementCard = ({ icon: Icon, title, value, className = "" }) => (
