@@ -86,6 +86,8 @@ export default function ImageSlider() {
         className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full p-2">
         ›
       </button>
+      
+      
     </div>
   );
 }

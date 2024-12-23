@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const PublicationsTable = () => {
   const [search, setSearch] = useState('');
@@ -43,110 +44,163 @@ const PublicationsTable = () => {
     },
   ];
 
+  // Enhanced search to look through both name and authors/title
   const filteredPublications = publications.filter((pub) =>
-    pub.name.toLowerCase().includes(search.toLowerCase())
+    Object.values(pub).some(value => 
+      value.toString().toLowerCase().includes(search.toLowerCase())
+    )
   );
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = filteredPublications.slice(indexOfFirstRow, indexOfLastRow);
+  const totalPages = Math.ceil(filteredPublications.length / rowsPerPage);
 
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(filteredPublications.length / rowsPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const handleRowsPerPageChange = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setCurrentPage(1);
-  };
-
-  return (
-    <div className="container mx-auto p-4 max-w-full">
-      <h2 className="text-2xl font-bold text-gray-800 border border-teal-600 rounded-xl mb-6">
-        Faculty
-      </h2>
-      <div className="bg-white rounded-lg shadow-md">
-        <div className="px-4 py-3 flex flex-col sm:flex-row sm:justify-between items-center gap-4">
-          <input
-            type="text"
-            className="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Search..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <div>
-            <label htmlFor="rows-per-page" className="mr-2">
-              Rows per page:
-            </label>
-            <select
-              id="rows-per-page"
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              value={rowsPerPage}
-              onChange={handleRowsPerPageChange}
-            >
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-            </select>
-          </div>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full table-auto">
-            <thead>
-              <tr className="bg-gray-200 text-gray-700 font-bold">
-                <th className="py-3 px-4 text-left">Name</th>
-                <th className="py-3 px-4 text-left">Author + Title</th>
-                <th className="py-3 px-4 text-center">Year</th>
-                <th className="py-3 px-4 text-center">Link</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentRows.map((pub, index) => (
-                <tr
-                  key={index}
-                  className={`border-b ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}
-                >
-                  <td className="py-3 px-4 text-gray-800">{pub.name}</td>
-                  <td className="py-3 px-4 text-gray-800">{pub.authorsTitle}</td>
-                  <td className="py-3 px-4 text-center text-gray-800">{pub.year}</td>
-                  <td className="py-3 px-4 text-center">
-                    <a href={pub.link} className="text-blue-500 hover:text-blue-700">
-                      Link
-                    </a>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="px-4 py-3 flex justify-between items-center flex-wrap gap-2">
-          <nav className="flex flex-wrap gap-2">
-            {pageNumbers.map((pageNumber) => (
-              <button
-                key={pageNumber}
-                className={`px-3 py-2 border rounded-md ${
-                  pageNumber === currentPage
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-200'
-                }`}
-                onClick={() => handlePageChange(pageNumber)}
-              >
-                {pageNumber}
-              </button>
-            ))}
-          </nav>
+  // Mobile card component
+  const MobileCard = ({ pub }) => (
+    <div className="bg-white p-4 rounded shadow-sm border-l-4 border-teal-600">
+      <div className="space-y-3">
+        <div className="font-medium text-gray-800">{pub.name}</div>
+        <div className="text-gray-600 text-sm">{pub.authorsTitle}</div>
+        <div className="flex justify-between items-center">
+          <span className="text-gray-500">Year: {pub.year}</span>
+          <a href={pub.link} className="text-blue-500 hover:text-blue-700 transition-duration-300">
+            View Publication
+          </a>
         </div>
       </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-auto flex lg:mr-10">
+      <main className="flex-1 lg:ml-10 p-2 lg:p-4">
+        <div className="max-w-6xl mx-auto p-0 pt-4 space-y-8">
+          <div className="relative">
+            <div className="mt-20 lg:mt-0 xl:mt-0 inline-flex items-center bg-teal-600 text-white px-5 py-2 rounded-full text-xl font-bold shadow-lg">
+              Publications
+            </div>
+            
+            <div className="mt-6 bg-white rounded-lg shadow-md p-6 border-l-4 border-teal-600">
+              <div className="space-y-4">
+                {/* Controls Section */}
+                <div className="flex flex-col sm:flex-row sm:justify-between items-center gap-4">
+                  <div className="w-full sm:w-64 relative">
+                    <input
+                      type="text"
+                      className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                      placeholder="Search publications..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                    <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                  </div>
+                  
+                  <div className="flex items-center">
+                    <label htmlFor="rows-per-page" className="mr-2 text-sm text-gray-600">
+                      Rows per page:
+                    </label>
+                    <select
+                      id="rows-per-page"
+                      className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                      value={rowsPerPage}
+                      onChange={(e) => {
+                        setRowsPerPage(Number(e.target.value));
+                        setCurrentPage(1);
+                      }}
+                    >
+                      {[5, 10, 25, 50].map(value => (
+                        <option key={value} value={value}>{value}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Desktop Table */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="min-w-full table-auto">
+                    <thead>
+                      <tr className="bg-gray-50 border-b">
+                        <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Journal/Conference</th>
+                        <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Authors & Title</th>
+                        <th className="py-3 px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
+                        <th className="py-3 px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Link</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {currentRows.map((pub, index) => (
+                        <tr
+                          key={index}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
+                          <td className="py-3 px-4 text-sm text-gray-900">{pub.name}</td>
+                          <td className="py-3 px-4 text-sm text-gray-900">{pub.authorsTitle}</td>
+                          <td className="py-3 px-4 text-center text-sm text-gray-900">{pub.year}</td>
+                          <td className="py-3 px-4 text-center">
+                            <a href={pub.link} className="text-blue-500 hover:text-blue-700">
+                              View
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Mobile Cards */}
+                <div className="md:hidden space-y-4">
+                  {currentRows.map((pub, index) => (
+                    <MobileCard key={index} pub={pub} />
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4">
+                  <div className="text-sm text-gray-600">
+                    Showing {indexOfFirstRow + 1} to {Math.min(indexOfLastRow, filteredPublications.length)} of {filteredPublications.length} entries
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50"
+                    >
+                      <ChevronLeft className="h-5 w-5" />
+                    </button>
+                    
+                    <div className="flex gap-2">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className={`px-3 py-1 rounded-md transition-colors ${
+                            page === currentPage
+                              ? 'bg-teal-600 text-white'
+                              : 'hover:bg-gray-100'
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      ))}
+                    </div>
+                    
+                    <button
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50"
+                    >
+                      <ChevronRight className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 };
 
 export default PublicationsTable;
-
-
-

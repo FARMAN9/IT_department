@@ -3,10 +3,10 @@ import { NavLink } from "react-router-dom";
 
 const HodCard = () => {
   return (
-    <div className="bg-white rounded-lg shadow-lg shadow-blue-300 p-6 mt-2 border">
+    <div className="bg-white rounded-lg shadow-lg p-6 mt-2 border">
       <div className="flex items-center mb-4">
-        <div className="m-10 rounded-full rounded-b-sm  size-40 bg-blue-300"></div>
-        <h2 className="text-xl text-blue-500 font-bold">
+        <div className="w-20 h-20 mr-4 rounded-full bg-blue-300"></div>
+        <h2 className="text-xl font-bold">
           Dr. Shabir Ahmad Sofi
           <p className="text-sm font-medium text-blue-950">
             Head of Department
@@ -14,7 +14,7 @@ const HodCard = () => {
         </h2>
       </div>
       <div className="m-2 items-center grid">
-        <p className="font-sans text-lg text-gray-700">
+        <p className="font-sans  text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed">
           Welcome to the Department of Information Technology of NIT Srinagar.
           Our Department was established in 2007, offering a four-year
           undergraduate programme (B.Tech) in Information Technology. Over the
@@ -38,7 +38,7 @@ const HodCard = () => {
         </p>
         <div className="self-start mt-4">
           
-          <NavLink to="/about/hod-message" className="bg-blue-600 text-white font-sans h-10 hover:cursor shadow-xl shadow-blue-200 hover:bg-blue-700 rounded-lg p-2">
+          <NavLink to="/about/hod-message" className="bg-blue-600 text-white font-sans h-10 hover:cursor shadow-xl shadow-blue-200 hover:bg-blue-700 rounded-lg px-4 py-2">
             Read more
           </NavLink>
         </div>

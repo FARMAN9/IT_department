@@ -15,7 +15,7 @@ function MissionAndVision() {
    
   ];
   return (
-    <div className=" mx-auto mt-3 bg-white rounded-lg shadow-lg text-lg   overflow-hidden">
+    <div className=" mx-auto mt-3 bg-white rounded-lg shadow-lg text-sm sm:text-base lg:text-lg   overflow-hidden">
       {/* Video Section */}
       <div className="w-full mb-6">
         <iframe
@@ -29,7 +29,7 @@ function MissionAndVision() {
 
       {/* Mission Section */}
       <div className="p-4">
-        <h2 className="text-xl font-semibold text-gray-800">Our Mission</h2>
+        <h2 className=" text-sm sm:text-base lg:text-lg font-semibold text-gray-800">Our Mission</h2>
         <p className="text-gray-600 mt-2">{mission}</p>
 
         {/* Mission Description Section */}
@@ -37,7 +37,7 @@ function MissionAndVision() {
 
       {/* Vision Section */}
       <div className="p-4 border-t border-gray-200">
-        <h2 className="text-xl font-semibold text-gray-800">Our Vision</h2>
+        <h2 className=" text-sm sm:text-base lg:text-lg font-semibold text-gray-800">Our Vision</h2>
         <ul className="list-disc pl-6 text-gray-600">
           {vission.map((item, index) => (
             <li key={index}>{item}</li>

@@ -16,9 +16,6 @@ function Main() {
 
   return (
     <div className="min-h-auto flex lg:mr-10">
-      {/* Sidebar */}
-      
-      
       <main className="flex-1 lg:ml-10 p-2 lg:p-4">
         <div className="max-w-6xl mx-auto p-0 pt-4 space-y-8">
           

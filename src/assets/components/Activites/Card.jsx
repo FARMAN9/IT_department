@@ -37,14 +37,14 @@ const Card = (props) => {
     <div className="max-w-full rounded-lg border border-gray-200 bg-white shadow-sm">
       <div className="p-6">
         <div className="mb-6">
-          <div className="inline-block bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-2 rounded-2xl text-lg font-semibold">
+          <div className="inline-block bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-2 rounded-2xl text-sm sm:text-base lg:text-lg font-semibold">
             {props.title}
           </div>
         </div>
         {/* Added max-height and overflow-y-auto for scrolling */}
-        <div className="max-h-[400px] overflow-y-auto pr-4">
+        <div className="max-h-[400px] overflow-y-auto no-bar pr-4">
           {/* Added custom scrollbar styling */}
-          <div className="scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          <div className="scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100">
             <ul className="space-y-4">
               {news.map((item) => (
                 <li
@@ -53,7 +53,7 @@ const Card = (props) => {
                   <div className="min-w-4 mt-2">
                     <div className="w-2 h-2 bg-cyan-700 rounded-full"></div>
                   </div>
-                  <span className="text-gray-700 flex-1">
+                  <span className="text-gray-700  text-sm sm:text-base lg:text-lg flex-1">
                     <a href="/">{item.text}</a>
                     {item.isNew && (
                       <span className="inline-block ml-2">
