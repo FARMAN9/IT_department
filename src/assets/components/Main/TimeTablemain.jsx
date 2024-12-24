@@ -61,7 +61,7 @@ function Main() {
   ], []); // Using empty dependency array to memoize data
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100">
+    <div className="min-h-screen flex flex-col lg:flex-row ">
       {/* Sidebar */}
       
 

@@ -14,13 +14,13 @@ const Main = () => {
 
   return (
     <>
-    <div className=" min-h-full flex flex-col lg:flex-row ">
-    <main className="flex-1 lg:ml-10 p-2 lg:p-4">
+    <div className=" min-h-full  flex-col lg:flex-row ">
+    <main className="flex-1 min-w-full  lg:ml-10 p-2 lg:p-4">
       <div className="max-w-6xl mx-auto lg:p-0 pt-4 space-y-8">
         
         {/* Coordinator Section */}
         <div className="relative">
-          <div className="mt-20 lg:mt-0 bg-white rounded-lg shadow-md lg:p-6 xl:p-6 border-l-4 ">
+          <div className="mt-20 lg:mt-0 bg-white rounded-lg shadow-md lg:p-6 xl:p-6 border-l-4  ">
             <div className="mb-3 ">
             <ImageSlide />
             </div>

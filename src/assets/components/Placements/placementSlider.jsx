@@ -169,7 +169,7 @@ const PlacementSlider = () => {
             </div>
             <div className="flex justify-center mt-6">
               <p className="text-sm sm:text-base text-gray-600">
-                <button className="">More</button>
+                
               </p>
             </div>
           </div>

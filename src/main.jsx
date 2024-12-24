@@ -14,9 +14,9 @@ import CoordinatorMain from './assets/components/Main/CoordinatorMain.jsx';
 import SyllabusMain from './assets/components/Main/SyllabusMain.jsx';
 import TimeTableMain from './assets/components/Main/TimeTablemain.jsx';
 import FacultyList from './assets/components/Main/facultymain.jsx';
-import studentMain from './assets/components/Main/studentMain.jsx';
 import PublishMain from './assets/components/Main/PublishMain.jsx';
 import ResearchAreas from './assets/components/Main/ResearchAreaMain.jsx';
+import Studentmain from './assets/components/Main/studentMain.jsx';
 
 
 const router = createBrowserRouter([
@@ -80,7 +80,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/people/students",
-        element: < studentMain />,
+        element: <Studentmain/>,
       },
       {
         path: "/people/alumni",

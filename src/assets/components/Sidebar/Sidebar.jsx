@@ -105,7 +105,7 @@ const AcademicSidebar = () => {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className="fixed top-7 right-3 z-50 bg-blue-500 rounded-lg border shadow-lg text-white lg:hidden xl:hidden 2xl:hidden"
+        className="fixed top-7 right-3 z-50 bg-gray-500 rounded-lg border shadow-lg text-white lg:hidden xl:hidden 2xl:hidden"
       >
         {isMobileOpen ? <X className="w-8 h-8" /> : <MenuIcon className="w-8 h-8" />}
       </button>
