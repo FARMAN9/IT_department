@@ -6,28 +6,28 @@ import swaggerJsdoc from "swagger-jsdoc";
 import mongoose from "mongoose";
 import  cors  from "cors";
 import MainImagesRouter from "./Routers/MainImagesrouter.js";
+import VissionRouter from "./Routers/Vissionrouter.js";
+import MissionRouter from "./Routers/Missionrouter.js";
+
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 const URI = process.env.MongoDB_URI;
 
 
+const connectDB = async () => {
+  try {
+      await mongoose.connect(process.env.MONGODB_URI, {
+          
+      });
+      console.log("MongoDB Connected");
+  } catch (error) {
+      console.error("MongoDB connection error:", error.message);
+      process.exit(1);
+  }
+};
 
-try {
- 
-  mongoose.connect(URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 30000, // 30 seconds timeout for server selection
-    socketTimeoutMS: 30000, // 30 seconds timeout for socket inactivity
-    connectTimeoutMS: 30000 // 30 seconds timeout for initial connection
-
-  })
-    .then(() => console.log('Connected to MongoDB'))
-    .catch((err) => console.error('MongoDB connection error:', err))
-} catch (error) {
-  console.log(error);
-}
+connectDB();
 
 app.use(express.json());
 app.use(cors({
@@ -61,6 +61,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", MainImagesRouter);
+app.use("/api", VissionRouter);
+app.use("/api", MissionRouter);
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

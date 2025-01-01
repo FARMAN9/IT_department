@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
 const missionSchema = new mongoose.Schema({
-    title: {
+    mission: {
         type: String,
         required: true
     }
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('Mission', missionSchema);
+const Mission = mongoose.model('Mission', missionSchema);
+
+export default Mission

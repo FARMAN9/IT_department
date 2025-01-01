@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-
+import axios from "axios";
 
 export default function ImageSlider() {
   const [images,setimages]=useState([])
@@ -7,8 +7,8 @@ export default function ImageSlider() {
   useEffect(() => { 
     const fetchImages = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/getMainImages");
-        const data = await response.json();
+        const response = await axios.get("http://localhost:4000/api/getMainImages");
+        const data = response.data;
         setimages(data);
         console.log(data);
       } catch (error) {

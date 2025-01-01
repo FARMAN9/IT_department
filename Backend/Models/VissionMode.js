@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const visionSchema = new mongoose.Schema({
-    title: {
+    vision: {
         type: String,
         required: true
 
@@ -9,4 +9,6 @@ const visionSchema = new mongoose.Schema({
   
 }, { timestamps: true });
 
-module.exports = mongoose.model('Vision',visionSchema);
+const vision = mongoose.model('Vision',visionSchema);
+
+export default vision
