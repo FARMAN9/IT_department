@@ -1,13 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const images = [
-  "https://images.pexels.com/photos/16689050/pexels-photo-16689050/free-photo-of-woman-hand-on-koran.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  "https://images.pexels.com/photos/8489005/pexels-photo-8489005.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  "https://images.pexels.com/photos/2432394/pexels-photo-2432394.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  "https://images.pexels.com/photos/8075987/pexels-photo-8075989.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-];
 
 export default function ImageSlider() {
+  const [images,setimages]=useState([])
+
+  useEffect(() => { 
+    const fetchImages = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/api/getMainImages");
+        const data = await response.json();
+        setimages(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching images:", error);
+      }
+    };
+
+    fetchImages();
+  },[setimages]);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalRef = useRef(null);
 
@@ -57,6 +68,7 @@ export default function ImageSlider() {
           }}>
           {images.map((src, index) => (
             <div
+           
               key={index}
               className="min-w-full h-full transform transition-all duration-700  rounded-md shadow-lg"
               style={{
@@ -66,7 +78,7 @@ export default function ImageSlider() {
                 zIndex: index === currentIndex ? 10 : 5,
               }}>
               <img
-                src={src}
+                src={src.image}
                 alt={`Slide ${index + 1}`}
                 className="w-full h-full object-cover rounded-md shadow-lg bg-blue-200 "
               />

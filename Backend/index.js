@@ -4,18 +4,36 @@ import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import mongoose from "mongoose";
+import  cors  from "cors";
+import MainImagesRouter from "./Routers/MainImagesrouter.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 const URI = process.env.MongoDB_URI;
 
+
+
 try {
-  mongoose.connect(URI).then(console.log("Connected to MongoDB"));
+ 
+  mongoose.connect(URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 30000, // 30 seconds timeout for server selection
+    socketTimeoutMS: 30000, // 30 seconds timeout for socket inactivity
+    connectTimeoutMS: 30000 // 30 seconds timeout for initial connection
+
+  })
+    .then(() => console.log('Connected to MongoDB'))
+    .catch((err) => console.error('MongoDB connection error:', err))
 } catch (error) {
   console.log(error);
 }
 
 app.use(express.json());
+app.use(cors({
+  origin: "*", // Your frontend URL
+  credentials: true
+}));
 const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
@@ -42,6 +60,7 @@ app.get("/", (req, res) => {
   res.send("Department of it nit");
 });
 
+app.use("/api", MainImagesRouter);
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
