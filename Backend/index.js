@@ -8,17 +8,17 @@ import  cors  from "cors";
 import MainImagesRouter from "./Routers/MainImagesrouter.js";
 import VissionRouter from "./Routers/Vissionrouter.js";
 import MissionRouter from "./Routers/Missionrouter.js";
+import mainInfoRouter from "./Routers/Maininforouters.js";
 
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 const URI = process.env.MongoDB_URI;
 
-
+app.use(express.json());
 const connectDB = async () => {
   try {
-      await mongoose.connect(process.env.MONGODB_URI, {
-          
+      await mongoose.connect(URI, {   
       });
       console.log("MongoDB Connected");
   } catch (error) {
@@ -28,8 +28,19 @@ const connectDB = async () => {
 };
 
 connectDB();
+mongoose.connection.on('error', err => {
+  console.error('MongoDB connection error:', err);
+});
 
-app.use(express.json());
+mongoose.connection.on('disconnected', () => {
+  console.log('MongoDB disconnected');
+});
+
+mongoose.connection.on('reconnected', () => {
+  console.log('MongoDB reconnected');
+});
+
+
 app.use(cors({
   origin: "*", // Your frontend URL
   credentials: true
@@ -63,8 +74,10 @@ app.get("/", (req, res) => {
 app.use("/api", MainImagesRouter);
 app.use("/api", VissionRouter);
 app.use("/api", MissionRouter);
+app.use("/api", mainInfoRouter);
 
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  connectDB();
 });

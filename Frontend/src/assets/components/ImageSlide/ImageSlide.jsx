@@ -10,14 +10,13 @@ export default function ImageSlider() {
         const response = await axios.get("http://localhost:4000/api/getMainImages");
         const data = response.data;
         setimages(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching images:", error);
       }
     };
 
     fetchImages();
-  },[setimages]);
+  }, []);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalRef = useRef(null);

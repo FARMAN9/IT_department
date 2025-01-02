@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState , useEffect} from "react";
 import AcademicSidebar from "../Sidebar/Sidebar";
 import { Lightbulb } from "lucide-react";
 
@@ -19,21 +19,41 @@ const MissionItem = React.memo(({ children }) => (
 
 function Main() {
   // Memoizing the vision and missions data to prevent re-renders
-  const vision = useMemo(
-    () => [
-      "To build a rich intellectual potential embedded with interdisciplinary knowledge, human values and professional ethics to make them globally competitive in education, industry, research and development and adapt with the changing technological environment.",
-    ],
-    [] // Empty dependency ensures this doesn't change unnecessarily
-  );
+  const [vision, setVision] = useState([]);
+  const [missions, setMissions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const missions = useMemo(
-    () => [
-      "To provide globally relevant, interdisciplinary and multifaceted knowledge in information technology.",
-      "To build, provide knowledge, facilities, and support industrial internship programs and higher education.",
-      "To nourish creativity, innovation and entrepreneurial spirit for solving real world problems using information technology.",
-    ],
-    [] // Empty dependency ensures this doesn't change unnecessarily
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const [visionResponse, missionsResponse] = await Promise.all([
+          fetch("http://localhost:4000/api/visions"),
+          fetch("http://localhost:4000/api/missions")
+        ]);
+
+        if (!visionResponse.ok || !missionsResponse.ok) {
+          throw new Error('Failed to fetch data');
+        }
+
+        const visionData = await visionResponse.json();
+        const missionsData = await missionsResponse.json();
+        console.log(visionData);
+        console.log(missionsData);
+        
+        setVision(visionData);
+        setMissions(missionsData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+  
 
   return (
     <>
@@ -49,7 +69,7 @@ function Main() {
 
               <div className="mt-6 bg-white rounded-lg shadow-md p-6 border-l-4 border-teal-600">
                 {vision.map((item, index) => (
-                  <VisionItem key={index}>{item}</VisionItem>
+                  <VisionItem key={index}>{item.vision}</VisionItem>
                 ))}
               </div>
             </div>
@@ -62,7 +82,7 @@ function Main() {
 
               <div className="mt-6 bg-white rounded-lg shadow-md p-6 space-y-4 border-l-4 border-teal-600">
                 {missions.map((mission, index) => (
-                  <MissionItem key={index}>{mission}</MissionItem>
+                  <MissionItem key={index}>{mission.mission}</MissionItem>
                 ))}
               </div>
             </div>

@@ -46,7 +46,7 @@ const Card = (props) => {
           {/* Added custom scrollbar styling */}
           <div className="scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100">
             <ul className="space-y-4">
-              {news.map((item) => (
+              {news.map((index, item) => (
                 <li
                   key={item.id}
                   className="flex items-start space-x-3 border-b border-gray-200 pb-4 last:border-b-0">
