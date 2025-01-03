@@ -1,6 +1,9 @@
 import React, { useMemo, useState , useEffect} from "react";
-import AcademicSidebar from "../Sidebar/Sidebar";
+
 import { Lightbulb } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { fetchMissions, fetchVisions } from "../../../Features/VisionAndMissionslice";
 
 // Memoized Vision Item for optimization
 const VisionItem = React.memo(({ children }) => (
@@ -19,40 +22,17 @@ const MissionItem = React.memo(({ children }) => (
 
 function Main() {
   // Memoizing the vision and missions data to prevent re-renders
-  const [vision, setVision] = useState([]);
-  const [missions, setMissions] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+
+  const { missions, visions, loading, error } = useSelector(state => state.VisionAndMissionData);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const [visionResponse, missionsResponse] = await Promise.all([
-          fetch("http://localhost:4000/api/visions"),
-          fetch("http://localhost:4000/api/missions")
-        ]);
+    dispatch(fetchMissions());
+    dispatch(fetchVisions());
+  }, [dispatch]);
 
-        if (!visionResponse.ok || !missionsResponse.ok) {
-          throw new Error('Failed to fetch data');
-        }
-
-        const visionData = await visionResponse.json();
-        const missionsData = await missionsResponse.json();
-        console.log(visionData);
-        console.log(missionsData);
-        
-        setVision(visionData);
-        setMissions(missionsData);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const vision = useMemo(() => visions, [visions]);
+  const mission = useMemo(() => missions, [missions]);
   
 
   return (
@@ -81,7 +61,7 @@ function Main() {
               </div>
 
               <div className="mt-6 bg-white rounded-lg shadow-md p-6 space-y-4 border-l-4 border-teal-600">
-                {missions.map((mission, index) => (
+                {mission.map((mission, index) => (
                   <MissionItem key={index}>{mission.mission}</MissionItem>
                 ))}
               </div>

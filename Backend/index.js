@@ -9,36 +9,15 @@ import MainImagesRouter from "./Routers/MainImagesrouter.js";
 import VissionRouter from "./Routers/Vissionrouter.js";
 import MissionRouter from "./Routers/Missionrouter.js";
 import mainInfoRouter from "./Routers/Maininforouters.js";
-
+import connectToMongoDB from "./MongoDB/MongoDBConnect.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 const URI = process.env.MongoDB_URI;
 
 app.use(express.json());
-const connectDB = async () => {
-  try {
-      await mongoose.connect(URI, {   
-      });
-      console.log("MongoDB Connected");
-  } catch (error) {
-      console.error("MongoDB connection error:", error.message);
-      process.exit(1);
-  }
-};
 
-connectDB();
-mongoose.connection.on('error', err => {
-  console.error('MongoDB connection error:', err);
-});
-
-mongoose.connection.on('disconnected', () => {
-  console.log('MongoDB disconnected');
-});
-
-mongoose.connection.on('reconnected', () => {
-  console.log('MongoDB reconnected');
-});
+connectToMongoDB();
 
 
 app.use(cors({
@@ -79,5 +58,5 @@ app.use("/api", mainInfoRouter);
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  connectDB();
+  
 });

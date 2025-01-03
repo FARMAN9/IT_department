@@ -1,35 +1,35 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchMainData } from "../../../Features/MainImages";
 
 export default function ImageSlider() {
+
+
+  const dispatch = useDispatch();
+  const { value, loading, error } = useSelector((state) => state.MainImagesData);
+
+  useEffect(() => {
+    dispatch(fetchMainData()); // Dispatch the API call on component mount
+  }, [dispatch]);
   const [images,setimages]=useState([])
 
-  useEffect(() => { 
-    const fetchImages = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/api/getMainImages");
-        const data = response.data;
-        setimages(data);
-      } catch (error) {
-        console.error("Error fetching images:", error);
-      }
-    };
+  console.log("----->",value)
 
-    fetchImages();
-  }, []);
+
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalRef = useRef(null);
 
   // Function to handle moving to the next image
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % value.length);
   };
 
   // Function to handle moving to the previous image
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+      prevIndex === 0 ? value.length - 1 : prevIndex - 1
     );
   };
 
@@ -65,7 +65,7 @@ export default function ImageSlider() {
           style={{
             transform: `translateX(-${currentIndex * 100}%)`,
           }}>
-          {images.map((src, index) => (
+          {value.map((src, index) => (
             <div
            
               key={index}

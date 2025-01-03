@@ -1,40 +1,23 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { fetchMissions, fetchVisions } from "../../../Features/VisionAndMissionslice";
 
 const MissionAndVision = () => {
-  const [mission, setMission] = useState([]);
-  const [vision, setVision] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+ 
+  
+  const dispatch = useDispatch();
+
+  const { missions, visions, loading, error } = useSelector(state => state.VisionAndMissionData);
+
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const [missionResponse, visionResponse] = await Promise.all([
-          fetch("http://localhost:4000/api/missions"),
-          fetch("http://localhost:4000/api/visions")
-        ]);
+    dispatch(fetchMissions());
+    dispatch(fetchVisions());
+  }, [dispatch]);
+  
 
-        if (!missionResponse.ok || !visionResponse.ok) {
-          throw new Error('Failed to fetch data');
-        }
-
-        const missionData = await missionResponse.json();
-        const visionData = await visionResponse.json();
-        console.log(missionData);
-        console.log(visionData);
-
-        setMission(missionData);
-        setVision(visionData); // Note: keeping 'vission' spelling as per API
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+   
 
   const handleReadMore = (e) => {
     e.preventDefault();
@@ -44,7 +27,7 @@ const MissionAndVision = () => {
     // navigation.navigate('/about/vision');
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
@@ -84,8 +67,8 @@ const MissionAndVision = () => {
         Our Vision  
         </h2>
         <div className="text-gray-600 mt-2">
-          {vision.length > 0 ? (
-            vision.map((item, index) => (
+          {visions.length > 0 ? (
+            visions.map((item, index) => (
               <li key={index} className="mb-2">
                 {item.vision}
               </li>
@@ -102,9 +85,9 @@ const MissionAndVision = () => {
         <h2 className="text-sm sm:text-base lg:text-lg font-semibold text-gray-800 text-center">
            Our Mission
         </h2>
-        {mission.length > 0 ? (
+        {missions.length > 0 ? (
           <ul className="list-disc pl-6 text-gray-600 mt-2">
-            {mission.map((item, index) => (
+            {missions.map((item, index) => (
               <li key={index} className="mb-2">
                 {item.mission}
               </li>

@@ -14,94 +14,147 @@ const API_KEY = process.env.APPWRITE_API_KEY;
 
 const MainID= 'mainNITsri'
 
-export const  putImage = async (req, res) => {
+export const putImage = async (req, res) => {
     try {
-        const mainInfo = await MainInfo.findById(req.params.id || MainID);
-        if (!mainInfo) {
-            return res.status(404).json({ error: "MainInfo not found" });
-        }
+        const mainId = req.params.id || MainID; // Use the ID from params or default to MainID
+        let mainInfo = await MainInfo.findById(mainId);
+
         if (!req.file) {
             return res.status(400).json({ error: "Image is required" });
         }
+
+        // Initialize Appwrite client
         const client = new Client()
-    .setEndpoint(ENDPOINT)
-    .setProject(PROJECT_ID);
+            .setEndpoint(ENDPOINT)
+            .setProject(PROJECT_ID);
+
         const storage = new Storage(client);
         const file = new File([req.file.buffer], req.file.originalname, {
             type: req.file.mimetype,
         });
-        const appwriteFile = await storage.createFile([BUCKET_ID], ID.unique(),file);
-        const fileUrl =`https://cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${appwriteFile.$id}/view?project=${PROJECT_ID}&project=${PROJECT_ID}&mode=admin`;
-        res.status(200).json({
-            success: true,
-            data: fileUrl,
-            message: "Image uploaded successfully"
-        });
+
+        // Upload file to Appwrite storage
+        const appwriteFile = await storage.createFile(BUCKET_ID, ID.unique(), file);
+        const fileUrl = `https://cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${appwriteFile.$id}/view?project=${PROJECT_ID}&mode=admin`;
+
+        if (!mainInfo) {
+            // If MainInfo not found, create a new record
+            mainInfo = new MainInfo({
+                _id: mainId, // Use the same ID
+                image: fileUrl,
+                id:appwriteFile.$id
+            });
+            await mainInfo.save();
+
+            return res.status(201).json({
+                success: true,
+                data: fileUrl,
+                message: "Image uploaded and new record created successfully",
+            });
+        } else {
+            // If MainInfo exists, update the image
+            mainInfo.image = fileUrl;
+            mainInfo.id = appwriteFile.$id;
+            await mainInfo.save();
+
+            return res.status(200).json({
+                success: true,
+                data: fileUrl,
+                message: "Image uploaded and record updated successfully",
+            });
+        }
     } catch (error) {
         res.status(500).json({ error: error.message });
-}
-}
+    }
+};
+
 
 export const postMainInfo = async (req, res) => {
     try {
+        const { name, description, address, officeMail, phoneNumber } = req.body;
 
-        if (!req.body.name) return res.status(400).json({ error: "name is required" });
-        if (!req.body.description) return res.status(400).json({ error: "description is required" });
-        if (!req.body.address) return res.status(400).json({ error: "address is required" });
-        if (!req.body.officeMail) return res.status(400).json({ error: "officeMail is required" });
-        if (!req.body.phoneNumber) return res.status(400).json({ error: "phoneNumber is required" });
-       
+        // Validate required fields
+        if (!name) return res.status(400).json({ error: "Name is required" });
+        if (!description) return res.status(400).json({ error: "Description is required" });
+        if (!address) return res.status(400).json({ error: "Address is required" });
+        if (!officeMail) return res.status(400).json({ error: "Office mail is required" });
+        if (!phoneNumber) return res.status(400).json({ error: "Phone number is required" });
 
-       
-     
+        // Check if a record with the same ID already exists
+        let mainInfo = await MainInfo.findById(MainID);
 
-        // Create the new record
-        const mainInfo = await MainInfo.create({
-            _id:MainID,
-            name:req.body.name,
-            description:req.body.description,
-            address:req.body.address,
-            officeMail:req.body.officeMail,
-            phoneNumber:req.body.phoneNumber
-        });
+        if (mainInfo) {
+            // Update the existing record
+            mainInfo.name = name;
+            mainInfo.description = description;
+            mainInfo.address = address;
+            mainInfo.officeMail = officeMail;
+            mainInfo.phoneNumber = phoneNumber;
 
-        // Return success response
-        res.status(201).json({
-            success: true,
-            data: mainInfo,
-            message: "MainInfo created successfully"
-        });
+            await mainInfo.save();
 
+            return res.status(200).json({
+                success: true,
+                data: mainInfo,
+                message: "MainInfo updated successfully",
+            });
+        } else {
+            // Create a new record
+            mainInfo = await MainInfo.create({
+                _id: MainID,
+                name,
+                description,
+                address,
+                officeMail,
+                phoneNumber,
+            });
+
+            return res.status(201).json({
+                success: true,
+                data: mainInfo,
+                message: "MainInfo created successfully",
+            });
+        }
     } catch (error) {
-        // Handle specific MongoDB errors
-        if (error.name === 'ValidationError') {
+        // Handle specific MongoDB validation errors
+        if (error.name === "ValidationError") {
             return res.status(400).json({
                 error: "Validation Error",
-                details: error.message
+                details: error.message,
             });
         }
 
-        // Handle other errors
-        res.status(500).json({ 
+        // Handle other unexpected errors
+        res.status(500).json({
             error: "Internal Server Error",
-            details: error.message 
+            details: error.message,
         });
     }
 };
 
 
 
+
 export const getMainInfoById = async (req, res) => {
     try {
-        const mainInfo = await MainInfo.findById(req.params.id||MainID);
+        // Find MainInfo by ID from the request parameters or default MainID
+        const mainInfo = await MainInfo.findById(req.params.id || MainID);
+
+        // If not found, return a 404 error
         if (!mainInfo) {
             return res.status(404).json({ error: "MainInfo not found" });
         }
-        console.log(mainInfo);
+
+        // Return the MainInfo object with a 200 status code
         res.status(200).json({
-            image: mainInfo.image
+            success: true,
+            data: mainInfo,
         });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        // Return a 500 error for unexpected issues
+        res.status(500).json({
+            error: "Internal Server Error",
+            details: error.message,
+        });
     }
 };
