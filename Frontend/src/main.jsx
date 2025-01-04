@@ -17,6 +17,7 @@ import FacultyList from './assets/components/Main/facultymain.jsx';
 import PublishMain from './assets/components/Main/PublishMain.jsx';
 import ResearchAreas from './assets/components/Main/ResearchAreaMain.jsx';
 import Studentmain from './assets/components/Main/studentMain.jsx';
+import Gallery from './assets/components/Gallery/Gallery.jsx';
 import {Provider} from "react-redux";
 import {store} from "./redux/store.js";
 
@@ -44,7 +45,7 @@ const router = createBrowserRouter([
       },
       {
         path:"/about/infrastructure",
-        element: <VisionAndMissionMain />,
+        element: <Gallery />,
       },
       {
         path:"/about/contact",
