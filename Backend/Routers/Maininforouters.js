@@ -5,10 +5,10 @@ import {handleUpload} from "../Middleware/ImageMiddleWare.js"
 
 
 router.put("/uplaodMainInfo", postMainInfo);
-router.put("/putImage/", handleUpload ,putImage);
-router.get("/getMainInfo/",getMainInfoById);
+router.put("/mainImage/", handleUpload ,putImage);
+router.get("/getMainInfo",getMainInfoById);
 
 
 
 
-export default router;
+export default router; 

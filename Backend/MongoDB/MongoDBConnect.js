@@ -12,11 +12,14 @@ const connectToMongoDB = async () => {
         } catch (error) {
             console.error("MongoDB connection error:", error.message);
             
+            
         }
+        
     };
 
     
     await connectDB();
 };
+
 
 export default connectToMongoDB;

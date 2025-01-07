@@ -9,7 +9,9 @@ import MainImagesRouter from "./Routers/MainImagesrouter.js";
 import VissionRouter from "./Routers/Vissionrouter.js";
 import MissionRouter from "./Routers/Missionrouter.js";
 import mainInfoRouter from "./Routers/Maininforouters.js";
+import HodInfoRouter from "./Routers/Hodinforouter.js";
 import connectToMongoDB from "./MongoDB/MongoDBConnect.js";
+import path from "path";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -17,7 +19,7 @@ const URI = process.env.MongoDB_URI;
 
 app.use(express.json());
 
-connectToMongoDB();
+connectToMongoDB().catch((error) => console.log(error));
 
 
 app.use(cors({
@@ -54,6 +56,7 @@ app.use("/api", MainImagesRouter);
 app.use("/api", VissionRouter);
 app.use("/api", MissionRouter);
 app.use("/api", mainInfoRouter);
+app.use("/api", HodInfoRouter);
 
 // Start the server
 app.listen(PORT, () => {
