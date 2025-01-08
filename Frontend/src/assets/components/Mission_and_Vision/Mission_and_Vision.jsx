@@ -50,8 +50,8 @@ const MissionAndVision = () => {
   }
 
   return (
-    <div className="mx-auto mt-3 bg-white rounded-lg shadow-lg text-sm sm:text-base lg:text-lg overflow-hidden">
-      <div className="w-full mb-6">
+    <div className="mx-auto mt-1 bg-transparent w-full rounded-lg shadow-lg text-sm sm:text-base lg:text-lg overflow-hidden">
+      <div className="p-0 m-0">
         <div className="relative pt-[56.25%]">
           <iframe
             className="absolute top-0 left-0 w-full h-full rounded-xl shadow-lg"
@@ -81,7 +81,7 @@ const MissionAndVision = () => {
 
       
 
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-3 border-t border-gray-200">
         <h2 className="text-sm sm:text-base lg:text-lg font-semibold text-gray-800 text-center">
            Our Mission
         </h2>

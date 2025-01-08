@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import profile from "../../../assets/profile.png";
+
+import { Link } from "react-router-dom";
 
 const placementData = [
   {
@@ -13,26 +16,21 @@ const placementData = [
     name: "Anubhav Gupta",
     company: "Writesonic",
     score: "27 LPA",
-    image: "/api/placeholder/80/80",
+    image: "",
   },
   {
     name: "Ravi Kumar",
     company: "Google",
     score: "40 LPA",
-    image: "/api/placeholder/80/80",
+    image: "",
   },
   {
     name: "Priya Sharma",
     company: "Microsoft",
     score: "35 LPA",
-    image: "/api/placeholder/80/80",
+    image: "",
   },
-  {
-    name: "More Opportunities",
-    company: "Join Us",
-    score: "",
-    image: "/api/placeholder/80/80",
-  },
+ 
 ];
 
 const PlacementSlider = () => {
@@ -90,7 +88,7 @@ const PlacementSlider = () => {
       <div className="flex-col mx-auto px-4 ">
         {/* Header */}
         <div className="space-y-4 pb-8 sm:pb-12">
-          <p className="text-2xl sm:text-3xl  text-center text-white bg-blue-400 block rounded-lg font-mono ">
+          <p className="text-2xl lg:text-3xl  text-center text-white bg-blue-400 block rounded-lg  ">
             Top Placements
           </p>
           <p className="text-sm sm:text-base text-center px-4 sm:px-44 text-gray-600">
@@ -140,7 +138,7 @@ const PlacementSlider = () => {
                     } rounded-lg shadow-lg h-full`}>
                     <div className="grid place-items-center">
                       <img
-                        src={placement.image}
+                        src={placement.image || profile} 
                         alt={placement.name}
                         className="rounded-full w-40 4-20 border bg-blue-800 shadow-xl shadow-blue-500 hover:rotate-6"
                       />
@@ -175,7 +173,7 @@ const PlacementSlider = () => {
           </div>
 
           {/* Dots Indicator */}
-          <div className="flex justify-center space-x-2 mt-6">
+          <div className="flex justify-center space-x-2 mt-2">
             {Array.from({
               length: placementData.length - (cardsToShow - 1),
             }).map((_, index) => (
@@ -188,9 +186,24 @@ const PlacementSlider = () => {
                 aria-label={`Go to placement set ${index + 1}`}
               />
             ))}
+         
+          </div>
+          <div>
+            <div className="flex justify-center mt-6">
+              <Link href="/placements">
+                <a className="text-sm sm:text-base font-semibold text-blue-600 hover:underline">
+                  View More
+                </a>
+              </Link>
+            </div>
+            
+          </div>
+          <div>
+            
           </div>
         </div>
       </div>
+      
     </div>
   );
 };

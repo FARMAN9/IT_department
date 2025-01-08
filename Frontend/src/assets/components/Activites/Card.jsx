@@ -1,3 +1,4 @@
+import newImg from "../../../assets/new.png";
 const Card = (props) => {
   const news = [
     {
@@ -25,16 +26,24 @@ const Card = (props) => {
       text: "Dr. Naveen Kumar article has been published in computer network journal (IF = 5.493, Q1)",
       isNew: false,
     },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
+    {
+      id: 6,
+      text: "Dr. Naveen Kumar article has been published in computer network journal (IF = 5.493, Q1)",
+      isNew: false,
+    },
+    {
+
+    },
+    {
+
+    }
+    
   ];
 
+
+
   return (
-    <div className="max-w-full rounded-lg border border-gray-200 bg-white shadow-sm">
+    <div className="min-w-full rounded-lg border border-gray-200 bg-white shadow-sm">
       <div className="p-6">
         <div className="mb-6">
           <div className="inline-block bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-2 rounded-2xl text-sm sm:text-base lg:text-lg font-semibold">
@@ -42,24 +51,23 @@ const Card = (props) => {
           </div>
         </div>
         {/* Added max-height and overflow-y-auto for scrolling */}
-        <div className="max-h-[400px] overflow-y-auto no-bar pr-4">
+        <div className="max-h-[400px] overflow-y-auto  w-[100%]">
           {/* Added custom scrollbar styling */}
           <div className="scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100">
             <ul className="space-y-4">
               {news.map((index, item) => (
                 <li
-                  key={item.id}
+                  key={index}
                   className="flex items-start space-x-3 border-b border-gray-200 pb-4 last:border-b-0">
                   <div className="min-w-4 mt-2">
                     <div className="w-2 h-2 bg-cyan-700 rounded-full"></div>
                   </div>
-                  <span className="text-gray-700  text-sm sm:text-base lg:text-lg flex-1">
-                    <a href="/">{item.text}</a>
-                    {item.isNew && (
-                      <span className="inline-block ml-2">
-                        <span className="text-red-500 animate-pulse border rounded-se-md rounded-w-md ">
-                          NEW
-                        </span>
+                  <span className="text-gray-700  text-sm sm:text-base lg:text-md   flex-1">
+                    
+                    <a href="/">{index.text}</a>
+                    {index.isNew && (
+                      <span className="inline-block animate-bounce transition duration-200 items-center justify-center">
+                          <img className="size-9 "src={newImg} alt="NEW" />
                       </span>
                     )}
                   </span>
