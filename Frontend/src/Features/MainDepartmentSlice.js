@@ -2,10 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 // Async thunk to fetch data from an API
-export const fetchMainDepartmentData = createAsyncThunk('MainData/fetchMainData', async (_, { rejectWithValue }) => {
+export const fetchMainDepartmentData = createAsyncThunk('MainDepartmentData/fetchMainDepartmentData', async (_, { rejectWithValue }) => {
   try {
-    const response = await axios.get('http://localhost:4000/api/getMainInfo/'); // Replace with your API endpoint
-    return response.data;
+    const response = await axios.get('http://localhost:4000/api/getMainInfo/');
+    console.log('data',response.data.data);
+    return response.data.data;
   } catch (error) {
     return rejectWithValue(error.response?.data || 'Something went wrong');
   }

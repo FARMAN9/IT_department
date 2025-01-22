@@ -9,11 +9,14 @@ function DepartmentOfItInfo() {
   useEffect(() => {
     dispatch(fetchMainDepartmentData());
 
+
   }, [dispatch]);
-  const info = useMemo(() => MainDepartmentInfo, [MainDepartmentInfo]);
+
+  const value = useMemo(() => MainDepartmentInfo, [MainDepartmentInfo]);
+
  
 
-  console.log('MainINFODATA',info);
+  console.log('MainINFODATA',MainDepartmentInfo);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -27,7 +30,7 @@ function DepartmentOfItInfo() {
     <div className=" w-full sm:w-auto pt-3 h-full bg-white rounded-lg shadow-md">
       {/* Card Image */}
       <img
-        src={info.image}
+        src={value.image || "https://via.placeholder.com/400"} 
         alt="Department of IT"
         className="w-full h-64 sm:h-96 rounded-lg object-cover"
       />
@@ -44,8 +47,7 @@ function DepartmentOfItInfo() {
           {/* Added custom scrollbar styling */}
           <div className="scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100 no-bar">
             <div className="text-gray-700 text-sm sm:text-base lg:text-lg mt-6 max-h-72 sm:max-h-96 overflow-y-auto">
-              {
-                info.description
+              {value.description || "Description not found"
              }
             </div>
           </div>

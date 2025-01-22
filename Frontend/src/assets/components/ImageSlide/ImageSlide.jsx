@@ -13,23 +13,20 @@ function ImageSlider() {
     }
   }, [dispatch, imageSlider]);
 
-  const x = []
-  console.log("ImageSlider",JSON.stringify(imageSlider));
-
-  
+  const value = useMemo(() => imageSlider, [imageSlider]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalRef = useRef(null);
 
   // Function to handle moving to the next image
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % imageSlider.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % value.length);
   };
 
   // Function to handle moving to the previous image
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? imageSlider.length - 1 : prevIndex - 1
+      prevIndex === 0 ? value.length - 1 : prevIndex - 1
     );
   };
 
@@ -65,7 +62,7 @@ function ImageSlider() {
           style={{
             transform: `translateX(-${currentIndex * 100}%)`,
           }}>
-          {x.map((src, index) => (
+          {value.map((src, index) => (
             <div
            
               key={index}
