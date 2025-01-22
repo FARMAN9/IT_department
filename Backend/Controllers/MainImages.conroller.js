@@ -62,13 +62,6 @@ export const PostMainImages = async (req, res) => {
 export const GetMainImages = async (req, res) => {
     try {
         const mainImages = await MainImages.find({});
-        const client = new Client();
-        client
-            .setEndpoint(ENDPOINT)
-            .setProject(PROJECT_ID)
-            
-           
-
         res.status(200).json(mainImages);
     } catch (error) {
         res.status(500).json({ error: error.message });

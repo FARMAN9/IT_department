@@ -8,9 +8,16 @@ import Card from "../Activites/Card";
 import PlacementSlider from "../Placements/placementSlider";
 import Wellcome from "../Wellcome/Wellcome";
 
+
+
+
 const Main = () => {
   const activitiesTitle = "Activities";
   const newsTitle = "News & Highlights";
+   
+
+
+
 
   return (
     <>
@@ -25,7 +32,7 @@ const Main = () => {
                 <div className="flex flex-wrap ">
 
                   <div className="h-full w-full">
-                    <ImageSlide />
+                    <ImageSlide  />
                   </div>
                   <div className="flex-1 items-center justify-center">
                     <Wellcome />

@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import MainImageSlice from '../Features/MainImages'
 import VisionAndMissionSlice from '../Features/VisionAndMissionslice'
-import MainSlice from '../Features/MainAPIslice'
+import MainDepartmentSlice from '../Features/MainDepartmentSlice'
+import GallerySlice from '../Features/GallerySlice'
 
 export const store = configureStore({
   reducer: {
     MainImagesData: MainImageSlice,
     VisionAndMissionData: VisionAndMissionSlice,
-    MainData: MainSlice
+    MainDepartmentData: MainDepartmentSlice,
+    GalleryData: GallerySlice
   }
 })

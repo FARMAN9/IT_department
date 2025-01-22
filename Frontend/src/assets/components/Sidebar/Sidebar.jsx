@@ -33,7 +33,7 @@ const AcademicSidebar = () => {
         { label: "Vision and Missions", link: "/about/vision" },
         { label: "HoD's Message", link: "/about/hod-message" },
         { label: "Achievements", link: "/about/achievements" },
-        { label: "Infrastructure: At a glance", link: "/about/infrastructure" },
+        { label: "Gallery", link: "/about/infrastructure" },
         { label: "Contact Us", link: "/about/contact" },
       ],
     },

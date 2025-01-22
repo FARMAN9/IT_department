@@ -1,35 +1,35 @@
-import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMainData } from "../../../Features/MainImages";
 
-export default function ImageSlider() {
-
+function ImageSlider() {
 
   const dispatch = useDispatch();
-  const { value, loading, error } = useSelector((state) => state.MainImagesData);
+  const {imageSlider, loading, error } = useSelector((state) => state.MainImagesData);
 
   useEffect(() => {
-    dispatch(fetchMainData()); // Dispatch the API call on component mount
-  }, [dispatch]);
-  const [images,setimages]=useState([])
+    if (imageSlider.length === 0) {
+      dispatch(fetchMainData()); // Dispatch the API call on component mount if data is not present
+    }
+  }, [dispatch, imageSlider]);
 
-  console.log("----->",value)
+  const x = []
+  console.log("ImageSlider",JSON.stringify(imageSlider));
 
-
+  
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalRef = useRef(null);
 
   // Function to handle moving to the next image
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % value.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % imageSlider.length);
   };
 
   // Function to handle moving to the previous image
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? value.length - 1 : prevIndex - 1
+      prevIndex === 0 ? imageSlider.length - 1 : prevIndex - 1
     );
   };
 
@@ -65,7 +65,7 @@ export default function ImageSlider() {
           style={{
             transform: `translateX(-${currentIndex * 100}%)`,
           }}>
-          {value.map((src, index) => (
+          {x.map((src, index) => (
             <div
            
               key={index}
@@ -102,3 +102,6 @@ export default function ImageSlider() {
     </div>
   );
 }
+
+
+export default React.memo(ImageSlider);
