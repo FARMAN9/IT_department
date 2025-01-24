@@ -23,6 +23,10 @@ function Header() {
   };
 
   return (
+    <>
+    <div className="bg-blue-500">
+      <h1 className="text-center mx-auto ">IT Department </h1>
+    </div>  
     <header className="fixed lg:static bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded border-gray-300 text-lg  font-semibold border   z-50 w-full">
       <div className="container mx-auto flex justify-between items-center md:p-2 py-2 px-full">
         <div className="flex items-center text-lg font-bold space-x-1">
@@ -56,6 +60,8 @@ function Header() {
         </nav>
       </div>
     </header>
+  
+    </>
   );
 }
 

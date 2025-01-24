@@ -2,7 +2,9 @@ import React from 'react';
 import FacultyCard from '../Facultycard/FaclutyCard';
 
 const FacultyList = () => {
+  document.title = "Faculty";
   const facultyData = [
+
     {
       image: 'https://via.placeholder.com/100', // Replace with actual image URLs
       name: 'Dr Vijay Kumar',

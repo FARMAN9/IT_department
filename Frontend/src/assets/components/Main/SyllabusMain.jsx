@@ -1,31 +1,25 @@
-import React, { useMemo } from "react";
-import AcademicSidebar from "../Sidebar/Sidebar";
+import React, { useMemo , useEffect} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSyllabusData } from "../../../Features/SyllabusSlice";
 
 function Main() {
+  document.title = "Syllabus";
+  
   // Memoize static data to avoid re-creating it on each render
-  const data = useMemo(
-    () => [
-      {
-        batch: "2021",
-        coordinator: "Dr. Kusum K. Bharti",
-        download:
-          "https://drive.google.com/file/d/1Y5d5YR2lQ5J7yBwM6D7X9Q6WbNk5L6oE/view?usp=share_link",
-      },
-      {
-        batch: "2022",
-        coordinator: "Dr. Mohit Kumar",
-        download:
-          "https://drive.google.com/file/d/1Y5d5YR2lQ5J7yBwM6D7X9Q6WbNk5L6oE/view?usp=share_link",
-      },
-      {
-        batch: "2023",
-        coordinator: "Dr. Nisha Chaurasia",
-        download:
-          "https://drive.google.com/file/d/1Y5d5YR2lQ5J7yBwM6D7X9Q6WbNk5L6oE/view?usp=share_link",
-      },
-    ],
-    []
-  );
+
+  const { syllabus, loading, error } = useSelector(state => state.SyllabusData);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchSyllabusData());
+  }, [dispatch]);
+
+  const value = useMemo(() => syllabus, [syllabus]);
+
+  console.log('syllabus',syllabus);
+
+
+  
+;
 
   // Memoize the link rendering to avoid creating a new function on every render
   const renderDownloadLink = (downloadUrl, batch) => (
@@ -47,7 +41,7 @@ function Main() {
 
       {/* Main Content */}
       <main className="flex-1 lg:ml-10 p-4 space-y-8">
-        <div className="max-w-6xl mx-auto">
+        <div className=" mx-auto">
           {/* Header Section */}
           <div className="relative">
             <h1 className="mt-24 lg:mt-0 xl:mt-0 inline-flex items-center bg-teal-600 text-white px-5 py-2 rounded-full text-xl font-bold shadow-lg">
@@ -61,22 +55,24 @@ function Main() {
               <table role="table" className="w-full text-left border-collapse">
                 <thead>
                   <tr role="row" className="bg-gray-100 text-gray-700">
+                    <th className="px-4 py-3 font-medium">Programme</th>
                     <th className="px-4 py-3 font-medium">Batch</th>
                     <th className="px-4 py-3 font-medium">Coordinator</th>
                     <th className="px-4 py-3 font-medium">Download</th>
                   </tr>
                 </thead>
                 <tbody role="rowgroup">
-                  {data.map((row, index) => (
+                  {value.map((row, index) => (
                     <tr
                       key={index}
                       role="row"
                       className={`border-b ${index % 2 === 0 ? "bg-gray-50" : ""}`}
                     >
-                      <td className="px-4 py-3">{row.batch}</td>
-                      <td className="px-4 py-3">{row.coordinator}</td>
+                       <td className="px-4 py-3">{row.Programe}</td>
+                      <td className="px-4 py-3">{row.Batch}</td>
+                      <td className="px-4 py-3">{row.Coordinators}</td>
                       <td className="px-4 py-3">
-                        {renderDownloadLink(row.download, row.batch)}
+                        {renderDownloadLink(row.Syllabus, row.Batch)}
                       </td>
                     </tr>
                   ))}

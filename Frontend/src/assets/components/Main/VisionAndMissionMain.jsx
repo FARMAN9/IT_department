@@ -21,6 +21,7 @@ const MissionItem = React.memo(({ children }) => (
 ));
 
 function Main() {
+  document.title = "Vision and Mission";
   // Memoizing the vision and missions data to prevent re-renders
   const dispatch = useDispatch();
 
@@ -33,6 +34,22 @@ function Main() {
 
   const vision = useMemo(() => visions, [visions]);
   const mission = useMemo(() => missions, [missions]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
+  }
   
 
   return (
@@ -40,7 +57,7 @@ function Main() {
       <div className="min-h-auto flex lg:mr-10">
         
         <main className="flex-1 lg:ml-10 p-2 lg:p-6">
-          <div className="max-w-6xl mx-auto p-6 space-y-8">
+          <div className=" mx-auto pt-4 space-y-8  bg-white">
             {/* Vision Section */}
             <div className="relative">
               <div className="mt-20 lg:mt-0 xl:mt-0 inline-flex items-center bg-teal-600 text-white px-6 py-2 rounded-full text-xl font-bold shadow-lg">
@@ -62,7 +79,7 @@ function Main() {
 
               <div className="mt-6 bg-white rounded-lg shadow-md p-6 space-y-4 border-l-4 border-teal-600">
                 {mission.map((mission, index) => (
-                  <MissionItem key={index}>{mission.mission}</MissionItem>
+                  <MissionItem key={index}>{mission.mission}</MissionItem> 
                 ))}
               </div>
             </div>

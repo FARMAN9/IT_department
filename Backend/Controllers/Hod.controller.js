@@ -70,11 +70,11 @@ export const puthodImage = async (req, res) => {
 
 export const posthodInfo = async (req, res) => {
     try {
-        const { name, description, address, mail, phoneNumber } = req.body;
+        const { name, HodMessage, address, mail, phoneNumber } = req.body;
 
         // Validate required fields
         if (!name) return res.status(400).json({ error: "Name is required" });
-        if (!description) return res.status(400).json({ error: "Description is required" });
+        if (!HodMessage) return res.status(400).json({ error: "HodMessage is required" });
         if (!address) return res.status(400).json({ error: "Address is required" });
         if (!mail) return res.status(400).json({ error: "Office mail is required" });
         if (!phoneNumber) return res.status(400).json({ error: "Phone number is required" });
@@ -85,7 +85,7 @@ export const posthodInfo = async (req, res) => {
         if (mainInfo) {
             // Update the existing record
             mainInfo.name = name;
-            mainInfo.description = description;
+            mainInfo.HodMessage = HodMessage;
             mainInfo.address = address;
             mainInfo.officeMail =mail;
             mainInfo.phoneNumber = phoneNumber;
@@ -102,7 +102,7 @@ export const posthodInfo = async (req, res) => {
             mainInfo = await HodInfo.create({
                 _id: MainID,
                 name,
-                description,
+                HodMessage,
                 address,
                 officeMail,
                 phoneNumber,

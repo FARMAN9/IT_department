@@ -12,6 +12,8 @@ import mainInfoRouter from "./Routers/Maininforouters.js";
 import HodInfoRouter from "./Routers/Hodinforouter.js";
 import connectToMongoDB from "./MongoDB/MongoDBConnect.js";
 import GalleryRouter from "./Routers/Galleryrouter.js";
+import SyllabusRouter from "./Routers/Syllabusrouter.js";
+import AcademicCoordinatorRouter from "./Routers/AcademicCoordinatorrouters.js";
 import path from "path";
 
 dotenv.config();
@@ -59,6 +61,8 @@ app.use("/api", MissionRouter);
 app.use("/api", mainInfoRouter);
 app.use("/api", HodInfoRouter);
 app.use("/api", GalleryRouter);
+app.use("/api", SyllabusRouter);
+app.use("/api", AcademicCoordinatorRouter);
 
 // Start the server
 app.listen(PORT, () => {

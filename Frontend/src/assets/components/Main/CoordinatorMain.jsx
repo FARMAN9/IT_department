@@ -7,6 +7,8 @@ import Mission_and_Vision from "../Mission_and_Vision/Mission_and_Vision";
 import { Lightbulb } from 'lucide-react';
 
 function Main() {
+  document.title = "Coordinator";
+
   // Memoizing static data for optimization
   const data = useMemo(() => [
     { program: 'Under Graduate', coordinator: 'Dr. Kusum K. Bharti' },

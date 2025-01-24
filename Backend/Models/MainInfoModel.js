@@ -21,10 +21,19 @@ const MainInfoSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    address:{
+    city:{
         type: String,
         required: true
     },
+    state:{
+        type: String,
+        required: true
+    },
+    pinCode:{
+        type: String,
+        required: true
+    },
+
     officeMail:{
         type: String,
         required: true

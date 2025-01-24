@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import GalleryModel from '../Models/GalleryModel.js';
+import {asFiletoCloud} from "../Utility/Utility.js";
 
 import { Readable } from "stream";
  // Adjust the import path as needed
@@ -22,25 +23,12 @@ export const PostGalleryImages = async (req, res) => {
         if (!req.file) {
             return res.status(400).json({ error: "Image is required" });
         }
-        const client = new Client()
-    .setEndpoint(ENDPOINT)
-    .setProject(PROJECT_ID);
-        const storage = new Storage(client);
+        
         const file = new File([req.file.buffer], req.file.originalname, {
             type: req.file.mimetype,
         });
 
-        // Upload the file to Appwrite storage
-        const appwriteFile = await storage.createFile([BUCKET_ID], ID.unique(),file);
-        
-        // Generate the file's URL
-        console.log(appwriteFile)
-        const fileUrl =`https://cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${appwriteFile.$id}/view?project=${PROJECT_ID}&project=${PROJECT_ID}&mode=admin`;
-        /*
-        https://cloud.appwrite.io/v1/storage/buckets/677505210032f70ce531/files/67754b2000207831cb56/view?project=677504d9000800330b4e&project=677504d9000800330b4e&mode=admin
-
-        */
-        // Save file details to the database
+        const {fileUrl,appwriteFile} = await asFiletoCloud(file)
         const galleryImages = await GalleryModel.create({
             id: appwriteFile.$id,
             image: fileUrl, // Save the file URL

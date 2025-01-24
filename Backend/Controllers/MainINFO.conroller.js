@@ -71,12 +71,14 @@ export const putImage = async (req, res) => {
 
 export const postMainInfo = async (req, res) => {
     try {
-        const { name, description, address, officeMail, phoneNumber } = req.body;
+        const { name, description, city, state, pinCode, officeMail, phoneNumber } = req.body;
 
         // Validate required fields
         if (!name) return res.status(400).json({ error: "Name is required" });
         if (!description) return res.status(400).json({ error: "Description is required" });
-        if (!address) return res.status(400).json({ error: "Address is required" });
+        if (!city) return res.status(400).json({ error: "City is required" });
+        if (!state) return res.status(400).json({ error: "State is required" });
+        if (!pinCode) return res.status(400).json({ error: "Pin code is required" });
         if (!officeMail) return res.status(400).json({ error: "Office mail is required" });
         if (!phoneNumber) return res.status(400).json({ error: "Phone number is required" });
 
@@ -87,7 +89,9 @@ export const postMainInfo = async (req, res) => {
             // Update the existing record
             mainInfo.name = name;
             mainInfo.description = description;
-            mainInfo.address = address;
+            mainInfo.city = city;
+            mainInfo.state = state;
+            mainInfo.pinCode = pinCode;
             mainInfo.officeMail = officeMail;
             mainInfo.phoneNumber = phoneNumber;
 
@@ -104,7 +108,9 @@ export const postMainInfo = async (req, res) => {
                 _id: MainID,
                 name,
                 description,
-                address,
+                city,
+                state,
+                pinCode,
                 officeMail,
                 phoneNumber,
             });

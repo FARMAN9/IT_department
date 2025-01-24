@@ -1,45 +1,57 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchHodData } from "../../../Features/HodSlice";
+
 
 const HodCard = () => {
+   const dispatch = useDispatch();
+  const { HodInfo, loading, error } = useSelector((state) => state.HodData);
+
+  useEffect(() => {
+    dispatch(fetchHodData());
+
+  }, [dispatch]);
+
+  const value = useMemo(() => HodInfo, [HodInfo]);
+
+ 
+
+  console.log('HOD MAIN DeBUG',HodInfo);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+ 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 mt-2 border">
       <div className="flex items-center mb-4">
-        <div className="w-20 h-20 mr-4 rounded-full bg-blue-300"></div>
+        <div className="w-40 h-40 mr-4 rounded-full bg-blue-300">
+          <img
+            src={value.image}
+            alt={value.name}
+            className="w-full h-full rounded-full object-cover border-2 border-blue-300 border-dashed animation-border"
+          />
+        </div>
         <h2 className="text-xl font-bold">
-          Dr. Shabir Ahmad Sofi
-          <p className="text-sm font-medium text-blue-950">
+          {value.name}
+          <p className="text-sm  text-blue-950  font-bold">
             Head of Department
           </p>
         </h2>
       </div>
       <div className="m-2 items-center grid">
         <p className="font-sans  text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed">
-          Welcome to the Department of Information Technology of NIT Srinagar.
-          Our Department was established in 2007, offering a four-year
-          undergraduate programme (B.Tech) in Information Technology. Over the
-          years, we have grown our expertise and competence in the core
-          Information Technology curriculum and research, holding the
-          Institute's tradition of excellence as a world-class leader in IT
-          education and research. Technology changes rapidly, especially in the
-          field of computing, whereas the science, if it changes at all, does so
-          much more gradually. Our understanding is that individuals who are
-          clear and thorough about the fundamentals can adapt to rapid changes
-          in technology relatively easily. We want the education imparted to our
-          students to be the basis of a lifetime of learning. Our constant
-          pursuit is to help our students achieve expertise and competence in
-          the core Information Technology curriculum and research. Our
-          Department has produced hundreds of professionals and has established
-          a name for itself in different fields. Our students have consistently
-          excelled in highly competitive industrial environments. I attribute
-          this success to the winning combination of a dedicated faculty that
-          works hard at imparting quality education, a well-planned syllabus,
-          and last but not least, our students.
+          {value.HodMessage || " HodMessage is not available"}
         </p>
         <div className="self-start mt-4">
           
-          <NavLink to="/about/hod-message" className="bg-blue-600 text-white font-sans h-10 hover:cursor shadow-xl shadow-blue-200 hover:bg-blue-700 rounded-lg px-4 py-2">
-            Read more
+          <NavLink to="/about/hod-message" >
+            <button className="btn btn-outline btn-sm  sm:btn-sm md:btn-md lg:btn-lg btn-info hover:cursor">More</button>
           </NavLink>
         </div>
       </div>

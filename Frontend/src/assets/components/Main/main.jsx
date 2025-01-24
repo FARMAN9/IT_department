@@ -12,6 +12,8 @@ import Wellcome from "../Wellcome/Wellcome";
 
 
 const Main = () => {
+
+  document.title = "Wellcome to Department of IT nit Srinagar";
   const activitiesTitle = "Activities";
   const newsTitle = "News & Highlights";
    
@@ -37,16 +39,17 @@ const Main = () => {
                   <div className="flex-1 items-center justify-center">
                     <Wellcome />
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                     < DepartmentOfItInfo />
                     <Mission_and_Vision />
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+                  <div className="flex-1 flex-row-reverse flex-wrap pt-1 pb-2">
                     <Card title={activitiesTitle} />
+                    
                     <Card title={newsTitle} />
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-1 gap-1">
+                  <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                     <HodCard />
                     <PlacementSlider />
 

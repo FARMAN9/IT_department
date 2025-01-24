@@ -13,11 +13,11 @@ const Layout = () => {
      </>
 
       <Header />
-      <div className="min-h-screen flex flex-col">
-        <div className="flex flex-1">
+      <div className="min-h-screen flex flex-col m-0">
+        <div className="flex flex-1 m-0">
           <Sidebar />
-          <main className="flex-1 p-0 m-0">
-            <div className="w-full">
+          <main className="flex-1 p-0 m-0 ">
+            <div className="w-full h-auto">
               <Outlet />
             </div>
           </main>
