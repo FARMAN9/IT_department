@@ -1,25 +1,26 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import Main from './assets/components/Main/main.jsx';
-import Layout from './Layout.jsx';
-import HodMain from './assets/components/Main/HODMain.jsx';
-import VisionAndMissionMain from './assets/components/Main/VisionAndMissionMain.jsx';
-import AchievementMain from './assets/components/Main/AchievementMain.jsx';
-import ContactMain from './assets/components/Main/ContactMain.jsx';
-import ProgramMain from './assets/components/Main/ProgramesMain.jsx';
-import CoordinatorMain from './assets/components/Main/CoordinatorMain.jsx';
-import SyllabusMain from './assets/components/Main/SyllabusMain.jsx';
-import TimeTableMain from './assets/components/Main/TimeTablemain.jsx';
-import FacultyList from './assets/components/Main/facultymain.jsx';
-import PublishMain from './assets/components/Main/PublishMain.jsx';
-import ResearchAreas from './assets/components/Main/ResearchAreaMain.jsx';
-import Studentmain from './assets/components/Main/studentMain.jsx';
-import Gallery from './assets/components/Gallery/Gallery.jsx';
-import {Provider} from "react-redux";
-import {store} from "./redux/store.js";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.jsx";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Main from "./assets/components/Main/main.jsx";
+import Layout from "./Layout.jsx";
+import HodMain from "./assets/components/Main/HODMain.jsx";
+import VisionAndMissionMain from "./assets/components/Main/VisionAndMissionMain.jsx";
+import AchievementMain from "./assets/components/Main/AchievementMain.jsx";
+import ContactMain from "./assets/components/Main/ContactMain.jsx";
+import ProgramMain from "./assets/components/Main/ProgramesMain.jsx";
+import CoordinatorMain from "./assets/components/Main/CoordinatorMain.jsx";
+import SyllabusMain from "./assets/components/Main/SyllabusMain.jsx";
+import TimeTableMain from "./assets/components/Main/TimeTablemain.jsx";
+import FacultyList from "./assets/components/Main/facultymain.jsx";
+import PublishMain from "./assets/components/Main/PublishMain.jsx";
+import ResearchAreas from "./assets/components/Main/ResearchAreaMain.jsx";
+import Studentmain from "./assets/components/Main/studentMain.jsx";
+import Gallery from "./assets/components/Gallery/Gallery.jsx";
+import { Provider } from "react-redux";
+import { store } from "./redux/store.js";
+import DepartmentActivitesCalender from "./assets/components/DepartmentActivituesCalender/DepartmentActivitesCalender.jsx";
 
 const router = createBrowserRouter([
   {
@@ -35,23 +36,21 @@ const router = createBrowserRouter([
         element: <HodMain />,
       },
       {
-        path:"/about/vision",
+        path: "/about/vision",
         element: <VisionAndMissionMain />,
-      }
-      ,
-      {
-        path:"/about/achievements",
-        element: <AchievementMain/>,
       },
       {
-        path:"/about/infrastructure",
+        path: "/about/achievements",
+        element: <AchievementMain />,
+      },
+      {
+        path: "/about/infrastructure",
         element: <Gallery />,
       },
       {
-        path:"/about/contact",
+        path: "/about/contact",
         element: <ContactMain />,
-      }
-      ,
+      },
       {
         path: "/academic/programmes",
         element: <ProgramMain />,
@@ -70,7 +69,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/academic/calendar",
-        element: <VisionAndMissionMain />,
+        element: <DepartmentActivitesCalender />,
       },
       {
         path: "/people/faculty",
@@ -78,11 +77,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/people/phd-scholars",
-        element:  <FacultyList />,
+        element: <FacultyList />,
       },
       {
         path: "/people/students",
-        element: <Studentmain/>,
+        element: <Studentmain />,
       },
       {
         path: "/people/alumni",
@@ -124,21 +123,20 @@ const router = createBrowserRouter([
         path: "/societies",
         element: <VisionAndMissionMain />,
       },
-
-
-
     ],
   },
 ]);
 
-
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
-     <Provider store={store}>
-    <RouterProvider router={router}
-    future={{
-      v7_startTransition: true}} />
-    {/* <App /> */}
+    <Provider store={store}>
+      <RouterProvider
+        router={router}
+        future={{
+          v7_startTransition: true,
+        }}
+      />
+      {/* <App /> */}
     </Provider>
-  </StrictMode>,
-)
+  </StrictMode>
+);

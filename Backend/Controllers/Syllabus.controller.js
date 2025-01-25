@@ -19,7 +19,7 @@ export const PostSyllabus = async (req, res) => {
 
     try {
         
-        console.log(req)
+       
 
         if (!req.file) {
             return res.status(400).json({ error: "Syllabus is required" });
@@ -47,7 +47,16 @@ export const PostSyllabus = async (req, res) => {
 
 export const UpdateSyllabus = async (req, res) => {
     try {
+
         const updatedSyllabus = await SyllabusModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (req.file) {
+            const file = new File([req.file.buffer], req.file.originalname, {
+                type: req.file.mimetype,
+            });
+            const {fileUrl,appwriteFile} = await asFiletoCloud(file)
+            updatedSyllabus.Syllabus = fileUrl;
+        }
+
         if (!updatedSyllabus) {
             return res.status(404).json({ error: "Syllabus not found" });
         }

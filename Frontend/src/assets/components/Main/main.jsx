@@ -41,7 +41,8 @@ const Main = () => {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                    < DepartmentOfItInfo />
+                    < DepartmentOfItInfo /> 
+                    
                     <Mission_and_Vision />
                   </div>
                   <div className="flex-1 flex-row-reverse flex-wrap pt-1 pb-2">

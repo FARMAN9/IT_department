@@ -14,6 +14,8 @@ import connectToMongoDB from "./MongoDB/MongoDBConnect.js";
 import GalleryRouter from "./Routers/Galleryrouter.js";
 import SyllabusRouter from "./Routers/Syllabusrouter.js";
 import AcademicCoordinatorRouter from "./Routers/AcademicCoordinatorrouters.js";
+import TimeTableRouter from "./Routers/TimeTableRouter.js";
+import DepartmentActivitesCalenderRouter from "./Routers/DepartmentActivitesCalendarrouter.js";
 import path from "path";
 
 dotenv.config();
@@ -63,6 +65,8 @@ app.use("/api", HodInfoRouter);
 app.use("/api", GalleryRouter);
 app.use("/api", SyllabusRouter);
 app.use("/api", AcademicCoordinatorRouter);
+app.use("/api", TimeTableRouter);
+app.use("/api", DepartmentActivitesCalenderRouter);
 
 // Start the server
 app.listen(PORT, () => {

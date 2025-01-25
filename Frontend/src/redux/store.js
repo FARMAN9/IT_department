@@ -5,6 +5,9 @@ import MainDepartmentSlice from '../Features/MainDepartmentSlice'
 import GallerySlice from '../Features/GallerySlice'
 import HodSlice from '../Features/HodSlice'
 import SyllabusSlice from '../Features/SyllabusSlice'
+import AcademicCoordinatorSlice from '../Features/AcademicCoordinatorSlice'
+import TimeTableSlice from '../Features/TimeTabelSlice'
+import DepartmentActivitesCalenderSlice from '../Features/DepartmentActivitesCalendarslice'
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +16,9 @@ export const store = configureStore({
     MainDepartmentData: MainDepartmentSlice,
     GalleryData: GallerySlice,
     HodData: HodSlice
-    ,SyllabusData: SyllabusSlice
+    , SyllabusData: SyllabusSlice,
+    AcademicCoordinatorData: AcademicCoordinatorSlice,
+    TimeTableData: TimeTableSlice,
+    DepartmentActivitesCalenderData: DepartmentActivitesCalenderSlice
   }
 })

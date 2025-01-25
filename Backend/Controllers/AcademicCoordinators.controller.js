@@ -15,10 +15,7 @@ export const GetAllAcademicCoordinators = async (req, res) => {
 export const PostAcademicCoordinators = async (req, res) => {
     try {
         
-        const file = new File([req.file.buffer], req.file.originalname, {
-            type: req.file.mimetype,
-        });
-        const {fileUrl,appwriteFile} = await asFiletoCloud(file)
+       
         const newAcademicCoordinators = await AcademicCoordinatorsModel.create({
            Coordinators: req.body.Coordinators,
            Programe: req.body.Programe

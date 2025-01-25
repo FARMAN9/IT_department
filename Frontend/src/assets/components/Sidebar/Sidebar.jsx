@@ -13,8 +13,10 @@ import {
   X,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const AcademicSidebar = () => {
+  const theme = [];
   const [expandedMenu, setExpandedMenu] = useState("about");
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -23,12 +25,13 @@ const AcademicSidebar = () => {
       icon: Home,
       label: "Home",
       link: "/",
+      id: "home",
     },
     {
       icon: Info,
       label: "About",
       id: "about",
-      link: "/",
+      link: "/about",
       submenu: [
         { label: "Vision and Missions", link: "/about/vision" },
         { label: "HoD's Message", link: "/about/hod-message" },
@@ -97,7 +100,7 @@ const AcademicSidebar = () => {
   };
 
   const handleSubmenuItemClick = () => {
-    setIsMobileOpen(false); // Close the sidebar when a submenu item is clicked
+    setIsMobileOpen(false);
   };
 
   return (
@@ -105,9 +108,16 @@ const AcademicSidebar = () => {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className="fixed top-7 right-3 z-50 bg-gray-500 rounded-lg border shadow-lg text-white lg:hidden xl:hidden 2xl:hidden"
+        className="fixed top-7 right-3 z-50 rounded-lg border shadow-lg text-white lg:hidden xl:hidden 2xl:hidden"
+        style={{
+          backgroundColor: theme === "dark" ? "#2E4053" : "#38A169",
+        }}
       >
-        {isMobileOpen ? <X className="w-8 h-8" /> : <MenuIcon className="w-8 h-8" />}
+        {isMobileOpen ? (
+          <X className="w-8 h-8" />
+        ) : (
+          <MenuIcon className="w-8 h-8" />
+        )}
       </button>
 
       {/* Overlay for mobile */}
@@ -115,15 +125,25 @@ const AcademicSidebar = () => {
         <div
           className="lg:hidden md:hidden fixed inset-0 z-0"
           onClick={() => setIsMobileOpen(false)}
+          style={{
+            backgroundColor:
+              theme === "dark" ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 0, 0.2)",
+          }}
         />
       )}
 
       {/* Sidebar */}
       <div
         className={`fixed lg:static z-40 p-0 mt-24 md:mt-0 lg:mt-6 mb-6 text-white rounded shadow-md
-        transform ${isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-10"}
+        transform ${
+          isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-10"
+        }
         transition-transform duration-300 ease-in-out
         md:w-80 w-full bg-white border-r border-gray-300 overflow-y-auto`}
+        style={{
+          backgroundColor: theme === "dark" ? "#212121" : "#F7F7F7",
+          color: theme === "dark" ? "#FFFFFF" : "#000000",
+        }}
       >
         <nav className="flex flex-col h-full">
           <div className="flex-1">
@@ -132,14 +152,16 @@ const AcademicSidebar = () => {
                 <NavLink
                   to={item.link}
                   className={({ isActive }) =>
-                    `flex items-center rounded-sm border m-1 px-4 py-3 text-gray-700 ${
-                      isActive ? "bg-gray-200" : "hover:bg-gray-100"
+                    `flex items-center rounded-sm border m-1 px-4 py-3  ${
+                      isActive
+                        ? "bg-gray-200 dark:bg-gray-600"
+                        : "hover:bg-gray-100 dark:hover:bg-gray-700"
                     } transition-colors duration-200`
                   }
                   onClick={(e) => handleMenuItemClick(e, item)} // Handle item click
                 >
                   <item.icon className="w-5 h-5 mr-3" />
-                  <span className="md:text-xl text-sm font-medium flex-grow">
+                  <span className="md:text-xl sm:text-lg text-base font-medium flex-grow">
                     {item.label}
                   </span>
                   {item.submenu &&
@@ -150,20 +172,24 @@ const AcademicSidebar = () => {
                     ))}
                 </NavLink>
                 {item.submenu && expandedMenu === item.id && (
-                  <div className="bg-gray-50 rounded-sm">
+                  <div className={`bg-gray-50 dark:bg-gray-800 rounded-sm`}>
                     {item.submenu.map((subItem, subIndex) => (
                       <NavLink
                         key={subIndex}
                         to={subItem.link}
                         className={({ isActive }) =>
-                          `flex items-center m-1 px-4 py-2 pl-12 text-gray-600 rounded-sm border ${
-                            isActive ? "bg-gray-200" : "hover:bg-gray-100"
+                          `flex items-center m-1 px-4 py-2 pl-12 text-gray-600 dark:text-gray-300 rounded-sm border ${
+                            isActive
+                              ? "bg-gray-200 dark:bg-gray-600"
+                              : "hover:bg-gray-100 dark:hover:bg-gray-700"
                           } transition-colors duration-200`
                         }
                         onClick={handleSubmenuItemClick} // Close sidebar when submenu item is clicked
                       >
                         <CircleDot className="w-5 h-5 mr-3" />
-                        <span className="text-sm md:text-xl">{subItem.label}</span>
+                        <span className="md:text-xl sm:text-lg text-base">
+                          {subItem.label}
+                        </span>
                       </NavLink>
                     ))}
                   </div>
