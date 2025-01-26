@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Header from "./assets/components/Header/Header";
-import Main from "./assets/components/Main/main";
-import Footer from "./assets/components/Footer/Footer";
+import Header from "./components/Header/Header";
+import Main from "./components/Main/main";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const [count, setCount] = useState(0);

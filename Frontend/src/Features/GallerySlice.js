@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import Gallery from '../assets/components/Gallery/Gallery';
+
 
 // Async thunk to fetch data from an API
 export const fetchGalleryData = createAsyncThunk('GalleryData/fetchGalleryData', async (_, { rejectWithValue }) => {

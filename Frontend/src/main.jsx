@@ -1,26 +1,35 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./App.jsx";
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Main from "./assets/components/Main/main.jsx";
+import Main from "./components/Main/main.jsx";
 import Layout from "./Layout.jsx";
-import HodMain from "./assets/components/Main/HODMain.jsx";
-import VisionAndMissionMain from "./assets/components/Main/VisionAndMissionMain.jsx";
-import AchievementMain from "./assets/components/Main/AchievementMain.jsx";
-import ContactMain from "./assets/components/Main/ContactMain.jsx";
-import ProgramMain from "./assets/components/Main/ProgramesMain.jsx";
-import CoordinatorMain from "./assets/components/Main/CoordinatorMain.jsx";
-import SyllabusMain from "./assets/components/Main/SyllabusMain.jsx";
-import TimeTableMain from "./assets/components/Main/TimeTablemain.jsx";
-import FacultyList from "./assets/components/Main/facultymain.jsx";
-import PublishMain from "./assets/components/Main/PublishMain.jsx";
-import ResearchAreas from "./assets/components/Main/ResearchAreaMain.jsx";
-import Studentmain from "./assets/components/Main/studentMain.jsx";
-import Gallery from "./assets/components/Gallery/Gallery.jsx";
+import HodMain from "./components/Main/HODMain.jsx";
+import VisionAndMissionMain from "./components/Main/VisionAndMissionMain.jsx";
+import AchievementMain from "./components/Main/AchievementMain.jsx";
+import ContactMain from "./components/Main/ContactMain.jsx";
+import ProgramMain from "./components/Main/ProgramesMain.jsx";
+import CoordinatorMain from "./components/Main/CoordinatorMain.jsx";
+import SyllabusMain from "./components/Main/SyllabusMain.jsx";
+import TimeTableMain from "./components/Main/TimeTablemain.jsx";
+import Gallery from "./components/Gallery/Gallery.jsx";
 import { Provider } from "react-redux";
 import { store } from "./redux/store.js";
-import DepartmentActivitesCalender from "./assets/components/DepartmentActivituesCalender/DepartmentActivitesCalender.jsx";
+import DepartmentActivitesCalender from "./components/DepartmentActivituesCalender/DepartmentActivitesCalender.jsx";
+import Faculity from "./components/People/Faculity.jsx";
+import PhdStudents from "./components/People/PhdStudents.jsx";
+import Students from "./components/People/Students.jsx";
+import Staff from "./components/People/Staff.jsx";
+import ResearchArea from "./components/ResearchAndLabs/ResearchArea.jsx";
+import ResearchLabs from "./components/ResearchAndLabs/Researchlabs.jsx";
+import Projects from "./components/ResearchAndLabs/Projects.jsx";
+import Publications from "./components/ResearchAndLabs/Publications.jsx";
+import DepartmentLabs from "./components/ResearchAndLabs/DepartmentLabs.jsx";
+import SocietiesClubsTeams from "./components/SocietiesClubsTeams/SocietiesClubsTeams.jsx";
+import Consultancy from "./components/ResearchAndLabs/Consultancy.jsx";
+import Patents from "./components/ResearchAndLabs/Patents.jsx";
+import PersonDetials from "./components/People/PersonDetials.jsx";
 
 const router = createBrowserRouter([
   {
@@ -73,55 +82,59 @@ const router = createBrowserRouter([
       },
       {
         path: "/people/faculty",
-        element: <FacultyList />,
+        element: <Faculity />,
       },
       {
         path: "/people/phd-scholars",
-        element: <FacultyList />,
+        element: <PhdStudents />,
       },
       {
         path: "/people/students",
-        element: <Studentmain />,
+        element: <Students />,
       },
       {
         path: "/people/alumni",
-        element: <TimeTableMain />,
+        element: <Faculity />,
       },
       {
         path: "/people/staff",
-        element: <FacultyList />,
+        element: <Staff />,
       },
       {
         path: "/research/areas",
-        element: <ResearchAreas />,
+        element: <ResearchArea />,
       },
       {
         path: "/research/labs",
-        element: <ResearchAreas />,
+        element: <DepartmentLabs />,
       },
       {
         path: "/research/publications",
-        element: <PublishMain />,
+        element: <Publications />,
       },
       {
         path: "/research/projects",
-        element: <VisionAndMissionMain />,
+        element: <Projects />,
       },
       {
         path: "/research/consultancy",
-        element: <VisionAndMissionMain />,
+        element: <Consultancy />,
       },
       {
         path: "/research/research-labs",
-        element: <VisionAndMissionMain />,
+        element: <ResearchLabs />,
       },
       {
         path: "/research/patents",
-        element: <VisionAndMissionMain />,
+        element: <Patents />,
       },
       {
         path: "/societies",
-        element: <VisionAndMissionMain />,
+        element: <SocietiesClubsTeams />,
+      },
+      {
+        path: "/people/:id",
+        element: <PersonDetials />,
       },
     ],
   },
