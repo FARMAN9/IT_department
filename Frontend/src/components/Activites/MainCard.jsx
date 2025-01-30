@@ -11,7 +11,7 @@ function MainCard({ title, children }) {
                 {title}
               </div>
             </div>
-            <div className="mt-0 bg-white rounded-lg shadow-md p-6 border-l-4 border-teal-600">
+            <div className="mt-0 bg-white rounded-lg shadow-md p-3 border-l-4 border-teal-600">
               {children}
             </div>
           </div>

@@ -19,19 +19,21 @@ function Faculity() {
       email: "bhartik@nitj.ac.in",
     },
     {
-      image: "https://via.placeholder.com/100",
-      name: "Dr Mohit Kumar",
+      image: null,
+      name: "Dr Saniya Malik  ",
       designation: "Assistant Professor (Grade-I)",
       email: "kumarmohit@nitj.ac.in",
     },
     {
-      image: "https://via.placeholder.com/100",
+      image:
+        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       name: "Dr Nisha Chaurasia",
       designation: "Assistant Professor (Grade-I)",
       email: "chaurasian@nitj.ac.in",
     },
     {
-      image: "https://via.placeholder.com/100",
+      image:
+        "https://images.unsplash.com/photo-1566438480900-0609be27a4be?q=80&w=1988&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       name: "Dr Nisha Chaurasia",
       designation: "Assistant Professor (Grade-I)",
       email: "chaurasian@nitj.ac.in",
