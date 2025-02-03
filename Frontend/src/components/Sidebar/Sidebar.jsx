@@ -17,7 +17,7 @@ import {
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const AcademicSidebar = () => {
+const AcademicSidebar = ({ adminNavopen }) => {
   const theme = [];
   const [expandedMenu, setExpandedMenu] = useState("about");
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -110,10 +110,10 @@ const AcademicSidebar = () => {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className="fixed top-7 right-3 z-50 rounded-lg border shadow-lg text-white lg:hidden xl:hidden 2xl:hidden"
-        style={{
-          backgroundColor: theme === "dark" ? "#2E4053" : "#38A169",
-        }}
+        className={`${
+          adminNavopen ? "top-[11%] right-3" : "top-[3.5%] right-3"
+        } z-50 absolute rounded-lg border shadow-lg text-white lg:hidden xl:hidden 2xl:hidden`}
+        style={{ backgroundColor: theme === "dark" ? "gray" : "blue" }}
       >
         {isMobileOpen ? (
           <X className="w-8 h-8" />
@@ -125,7 +125,7 @@ const AcademicSidebar = () => {
       {/* Overlay for mobile */}
       {isMobileOpen && (
         <div
-          className="lg:hidden md:hidden fixed inset-0 z-0"
+          className="lg:hidden md:hidden xl:hidden 2xl:hidden  fixed inset-0 z-0"
           onClick={() => setIsMobileOpen(false)}
           style={{
             backgroundColor:
@@ -136,12 +136,12 @@ const AcademicSidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed lg:static z-40 p-0 mt-24 md:mt-0 lg:mt-6 mb-6 text-white rounded shadow-md
+        className={`fixed lg:static z-40 p-0  md:mt-0 lg:m-3 mb-0 text-white rounded shadow-md
         transform ${
-          isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-10"
+          isMobileOpen ? "translate-x-0" : "translate-x-full lg:translate-x-10"
         }
         transition-transform duration-300 ease-in-out
-        md:w-80 w-full bg-white border-r border-gray-300 overflow-y-auto`}
+        lg:w-[20%] xl:w-[20%] 2xl:w-[20%] w-full bg-white border-r border-gray-300 overflow-y-auto`}
         style={{
           backgroundColor: theme === "dark" ? "#212121" : "#F7F7F7",
           color: theme === "dark" ? "#FFFFFF" : "#000000",
@@ -163,7 +163,7 @@ const AcademicSidebar = () => {
                   onClick={(e) => handleMenuItemClick(e, item)} // Handle item click
                 >
                   <item.icon className="w-5 h-5 mr-3" />
-                  <span className="md:text-md sm:text-md text-base lg:text-md flex-grow font-semibold ">
+                  <span className="md:text-md sm:text-base text-base lg:text-md flex-grow font-semibold ">
                     {item.label}
                   </span>
                   {item.submenu &&

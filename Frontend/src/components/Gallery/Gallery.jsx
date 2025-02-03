@@ -50,13 +50,13 @@ function Gallery() {
           {GalleryImage.map((photo) => (
             <div
               key={photo.id}
-              className="break-inside-avoid mb-4 rounded-xl overflow-hidden relative group"
+              className="break-inside-avoid mb-4 rounded-xl overflow-hidden relative group p-4"
             >
-              <div className="relative">
+              <div className="relative gap-2">
                 <img
                   src={photo.image}
                   alt={`Photo ${photo.id}`}
-                  className="w-full object-cover rounded-xl"
+                  className="w-full object-cover rounded-xl "
                   loading="lazy"
                 />
 

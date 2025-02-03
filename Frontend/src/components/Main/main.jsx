@@ -17,10 +17,10 @@ const Main = () => {
     <>
       <div className="min-h-auto flex lg:mr-10">
         <main className="flex-1 lg:ml-10 p-2 lg:p-4">
-          <div className="max-w-9xl mx-auto p-0 pt-4 space-y-8">
+          <div className="">
             {/* Coordinator Section */}
             <div className="relative">
-              <div className="mt-o bg-white rounded-lg shadow-md p-0 border-l-4-">
+              <div className="mt-o rounded-lg shadow-md p-0 ">
                 <div className="">
                   <div className="h-full w-full">
                     <ImageSlide />

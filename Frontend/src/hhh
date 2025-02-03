@@ -1,0 +1,29 @@
+ <div className="w-full">
+        {/* Admin Nav */}
+        <div
+          className={`w-full shadow-md transition-all duration-[1000ms] ease-in-out ${
+            isMenuVisible
+              ? "opacity-100 visible animate-slideInDown"
+              : "hidden opacity-0 animate-slideOutUp"
+          }`}
+        >
+          <NavAdmin />
+        </div>
+        {/* Main Header */}
+      </div>
+      <div className="flex justify-center min-w-full">
+        <button
+          onClick={toggleAdmin}
+          className="bg-blue-700 px-4 absolute py-2 rounded-b-full text-white z-50 "
+        >
+          {isMenuVisible ? (
+            <IoIosArrowUp size={20} />
+          ) : (
+            <IoIosArrowDown size={20} />
+          )}
+        </button>
+
+        <div className="w-full">
+          <Header />
+        </div>
+      </div>

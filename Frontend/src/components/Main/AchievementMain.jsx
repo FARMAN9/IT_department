@@ -16,7 +16,7 @@ function Main() {
     <>
       <div className="min-h-screen flex lg:mr-10">
         <main className="flex-1 lg:ml-10 p-2 lg:p-6">
-          <div className=" mx-auto pt-4 space-y-0  bg-white">
+          <div className=" mx-auto  space-y-0  bg-white">
             {/* Header */}
             <div className="mb-10 flex ">
               <div className="mt-20 lg:mt-0 xl:mt-0 inline-flex items-center bg-teal-600 text-white px-6 py-2 rounded-full text-xl font-bold shadow-lg">

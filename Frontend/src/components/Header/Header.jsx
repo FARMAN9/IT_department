@@ -12,6 +12,8 @@ import {
   House,
   X,
 } from "lucide-react";
+import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowUp } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 
 function Header() {
@@ -24,43 +26,42 @@ function Header() {
 
   return (
     <>
-    <div className="bg-blue-500">
-      <h1 className="text-center mx-auto ">IT Department </h1>
-    </div>  
-    <header className="fixed lg:static bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded border-gray-300 text-lg  font-semibold border   z-50 w-full">
-      <div className="container mx-auto flex justify-between items-center md:p-2 py-2 px-full">
-        <div className="flex items-center text-lg font-bold space-x-1">
-          <img
-            className="w-20 h-20 md:w-20 md:h-20 transition-transform duration-500 transform "
-            src="https://nitsri.ac.in/images/nit-logo.png"
-            alt=""
-          />
-          <div className="md:flex-col self-center text-center md:text-left">
-            <NavLink
-              to ="/"
-              className="text-pretty md:text-4xl text-sm font-semibold text-glow  ">
-              INFORMATION TECHNOLOGY
-            </NavLink>
-            <hr className="" />
-            <p className="md:text-sm text-xs text-glow  font-semibold ">
-              National Institute of Technology Srinagar,Jammu & Kashmir
-            </p>
+      <header className="z-20  bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded border-gray-300 text-lg  font-semibold border  w-full">
+        <div className="container mx-auto flex justify-between items-center md:p-2 py-2 px-full">
+          <div className="flex items-center text-lg font-bold space-x-1">
+            <img
+              className="w-20 h-20 md:w-20 md:h-20 transition-transform duration-500 transform "
+              src="https://nitsri.ac.in/images/nit-logo.png"
+              alt="nit logo"
+            />
+            <div className="md:flex-col sm:flex-col self-center text-center md:text-left">
+              <NavLink
+                to="/"
+                className="text-pretty md:text-4xl text-sm font-semibold text-glow  "
+              >
+                INFORMATION TECHNOLOGY
+              </NavLink>
+              <hr className="" />
+              <p className="md:text-sm text-xs text-glow  font-semibold ">
+                National Institute of Technology Srinagar,Jammu & Kashmir
+              </p>
+            </div>
+            <div className="md:hidden lg:hidden visibility:hidden m-1 p-2">
+              <button className="flex z-0 items-center justify-center w-10 lg:hidden md:hidden">
+                {" "}
+              </button>
+            </div>
           </div>
-          <div className="md:hidden lg:hidden visibility:hidden m-1 p-2">
-            <button className="flex z-0 items-center justify-center w-10 lg:hidden md:hidden"></button>
-          </div>
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex space-x-20 text-xl">
+            <div className="flex-1">
+              <a href="#" className="hover:text-gray-200 ">
+                <House size={36} strokeWidth={2.75} />
+              </a>
+            </div>
+          </nav>
         </div>
-        {/* Desktop Nav */}
-        <nav className="hidden hidden md:flex space-x-20 text-xl">
-          <div className="flex-1">
-            <a href="#" className="hover:text-gray-200 ">
-              <House size={36} strokeWidth={2.75} />
-            </a>
-          </div>
-        </nav>
-      </div>
-    </header>
-  
+      </header>
     </>
   );
 }

@@ -27,10 +27,10 @@ function Main() {
   return (
     <>
       <div className="flex flex-col lg:flex-row min-h-screen">
-        <main className="flex-1 lg:ml-10 p-4 lg:p-6">
+        <main className="flex-1 lg:ml-10 p-0 m-1 lg:p-6">
           <div className=" mx-auto pt-4 space-y-8  bg-white">
             {/* Profile Section */}
-            <div className="flex flex-col md:flex-row gap-8 items-start md:items-center mt-20 lg:mt-0">
+            <div className="flex flex-col md:flex-row gap-8 items-start md:items-center  lg:mt-0">
               {/* Left side with image */}
               <div className="w-64 h-64 relative">
                 <div

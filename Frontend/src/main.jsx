@@ -30,6 +30,7 @@ import SocietiesClubsTeams from "./components/SocietiesClubsTeams/SocietiesClubs
 import Consultancy from "./components/ResearchAndLabs/Consultancy.jsx";
 import Patents from "./components/ResearchAndLabs/Patents.jsx";
 import PersonDetials from "./components/People/PersonDetials.jsx";
+import LoginForm from "./components/UtilityCompoments/LoginForm.jsx";
 
 const router = createBrowserRouter([
   {
@@ -135,6 +136,10 @@ const router = createBrowserRouter([
       {
         path: "/people/:id",
         element: <PersonDetials />,
+      },
+      {
+        path: "/login",
+        element: <LoginForm />,
       },
     ],
   },
