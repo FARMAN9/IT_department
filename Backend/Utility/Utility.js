@@ -1,6 +1,6 @@
 
 import { Readable } from "stream";
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
  
 import { Client, Storage, ID } from "appwrite";
 import dotenv from "dotenv";
@@ -26,11 +26,12 @@ export async function asFiletoCloud(file) {
 }
 
 
-export async function passwordHash(password) {
-    const salt = await bcrypt.genSalt(10);
+export async function hashPassword(password) {
+    const salt = await bcrypt.genSalt(10)
+    console.log(salt)
     return await bcrypt.hash(password, salt);
 }
 
-export async function passwordCompare(password, hash) {
+export async function comparePassword(password, hash) {
     return await bcrypt.compare(password, hash);
 }

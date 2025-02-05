@@ -16,6 +16,8 @@ import SyllabusRouter from "./Routers/Syllabusrouter.js";
 import AcademicCoordinatorRouter from "./Routers/AcademicCoordinatorrouters.js";
 import TimeTableRouter from "./Routers/TimeTableRouter.js";
 import DepartmentActivitesCalenderRouter from "./Routers/DepartmentActivitesCalendarrouter.js";
+
+import Userrouter from "./Routers/Userrouter.js";
 import path from "path";
 
 dotenv.config();
@@ -57,6 +59,8 @@ app.get("/", (req, res) => {
   res.send("Department of it nit");
 });
 
+
+app.use("/api", Userrouter);
 app.use("/api", MainImagesRouter);
 app.use("/api", VissionRouter);
 app.use("/api", MissionRouter);
