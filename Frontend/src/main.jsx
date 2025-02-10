@@ -31,6 +31,7 @@ import Consultancy from "./components/ResearchAndLabs/Consultancy.jsx";
 import Patents from "./components/ResearchAndLabs/Patents.jsx";
 import PersonDetials from "./components/People/PersonDetials.jsx";
 import LoginForm from "./components/UtilityCompoments/LoginForm.jsx";
+import SignupForm from "./components/UtilityCompoments/SignupForm.jsx";
 
 const router = createBrowserRouter([
   {
@@ -140,6 +141,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <LoginForm />,
+      },
+      {
+        path: "/signup",
+        element: <SignupForm />,
       },
     ],
   },

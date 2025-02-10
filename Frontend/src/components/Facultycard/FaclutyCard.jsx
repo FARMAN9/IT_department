@@ -7,7 +7,7 @@ const FacultyCard = ({ image, name, designation, email, id }) => {
     <div className="card card-compact bg-base-100 w-full shadow-xl transition duration-300 hover:shadow-2xl hover:scale-105 hover:cursor-pointer hover:shadow-blue-500 ">
       <figure>
         <img
-          className="w-48 h-48 object-cover"
+          className="w-60 h-48 object-cover"
           src={
             image
               ? image

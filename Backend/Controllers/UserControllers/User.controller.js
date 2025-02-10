@@ -1,13 +1,13 @@
 import UserModel from '../../Models/UserModel.js'
 import {hashPassword,comparePassword} from "../../Utility/Utility.js";
 
-import craeteTokenAndSave from "../../Jwt/Jwt_Token.js";
+import createTokenAndSave from "../../Jwt/Jwt_Token.js";
 import { asFiletoCloud } from "../../Utility/Utility.js";
 
 
 export const signUpForUsers = async (req, res) => {
     try {
-        const { name, email, password, image, designation, mobile } = req.body;
+        const { name, email, password, designation, mobile } = req.body;
         const user = await UserModel.findOne({ email });
         if (user) {
             return res.status(400).json({ message: "User already exists" });
@@ -21,10 +21,16 @@ export const signUpForUsers = async (req, res) => {
             email,
             password: hashedPassword,
             role:'user',
-            image,
             designation,
             mobile
         });
+        if (req.file) {
+            const {fileUrl,appwriteFile} = await asFiletoCloud(new File([req.file.buffer], req.file.originalname, {
+                type: req.file.mimetype,
+            }));
+            NewUser.image = fileUrl;
+            NewUser.id = appwriteFile.$id;
+        }
         await NewUser.save();
         
         return res.status(201).json({
@@ -42,34 +48,19 @@ export const signUpForUsers = async (req, res) => {
 
 export const signUpForAdmin = async (req, res) => {
     try {
-        const { name, email, password, image, designation, mobile } = req.body;
-        if (!email) {
-            return res.status(400).json({ message: "Email is required" });
-        }
-        if (!password) {
-            return res.status(400).json({ message: "Password is required" });
-        }
-        if (!name) {
-            return res.status(400).json({ message: "Name is required" });
-        }
-        if (!designation) {
-            return res.status(400).json({ message: "Designation is required" });
-        }
-        
+        const { name, email, password, designation, mobile } = req.body;
+        let UserImage = '';
         if (req.file) {
-             const file = new File([req.file.buffer], req.file.originalname, {
+            const file = new File([req.file.buffer], req.file.originalname, {
                 type: req.file.mimetype,
-             });
-            
-                      
-            
+            });
+            const { fileUrl, appwriteFile } = await asFiletoCloud(file);
+            UserImage = fileUrl;
         }
-        
 
         const user = await UserModel.findOne({ email });
         if (user) {
             return res.status(400).json({ message: "Admin already exists" });
-
         }
         const hashedPassword = await hashPassword(password);
 
@@ -81,13 +72,13 @@ export const signUpForAdmin = async (req, res) => {
                 email,
                 password: hashedPassword,
                 role: 'Admin',
-                image,
+                image: UserImage,
                 designation,
                 status: 'not verified',
                 mobile
             });
             await NewUser.save();
-        
+
             return res.status(201).json({
                 success: true,
                 data: NewUser,
@@ -100,20 +91,19 @@ export const signUpForAdmin = async (req, res) => {
                 email,
                 password: hashedPassword,
                 role: 'Admin',
-                image,
+                image: UserImage,
                 designation,
-                status:'active',
+                status: 'active',
                 mobile
             });
             await NewUser.save();
-        
+
             return res.status(201).json({
                 success: true,
                 data: NewUser,
                 message: "Admin created successfully",
             });
         }
-            
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: error.message });
@@ -133,7 +123,15 @@ export const signIn = async (req, res) => {
         if (!isPasswordValid) {
             return res.status(400).json({ message: "Invalid Credentials" });
         }
-        const token = await craeteTokenAndSave(user._id, user.role);
+        if (user.status === 'not verified') {
+            return res.status(400).json({ message: "Please wait for admin approval" });
+        }
+        const token = await createTokenAndSave(user._id, user.role, res);
+        
+
+       
+
+        
         return res.status(200).json({
             success: true,
             data: {
@@ -143,9 +141,9 @@ export const signIn = async (req, res) => {
                 image: user.image,
                 designation: user.designation,
                 mobile: user.mobile,
-                role: user.role
+                role: user.role,
+                
             },
-            token: token,
             message: "Login successful"
         });
     } catch (error) {

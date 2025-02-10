@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 function DepartmentLabs() {
   const facultyData = [
     {
-      image: "https://via.placeholder.com/100", // Replace with actual image URLs
+      image: "", // Replace with actual image URLs
       name: "IOT Lab",
       Incharge: "Associate Professor & Head",
       email: "vijayk@nitj.ac.in",
@@ -15,7 +15,7 @@ function DepartmentLabs() {
       labmenu: "",
     },
     {
-      image: "https://via.placeholder.com/100", // Replace with actual image URLs
+      image: "", // Replace with actual image URLs
       name: "Cyber Security Lab",
       Incharge: "Associate Professor & Head",
       email: "vijayk@nitj.ac.in",
@@ -28,9 +28,9 @@ function DepartmentLabs() {
     <MainCard title="Department Labs">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
         {facultyData.map((faculty, index) => (
-          <div className="flex flex-wrap">
+          <div className="w-full ">
             <Link
-              className="w-full "
+              className=""
               key={index}
               to={`/people/${encodeURIComponent(
                 JSON.stringify({
@@ -51,6 +51,7 @@ function DepartmentLabs() {
               <LabCard
                 image={faculty.image}
                 name={faculty.name}
+                Incharge={faculty.Incharge}
                 designation={faculty.designation}
                 email={faculty.email}
               />

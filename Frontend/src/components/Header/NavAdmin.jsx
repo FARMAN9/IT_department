@@ -11,6 +11,7 @@ function NavAdmin() {
               <Link
                 className="btn btn-outline btn-primary bg-slate-50 btn-xs sm:btn-sm md:btn-md lg:btn-md xl:btn-md"
                 to="/login"
+                state={{ from: "Admin login" }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

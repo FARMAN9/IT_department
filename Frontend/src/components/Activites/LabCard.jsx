@@ -1,17 +1,23 @@
 import React from "react";
 
-function LabCard({ image, name }) {
+function LabCard({ image, name, Incharge, email }) {
   return (
-    <div className="card card-compact bg-base-100 w-96 shadow-xl hover:shadow-2xl hover:scale-105 hover:cursor-pointer hover:shadow-blue-500">
+    <div className="card card-compact bg-base-100 w-full shadow-xl transition duration-300 hover:shadow-2xl hover:scale-105 hover:cursor-pointer hover:shadow-blue-500 ">
       <figure>
         <img
-          src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-          alt="Shoes"
+          className="w-48 h-48 object-cover"
+          src={
+            image === ""
+              ? "https://www.contactpointe.com/wp-content/uploads/2013/08/computer-lab-rental1.png"
+              : image
+          }
+          alt={name}
         />
       </figure>
       <div className="card-body">
         <h2 className="card-title">{name}</h2>
-        <p></p>
+        <p> Incharge: {Incharge}</p>
+        <p> Email: {email}</p>
       </div>
     </div>
   );

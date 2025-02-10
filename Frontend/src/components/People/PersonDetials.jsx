@@ -3,6 +3,7 @@ import { useParams, useLocation } from "react-router-dom";
 import MainCard from "../Activites/MainCard";
 import { FaFilePdf } from "react-icons/fa6";
 import Table from "../Activites/Table";
+import { Link } from "react-router-dom";
 
 function PersonDetials() {
   const { id } = useParams();
@@ -72,12 +73,15 @@ function PersonDetials() {
             <button className="btn btn-xs sm:btn-sm md:btn-md lg:btn-md btn-error hover:bg-red-300">
               <FaFilePdf size={"auto"} color="white" />
             </button>
-            <button
-              onClick={handleLogin}
+            <Link
+              to="/login"
+              state={{
+                from: "Faculty login",
+              }}
               className="btn btn-xs sm:btn-sm md:btn-md lg:btn-md bg-blue-500 text-white hover:border-blue-600 hover:bg-blue-200 "
             >
               login
-            </button>
+            </Link>
           </div>
         </div>
       </div>
