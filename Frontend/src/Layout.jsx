@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./components/Header/Header";
 
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -10,6 +10,11 @@ import { IoIosArrowUp } from "react-icons/io";
 
 const Layout = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.classList.remove("dark"); // Forces light mode
+    document.documentElement.style.colorScheme = "light";
+  }, []);
 
   const toggleAdmin = () => {
     console.log(isMenuVisible);
