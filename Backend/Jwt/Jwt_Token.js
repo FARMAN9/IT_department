@@ -10,8 +10,8 @@ const createTokenAndSave = async (userId, role, res) => {
     return;
   }
 
-  const token = jwt.sign({ userId, role }, process.env.JWT_SECRET || "fallback_secret", {
-    expiresIn: "8h"
+  const token = jwt.sign({ userId, role }, process.env.JWT_SECRET , {
+    expiresIn: "8h",
   });
   
   res.cookie("token", token, {

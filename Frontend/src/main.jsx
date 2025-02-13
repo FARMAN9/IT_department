@@ -4,7 +4,7 @@ import "./index.css";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Main from "./components/Main/main.jsx";
-import Layout from "./Layout.jsx";
+import Layout from "./Layouts/Layout.jsx";
 import HodMain from "./components/Main/HODMain.jsx";
 import VisionAndMissionMain from "./components/Main/VisionAndMissionMain.jsx";
 import AchievementMain from "./components/Main/AchievementMain.jsx";
@@ -32,6 +32,8 @@ import Patents from "./components/ResearchAndLabs/Patents.jsx";
 import PersonDetials from "./components/People/PersonDetials.jsx";
 import LoginForm from "./components/UtilityCompoments/LoginForm.jsx";
 import SignupForm from "./components/UtilityCompoments/SignupForm.jsx";
+import AdminLayout from "./Layouts/AdminLayout.jsx";
+import FacilitiesLayout from "./Layouts/FacilitiesLayout.jsx";
 
 const router = createBrowserRouter([
   {
@@ -145,6 +147,30 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <SignupForm />,
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: <div>404</div>,
+  },
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    children: [
+      {
+        path: "/admin",
+        element: <Main />,
+      },
+    ],
+  },
+  {
+    path: "/faculty",
+    element: <FacilitiesLayout />,
+    children: [
+      {
+        path: "/faculty",
+        element: <Main />,
       },
     ],
   },

@@ -18,6 +18,7 @@ const API_KEY = process.env.APPWRITE_API_KEY;
 
 export const PostMainImages = async (req, res) => {
     try {
+        console.log(req)
         // Check if file exists
         if (!req.file) {
             return res.status(400).json({ error: "Image is required" });

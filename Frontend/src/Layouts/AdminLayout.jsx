@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Header from "./components/Header/Header";
+import Header from "../components/Header/Header";
 
-import Sidebar from "./components/Sidebar/Sidebar";
-import Footer from "./components/Footer/Footer";
+import Sidebar from "../components/Sidebar/Sidebar";
+import Footer from "../components/Footer/Footer";
 import { Outlet } from "react-router-dom";
-import NavAdmin from "./components/Header/NavAdmin";
+import NavAdmin from "../components/Header/NavAdmin";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
+import { Toaster } from "react-hot-toast";
 
 const Layout = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
@@ -22,6 +23,15 @@ const Layout = () => {
   };
   return (
     <>
+      <Toaster
+        position="top-center"
+        gutter={8}
+        reverseOrder={true}
+        className="z-50"
+        toastOptions={{
+          duration: 3000,
+        }}
+      />
       <div className="w-full">
         {/* Admin Nav */}
         <div
