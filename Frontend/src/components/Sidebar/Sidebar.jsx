@@ -16,77 +16,9 @@ import {
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
-const AcademicSidebar = ({ adminNavopen }) => {
+const AcademicSidebar = ({ adminNavopen, menuItems }) => {
   const [expandedMenu, setExpandedMenu] = useState("about");
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-
-  const menuItems = [
-    {
-      icon: Home,
-      label: "Home",
-      link: "/",
-      id: "home",
-    },
-    {
-      icon: Info,
-      label: "About",
-      id: "about",
-      link: "/about",
-      submenu: [
-        { label: "Vision and Missions", link: "/about/vision" },
-        { label: "HoD's Message", link: "/about/hod-message" },
-        { label: "Achievements", link: "/about/achievements" },
-        { label: "Gallery", link: "/about/infrastructure" },
-        { label: "Contact Us", link: "/about/contact" },
-      ],
-    },
-    {
-      icon: GraduationCap,
-      label: "Academic",
-      id: "academic",
-      link: "/academic",
-      submenu: [
-        { label: "Programmes", link: "/academic/programmes" },
-        { label: "Academic Coordinators", link: "/academic/coordinators" },
-        { label: "Syllabus", link: "/academic/syllabus" },
-        { label: "TimeTable", link: "/academic/timetable" },
-        { label: "Department Activities Calendar", link: "/academic/calendar" },
-      ],
-    },
-    {
-      icon: User,
-      label: "People",
-      id: "people",
-      link: "/people",
-      submenu: [
-        { label: "Faculty", link: "/people/faculty" },
-        { label: "PhD Scholars", link: "/people/phd-scholars" },
-        { label: "Students", link: "/people/students" },
-        { label: "Alumni", link: "/people/alumni" },
-        { label: "Staff", link: "/people/staff" },
-      ],
-    },
-    {
-      icon: FlaskConical,
-      label: "Research and Labs",
-      id: "research",
-      link: "/research",
-      submenu: [
-        { label: "Research Areas", link: "/research/areas" },
-        { label: "Department Labs", link: "/research/labs" },
-        { label: "Publications", link: "/research/publications" },
-        { label: "Projects", link: "/research/projects" },
-        { label: "Consultancy", link: "/research/consultancy" },
-        { label: "Research Labs", link: "/research/research-labs" },
-        { label: "Patents", link: "/research/patents" },
-      ],
-    },
-    {
-      icon: Users,
-      label: "Societies/Clubs/Teams",
-      link: "/societies",
-    },
-  ];
 
   const handleMenuItemClick = (e, item) => {
     // If item has a submenu, toggle its expanded state

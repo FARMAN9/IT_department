@@ -34,6 +34,7 @@ import LoginForm from "./components/UtilityCompoments/LoginForm.jsx";
 import SignupForm from "./components/UtilityCompoments/SignupForm.jsx";
 import AdminLayout from "./Layouts/AdminLayout.jsx";
 import FacilitiesLayout from "./Layouts/FacilitiesLayout.jsx";
+import MainImageSlide from "./components/Admin/MainImageSlide.jsx";
 
 const router = createBrowserRouter([
   {
@@ -162,6 +163,10 @@ const router = createBrowserRouter([
         path: "/admin",
         element: <Main />,
       },
+      {
+        path: "/admin/main-image-slide",
+        element: <MainImageSlide />,
+      },
     ],
   },
   {
@@ -172,6 +177,7 @@ const router = createBrowserRouter([
         path: "/faculty",
         element: <Main />,
       },
+      {},
     ],
   },
 ]);
