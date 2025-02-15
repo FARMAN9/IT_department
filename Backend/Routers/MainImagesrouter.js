@@ -5,7 +5,7 @@ import { PostMainImages, GetMainImages, DeleteMainImages,UpdateMainImages } from
 import secureRouter from "../Middleware/secureRouter.js";
 
 
-router.post("/uplaodMainImages", handleUpload, PostMainImages);
+router.post("/uploadMainImages", handleUpload, PostMainImages);
 
 router.get("/getMainImages",GetMainImages);
 router.delete("/deleteMainImages/:id", DeleteMainImages);

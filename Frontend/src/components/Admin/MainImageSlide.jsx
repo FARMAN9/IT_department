@@ -2,35 +2,50 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
 import MainCard from "../Activites/MainCard";
-import { fetchMainData, deleteMainImage } from "../../Features/MainImages";
+import { fetchMainData } from "../../Features/MainImages";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import ImageCard from "../Activites/ImageCard";
 import { HiPencil, HiTrash } from "react-icons/hi";
+import Loading from "../UtilityCompoments/Loading";
+import Errors from "../UtilityCompoments/Errors";
+import Cookies from "js-cookie";
 
 const MainImageSlide = () => {
   const dispatch = useDispatch();
   const { imageSlider, loading, error } = useSelector(
     (state) => state.MainImagesData
   );
+  const token = Cookies.get("token");
+  console.log("token", token);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [file, setFile] = useState(null);
-  const [editFile, setEditFile] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [updating, setUpdating] = useState(false);
-  const [deleting, setDeleting] = useState(false);
+  const [updateFile, setUpdateFile] = useState(null);
 
   useEffect(() => {
     dispatch(fetchMainData());
   }, [dispatch]);
 
-  // Handle image upload
+  // Common error handler
+  const handleApiError = (err, action) => {
+    const errorMessage =
+      err.response?.data?.message ||
+      err.message ||
+      `${action} failed. Please try again.`;
+    toast.error(errorMessage);
+  };
+
+  // Image upload handler
   const handleImageUpload = async (e) => {
     e.preventDefault();
-    setUploading(true);
     if (!file) return toast.error("Please select a file");
+
     const MAX_SIZE_MB = 5;
     if (!file.type.startsWith("image/")) {
       setFile(null);
@@ -47,57 +62,45 @@ const MainImageSlide = () => {
     try {
       setUploading(true);
       const loadingToast = toast.loading("Uploading image...");
-      const response = await axios.post(
-        "http://localhost:4000/api/uplaodMainImages",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
 
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      await axios.post("http://localhost:4000/api/uploadMainImages", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
-      if (response.data.message) {
-        dispatch(fetchMainData());
-        toast.success("Image uploaded successfully!");
-        setFile(null);
-      }
+      await dispatch(fetchMainData());
+      toast.success("Image uploaded successfully!");
+      setFile(null);
       toast.dismiss(loadingToast);
     } catch (err) {
-      const errorMessage =
-        err.response?.data?.message ||
-        err.message ||
-        "Upload failed. Please try again.";
-      toast.error(errorMessage);
+      handleApiError(err, "upload");
     } finally {
       setUploading(false);
     }
   };
 
-  const handleUpdate = async (e, id) => {
-    setUpdating(true);
-    e.preventDefault();
-    if (!editFile) return toast.error("Please select a file");
+  // Image update handler
+  const handleUpdate = async () => {
+    if (!updateFile) return toast.error("Please select a file");
+
     const MAX_SIZE_MB = 5;
-    if (!editFile.type.startsWith("image/")) {
-      setEditFile(null);
+    if (!updateFile.type.startsWith("image/")) {
       return toast.error("Please upload an image file (JPEG, PNG, etc.)");
     }
-    if (editFile.size > MAX_SIZE_MB * 1024 * 1024) {
-      setEditFile(null);
+    if (updateFile.size > MAX_SIZE_MB * 1024 * 1024) {
       return toast.error(`File size exceeds ${MAX_SIZE_MB}MB limit`);
     }
 
     const formData = new FormData();
-    formData.append("image", editFile);
+    formData.append("image", updateFile);
 
     try {
       setUpdating(true);
       const loadingToast = toast.loading("Updating image...");
-      const response = await axios.put(
-        `http://localhost:4000/api/updateMainImage/${id}`,
+      await axios.put(
+        `http://localhost:4000/api/updateMainImages/${selectedImage._id}`,
         formData,
         {
           headers: {
@@ -107,71 +110,118 @@ const MainImageSlide = () => {
         }
       );
 
-      if (response.data.message) {
-        dispatch(fetchMainData());
-        toast.success("Image updated successfully!");
-        setEditFile(null);
-      }
+      await dispatch(fetchMainData());
+      toast.success("Image updated successfully!");
+      setShowUpdateModal(false);
+      setUpdateFile(null);
       toast.dismiss(loadingToast);
     } catch (err) {
-      const errorMessage =
-        err.response?.data?.message ||
-        err.message ||
-        "Upload failed. Please try again.";
-      toast.error(errorMessage);
+      handleApiError(err, "update");
     } finally {
       setUpdating(false);
     }
   };
 
-  // Handle image deletion
-  const handleDelete = async (id) => {
-    console.log(id);
+  // Image deletion handler
+  const handleDelete = async () => {
     try {
-      setDeleting(true);
       const loadingToast = toast.loading("Deleting image...");
-      const res = await axios.delete(
-        `http://localhost:4000/api/deleteMainImages/${id}`,
+
+      await axios.delete(
+        `http://localhost:4000/api/deleteMainImages/${selectedImage._id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      if (res.data) {
-        toast.success("Image deleted successfully!");
-        await dispatch(fetchMainData());
-        setDeleting(false);
-      } else {
-        toast.error(res.error || "Delete failed.");
-        await dispatch(fetchMainData());
-        setDeleting(false);
-      }
-    } catch (err) {
-      toast.error(err.response?.data?.error || "Delete failed.");
+
       await dispatch(fetchMainData());
-      setDeleting(false);
+      toast.success("Image deleted successfully!");
+      setShowDeleteModal(false);
+      toast.dismiss(loadingToast);
+    } catch (err) {
+      handleApiError(err, "delete");
     }
   };
 
-  // Filter data based on search term
-  const filteredPublications = imageSlider.filter((pub) =>
-    Object.values(pub).some((value) =>
-      value.toString().toLowerCase().includes(search.toLowerCase())
-    )
+  // Memoized filtered data
+  const filteredPublications = useMemo(
+    () =>
+      imageSlider.filter((pub) =>
+        Object.values(pub).some((value) =>
+          value.toString().toLowerCase().includes(search.toLowerCase())
+        )
+      ),
+    [imageSlider, search]
   );
 
+  // Pagination calculations
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = filteredPublications.slice(
     indexOfFirstRow,
     indexOfLastRow
   );
-
   const totalPages = Math.ceil(filteredPublications.length / rowsPerPage);
 
   return (
     <MainCard title={"Main Image Slide"}>
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-6 max-w-sm w-full">
+            <h3 className="text-lg font-bold mb-4">Confirm Delete</h3>
+            <p className="mb-6">Are you sure you want to delete this image?</p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="btn btn-ghost"
+              >
+                Cancel
+              </button>
+              <button onClick={handleDelete} className="btn btn-error">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Update Image Modal */}
+      {showUpdateModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-6 max-w-sm w-full">
+            <h3 className="text-lg font-bold mb-4">Update Image</h3>
+            <input
+              type="file"
+              className="file-input file-input-bordered w-full mb-4"
+              onChange={(e) => setUpdateFile(e.target.files[0])}
+              accept="image/*"
+            />
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  setShowUpdateModal(false);
+                  setUpdateFile(null);
+                }}
+                className="btn btn-ghost"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleUpdate}
+                className="btn btn-primary"
+                disabled={!updateFile || updating}
+              >
+                {updating ? "Updating..." : "Update"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content */}
       <div className="min-h-auto flex m-0 pt-3">
         <div className="mt-6 bg-white rounded-lg shadow-md w-full">
           <div className="space-y-4 p-4">
@@ -181,28 +231,27 @@ const MainImageSlide = () => {
                 <input
                   type="text"
                   className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                  placeholder="Search "
+                  placeholder="Search"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
                 <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                <div className="w-full sm:w-96 relative">
-                  <form onSubmit={handleImageUpload} className="mt-4">
-                    <input
-                      type="file"
-                      className="file-input file-input-bordered file-input-info w-full max-w-xs"
-                      onChange={(e) => setFile(e.target.files[0])}
-                      accept="image/*"
-                    />
-                    <button
-                      type="submit"
-                      className="btn btn-info btn-sm mt-2"
-                      disabled={!file || uploading}
-                    >
-                      {uploading ? "Uploading..." : "Upload Image"}
-                    </button>
-                  </form>
-                </div>
+
+                <form onSubmit={handleImageUpload} className="mt-4">
+                  <input
+                    type="file"
+                    className="file-input file-input-bordered file-input-info w-full max-w-xs"
+                    onChange={(e) => setFile(e.target.files[0])}
+                    accept="image/*"
+                  />
+                  <button
+                    type="submit"
+                    className="btn btn-info btn-sm mt-2"
+                    disabled={!file || uploading}
+                  >
+                    {uploading ? "Uploading..." : "Upload Image"}
+                  </button>
+                </form>
               </div>
 
               {/* Rows Per Page Selector */}
@@ -222,77 +271,67 @@ const MainImageSlide = () => {
                     setCurrentPage(1);
                   }}
                 >
-                  {[6, 9, 12, 24, 50, filteredPublications.length].map(
-                    (value) => (
-                      <option key={value} value={value}>
-                        {value}
-                      </option>
-                    )
-                  )}
+                  {[6, 9, 12, 24, 50].map((value) => (
+                    <option key={value} value={value}>
+                      {value}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
 
             {/* Content Section */}
             {loading ? (
-              <div className="text-center py-8">Loading images...</div>
+              <Loading />
             ) : error ? (
-              <div className="text-red-500 text-center py-8">{error}</div>
+              <Errors error={error.error} />
             ) : (
               <>
                 {/* Image Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {currentRows.map((pub) => (
-                    <div className="card card-compact bg-base-100 shadow-xl transition duration-300 hover:shadow-2xl hover:scale-105 hover:cursor-pointer hover:shadow-blue-500">
-                      <figure className="">
+                    <div
+                      key={pub._id}
+                      className="card card-compact bg-base-100 shadow-xl transition duration-300 hover:shadow-2xl hover:scale-105"
+                    >
+                      <figure className="relative">
                         <img
-                          className="w-100 h-48 object-cover"
+                          className="w-full h-48 object-cover"
                           src={pub.image}
-                          alt={pub._id}
+                          alt={pub.description || "Uploaded image"}
                         />
+                        <div className="absolute top-2 right-2 flex gap-2">
+                          <button
+                            className="btn btn-circle btn-sm btn-warning"
+                            onClick={() => {
+                              setSelectedImage(pub);
+                              setShowUpdateModal(true);
+                            }}
+                          >
+                            <HiPencil size={16} />
+                          </button>
+                          <button
+                            className="btn btn-circle btn-sm btn-error"
+                            onClick={() => {
+                              setSelectedImage(pub);
+                              setShowDeleteModal(true);
+                            }}
+                          >
+                            <HiTrash size={16} />
+                          </button>
+                        </div>
                       </figure>
                       <div className="card-body">
-                        <h2 className="card-title ">
-                          Upload date : {pub.createdAt}
-                        </h2>
-                        <h1 className="card-title ">
-                          updated at : {pub.updatedAt}
-                        </h1>
-                        <p>{pub.description}</p>
-
-                        <div className="card-actions justify-end">
-                          <div className="w-full flex justify-between ">
-                            <div className="">
-                              <form
-                                onSubmit={(e) => handleUpdate(pub._id)}
-                                className="mt-4"
-                              >
-                                <input
-                                  type="file"
-                                  className="file-input file-input-bordered file-input-info w-full "
-                                  onChange={(e) =>
-                                    setEditFile(e.target.files[0])
-                                  }
-                                  accept="image/*" // Browser-level image filter
-                                />
-
-                                <button
-                                  type="submit"
-                                  className="btn btn-info mt-2"
-                                  disabled={editFile === null || updating}
-                                >
-                                  {updating ? "Updateing..." : "Update Image"}
-                                </button>
-                              </form>
-                            </div>
-                          </div>
-                          <button
-                            className="btn btn-secondary"
-                            onClick={() => handleDelete(pub._id)}
-                          >
-                            <HiTrash className="mr-2" size={20} />
-                            Delete
-                          </button>
+                        <div className="text-sm space-y-1">
+                          <p>
+                            Uploaded:{" "}
+                            {new Date(pub.createdAt).toLocaleDateString()}
+                          </p>
+                          <p>
+                            Updated:{" "}
+                            {new Date(pub.updatedAt).toLocaleDateString()}
+                          </p>
+                          {pub.description && <p>{pub.description}</p>}
                         </div>
                       </div>
                     </div>
@@ -306,16 +345,16 @@ const MainImageSlide = () => {
                     {Math.min(indexOfLastRow, filteredPublications.length)} of{" "}
                     {filteredPublications.length} entries
                   </div>
+
                   <div className="flex items-center space-x-2">
                     <button
-                      onClick={() =>
-                        setCurrentPage((prev) => Math.max(1, prev - 1))
-                      }
+                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                       disabled={currentPage === 1}
                       className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50"
                     >
                       <ChevronLeft className="h-5 w-5" />
                     </button>
+
                     <div className="flex gap-1">
                       {Array.from({ length: totalPages }, (_, i) => (
                         <button
@@ -331,9 +370,10 @@ const MainImageSlide = () => {
                         </button>
                       ))}
                     </div>
+
                     <button
                       onClick={() =>
-                        setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+                        setCurrentPage((p) => Math.min(totalPages, p + 1))
                       }
                       disabled={currentPage === totalPages}
                       className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50"

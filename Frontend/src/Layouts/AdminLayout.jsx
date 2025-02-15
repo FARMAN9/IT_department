@@ -43,7 +43,11 @@ const Layout = () => {
       link: "/",
       id: "home",
       submenu: [
-        { label: "Home Slide Images", link: "/admin/main-image-slide" },
+        {
+          label: "Home Slide Images",
+          link: "/admin/main-image-slide",
+          secureRouter: true,
+        },
         {
           label: "Hod Information",
           link: "/hod-info",
