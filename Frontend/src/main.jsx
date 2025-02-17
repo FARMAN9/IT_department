@@ -38,6 +38,7 @@ import MainImageSlide from "./components/Admin/MainSlideImages/MainImageSlide.js
 import AdminGallery from "./components/Admin/Gallery/AdminGallery.jsx";
 import Vision from "./components/Admin/VisionAndMission/Visions.jsx";
 import Mission from "./components/Admin/VisionAndMission/Mission.jsx";
+import Hod from "./components/Admin/Hod_information/Hod.jsx";
 
 const router = createBrowserRouter([
   {
@@ -181,6 +182,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/gallery",
         element: <AdminGallery />,
+      },
+      {
+        path: "/admin/hod",
+        element: <Hod />,
       },
     ],
   },

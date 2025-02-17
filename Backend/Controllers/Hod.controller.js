@@ -68,14 +68,47 @@ export const puthodImage = async (req, res) => {
     }
 };
 
+export const removehodImage = async (req, res) => {
+    try {
+        const mainId = req.params.id || MainID; // Use the ID from params or default to MainID
+        let Hod_Info = await HodInfo.findById(mainId);     
+        if (!Hod_Info) {
+            // If MainInfo not found, create a new record
+            Hod_Info = new HodInfo({
+                _id: mainId, // Use the same ID
+                image: ''
+            });
+            await Hod_Info.save();
+
+            return res.status(201).json({
+                success: true,
+                data: Hod_Info,
+                message: "Image removed  and new record created successfully",
+            });
+        } else {
+            // If MainInfo exists, update the image
+            Hod_Info.image = '';
+            await Hod_Info.save();
+
+            return res.status(200).json({
+                success: true,
+                data: Hod_Info,
+                message: "Image removed and record updated successfully",
+            });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 export const posthodInfo = async (req, res) => {
     try {
-        const { name, HodMessage, address, mail, phoneNumber } = req.body;
+        const { name, HodMessage, mail, phoneNumber ,imageUrl } = req.body;
 
         // Validate required fields
         if (!name) return res.status(400).json({ error: "Name is required" });
         if (!HodMessage) return res.status(400).json({ error: "HodMessage is required" });
-        if (!address) return res.status(400).json({ error: "Address is required" });
+        //if (!address) return res.status(400).json({ error: "Address is required" });
         if (!mail) return res.status(400).json({ error: "Office mail is required" });
         if (!phoneNumber) return res.status(400).json({ error: "Phone number is required" });
 
@@ -86,9 +119,10 @@ export const posthodInfo = async (req, res) => {
             // Update the existing record
             mainInfo.name = name;
             mainInfo.HodMessage = HodMessage;
-            mainInfo.address = address;
+         
             mainInfo.officeMail =mail;
             mainInfo.phoneNumber = phoneNumber;
+            mainInfo.image = imageUrl;
 
             await mainInfo.save();
 

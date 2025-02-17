@@ -50,7 +50,7 @@ const Layout = () => {
         },
         {
           label: "Hod Information",
-          link: "/hod-info",
+          link: "/admin/hod-info",
         },
 
         { label: "About Us", link: "/" },
@@ -67,7 +67,7 @@ const Layout = () => {
       submenu: [
         { label: "Vision", link: "/admin/vision" },
         { label: "Missions", link: "/admin/mission" },
-        { label: "HoD's Message", link: "/about/hod-message" },
+        { label: "HoD's Message", link: "/admin/hod" },
         { label: "Achievements", link: "/about/achievements" },
         { label: "Gallery", link: "/admin/gallery" },
         { label: "Contact Us", link: "/about/contact" },

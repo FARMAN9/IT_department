@@ -24,6 +24,7 @@ const MainImageSlide = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showLoadModal, setShowLoadModal] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [updateFile, setUpdateFile] = useState(null);
@@ -42,8 +43,7 @@ const MainImageSlide = () => {
   };
 
   // Image upload handler
-  const handleImageUpload = async (e) => {
-    e.preventDefault();
+  const handleImageUpload = async () => {
     if (!file) return toast.error("Please select a file");
 
     const MAX_SIZE_MB = 5;
@@ -66,7 +66,7 @@ const MainImageSlide = () => {
       await axios.post("http://localhost:4000/api/uploadMainImages", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -220,11 +220,42 @@ const MainImageSlide = () => {
           </div>
         </div>
       )}
+      {showLoadModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-6 max-w-sm w-full">
+            <h3 className="text-lg font-bold mb-4">Upload New Image</h3>
+            <input
+              type="file"
+              className="file-input file-input-bordered w-full mb-4"
+              onChange={(e) => setFile(e.target.files[0])}
+              accept="image/*"
+            />
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  setShowLoadModal(false);
+                  setFile(null);
+                }}
+                className="btn btn-ghost"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleImageUpload()}
+                className="btn btn-primary"
+                disabled={!file || uploading}
+              >
+                {uploading ? "Uploading..." : "Upload"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="min-h-auto flex m-0 pt-3">
-        <div className="mt-6 bg-white rounded-lg shadow-md w-full">
-          <div className="space-y-4 p-4">
+        <div className="rounded-lg  w-full">
+          <div className="p-4">
             {/* Search and Upload Section */}
             <div className="flex flex-col sm:flex-row sm:justify-between items-center gap-4">
               <div className="w-full sm:w-96 relative">
@@ -236,22 +267,6 @@ const MainImageSlide = () => {
                   onChange={(e) => setSearch(e.target.value)}
                 />
                 <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-
-                <form onSubmit={handleImageUpload} className="mt-4">
-                  <input
-                    type="file"
-                    className="file-input file-input-bordered file-input-info w-full max-w-xs"
-                    onChange={(e) => setFile(e.target.files[0])}
-                    accept="image/*"
-                  />
-                  <button
-                    type="submit"
-                    className="btn btn-info btn-sm mt-2"
-                    disabled={!file || uploading}
-                  >
-                    {uploading ? "Uploading..." : "Upload Image"}
-                  </button>
-                </form>
               </div>
 
               {/* Rows Per Page Selector */}
@@ -277,6 +292,14 @@ const MainImageSlide = () => {
                     </option>
                   ))}
                 </select>
+              </div>
+              <div className="flex justify-end mb-4">
+                <button
+                  onClick={() => setShowLoadModal(true)}
+                  className="btn btn-sm btn-warning rounded-lg"
+                >
+                  <HiPencil size={24} /> Upload New Image
+                </button>
               </div>
             </div>
 

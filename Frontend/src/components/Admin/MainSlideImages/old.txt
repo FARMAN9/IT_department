@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
 import MainCard from "../../Activites/MainCard";
-import { fetchGalleryData } from "../../../Features/GallerySlice";
+import { fetchMainData } from "../../../Features/MainImages";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { HiPencil, HiTrash } from "react-icons/hi";
@@ -10,12 +10,11 @@ import Loading from "../../UtilityCompoments/Loading";
 import Errors from "../../UtilityCompoments/Errors";
 import Cookies from "js-cookie";
 
-const AdminGallery = () => {
+const MainImageSlide = () => {
   const dispatch = useDispatch();
-  const { GalleryImage, loading, error } = useSelector(
-    (state) => state.GalleryData
+  const { imageSlider, loading, error } = useSelector(
+    (state) => state.MainImagesData
   );
-
   const token = Cookies.get("token");
   console.log("token", token);
   const [search, setSearch] = useState("");
@@ -26,13 +25,12 @@ const AdminGallery = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showLoadModal, setShowLoadModal] = useState(false);
-  const [loadingImage, setLoadingImage] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [updateFile, setUpdateFile] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchGalleryData());
+    dispatch(fetchMainData());
   }, [dispatch]);
 
   // Common error handler
@@ -45,7 +43,8 @@ const AdminGallery = () => {
   };
 
   // Image upload handler
-  const handleImageUpload = async () => {
+  const handleImageUpload = async (e) => {
+    e.preventDefault();
     if (!file) return toast.error("Please select a file");
 
     const MAX_SIZE_MB = 5;
@@ -65,18 +64,14 @@ const AdminGallery = () => {
       setUploading(true);
       const loadingToast = toast.loading("Uploading image...");
 
-      await axios.post(
-        "http://localhost:4000/api/uplaodGalleryImages",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.post("http://localhost:4000/api/uploadMainImages", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      await dispatch(fetchGalleryData());
+      await dispatch(fetchMainData());
       toast.success("Image uploaded successfully!");
       setFile(null);
       toast.dismiss(loadingToast);
@@ -106,7 +101,7 @@ const AdminGallery = () => {
       setUpdating(true);
       const loadingToast = toast.loading("Updating image...");
       await axios.put(
-        `http://localhost:4000/api/updateGalleryImages/${selectedImage._id}`,
+        `http://localhost:4000/api/updateMainImages/${selectedImage._id}`,
         formData,
         {
           headers: {
@@ -116,7 +111,7 @@ const AdminGallery = () => {
         }
       );
 
-      await dispatch(fetchGalleryData());
+      await dispatch(fetchMainData());
       toast.success("Image updated successfully!");
       setShowUpdateModal(false);
       setUpdateFile(null);
@@ -134,7 +129,7 @@ const AdminGallery = () => {
       const loadingToast = toast.loading("Deleting image...");
 
       await axios.delete(
-        `http://localhost:4000/api/deleteGalleryImages/${selectedImage._id}`,
+        `http://localhost:4000/api/deleteMainImages/${selectedImage._id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -142,7 +137,7 @@ const AdminGallery = () => {
         }
       );
 
-      await dispatch(fetchGalleryData());
+      await dispatch(fetchMainData());
       toast.success("Image deleted successfully!");
       setShowDeleteModal(false);
       toast.dismiss(loadingToast);
@@ -154,12 +149,12 @@ const AdminGallery = () => {
   // Memoized filtered data
   const filteredPublications = useMemo(
     () =>
-      GalleryImage.filter((pub) =>
+      imageSlider.filter((pub) =>
         Object.values(pub).some((value) =>
           value.toString().toLowerCase().includes(search.toLowerCase())
         )
       ),
-    [GalleryImage, search]
+    [imageSlider, search]
   );
 
   // Pagination calculations
@@ -172,7 +167,7 @@ const AdminGallery = () => {
   const totalPages = Math.ceil(filteredPublications.length / rowsPerPage);
 
   return (
-    <MainCard title={"Gallery"}>
+    <MainCard title={"Main Image Slide"}>
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
@@ -229,11 +224,11 @@ const AdminGallery = () => {
       {showLoadModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4">
           <div className="bg-white rounded-lg p-6 max-w-sm w-full">
-            <h3 className="text-lg font-bold mb-4">Upload New Image</h3>
+            <h3 className="text-lg font-bold mb-4">Add New Image</h3>
             <input
               type="file"
               className="file-input file-input-bordered w-full mb-4"
-              onChange={(e) => setFile(e.target.files[0])}
+              onChange={(e) => setUpdateFile(e.target.files[0])}
               accept="image/*"
             />
             <div className="flex justify-end gap-3">
@@ -247,7 +242,7 @@ const AdminGallery = () => {
                 Cancel
               </button>
               <button
-                onClick={() => handleImageUpload()}
+                onClick={() => handleUpload()}
                 className="btn btn-primary"
                 disabled={!file || uploading}
               >
@@ -260,8 +255,17 @@ const AdminGallery = () => {
 
       {/* Main Content */}
       <div className="min-h-auto flex m-0 pt-3">
-        <div className="rounded-lg  w-full">
-          <div className="p-4">
+        <div className="mt-6 bg-white rounded-lg shadow-md w-full">
+          <div className="flex justify-end mb-4">
+            <button
+              onClick={() => setShowLoadModal(true)}
+              className="btn btn-sm btn-warning rounded-lg"
+            >
+              <HiPencil size={24} /> Edit HOD Information
+            </button>
+          </div>
+
+          <div className="space-y-4 p-4">
             {/* Search and Upload Section */}
             <div className="flex flex-col sm:flex-row sm:justify-between items-center gap-4">
               <div className="w-full sm:w-96 relative">
@@ -298,14 +302,6 @@ const AdminGallery = () => {
                     </option>
                   ))}
                 </select>
-              </div>
-              <div className="flex justify-end mb-4">
-                <button
-                  onClick={() => setShowLoadModal(true)}
-                  className="btn btn-sm btn-warning rounded-lg"
-                >
-                  <HiPencil size={24} /> Upload New Image
-                </button>
               </div>
             </div>
 
@@ -420,4 +416,4 @@ const AdminGallery = () => {
   );
 };
 
-export default AdminGallery;
+export default MainImageSlide;
