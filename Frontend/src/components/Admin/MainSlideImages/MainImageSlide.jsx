@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
-import MainCard from "../Activites/MainCard";
-import { fetchMainData } from "../../Features/MainImages";
+import MainCard from "../../Activites/MainCard";
+import { fetchMainData } from "../../../Features/MainImages";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { HiPencil, HiTrash } from "react-icons/hi";
-import Loading from "../UtilityCompoments/Loading";
-import Errors from "../UtilityCompoments/Errors";
+import Loading from "../../UtilityCompoments/Loading";
+import Errors from "../../UtilityCompoments/Errors";
 import Cookies from "js-cookie";
 
 const MainImageSlide = () => {

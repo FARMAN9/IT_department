@@ -34,7 +34,10 @@ import LoginForm from "./components/UtilityCompoments/LoginForm.jsx";
 import SignupForm from "./components/UtilityCompoments/SignupForm.jsx";
 import AdminLayout from "./Layouts/AdminLayout.jsx";
 import FacilitiesLayout from "./Layouts/FacilitiesLayout.jsx";
-import MainImageSlide from "./components/Admin/MainImageSlide.jsx";
+import MainImageSlide from "./components/Admin/MainSlideImages/MainImageSlide.jsx";
+import AdminGallery from "./components/Admin/Gallery/AdminGallery.jsx";
+import Vision from "./components/Admin/VisionAndMission/Visions.jsx";
+import Mission from "./components/Admin/VisionAndMission/Mission.jsx";
 
 const router = createBrowserRouter([
   {
@@ -166,6 +169,18 @@ const router = createBrowserRouter([
       {
         path: "/admin/main-image-slide",
         element: <MainImageSlide />,
+      },
+      {
+        path: "/admin/vision",
+        element: <Vision />,
+      },
+      {
+        path: "/admin/mission",
+        element: <Mission />,
+      },
+      {
+        path: "/admin/gallery",
+        element: <AdminGallery />,
       },
     ],
   },

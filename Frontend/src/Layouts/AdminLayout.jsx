@@ -55,7 +55,7 @@ const Layout = () => {
 
         { label: "About Us", link: "/" },
         { label: "Our Mission", link: "/" },
-        { label: "Our Vision", link: "/" },
+        { label: "Our Vision", link: "/admin/vision" },
         { label: "Our Values", link: "/" },
       ],
     },
@@ -65,11 +65,11 @@ const Layout = () => {
       id: "about",
       link: "/about",
       submenu: [
-        { label: "Vision", link: "/about/vision" },
-        { label: "Missions", link: "/about/missions" },
+        { label: "Vision", link: "/admin/vision" },
+        { label: "Missions", link: "/admin/mission" },
         { label: "HoD's Message", link: "/about/hod-message" },
         { label: "Achievements", link: "/about/achievements" },
-        { label: "Gallery", link: "/about/infrastructure" },
+        { label: "Gallery", link: "/admin/gallery" },
         { label: "Contact Us", link: "/about/contact" },
       ],
     },

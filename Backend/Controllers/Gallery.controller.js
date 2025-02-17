@@ -54,6 +54,9 @@ export const GetGalleryImages = async (req, res) => {
 
 
 
+
+
+
 export const DeleteGalleryImages = async (req, res) => {
     try {
         try{
@@ -77,6 +80,43 @@ export const DeleteGalleryImages = async (req, res) => {
         }
         
     } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+export const UpdateGalleryImages = async (req, res) => {
+    try {
+        // Check if file exists
+        if (!req.file) {
+            return res.status(400).json({ error: "Image is required" });
+        }
+        const file = new File([req.file.buffer], req.file.originalname, {
+            type: req.file.mimetype,
+        });
+
+        const {fileUrl,appwriteFile} = await asFiletoCloud(file)
+
+        // Update the image document in the database
+        const galleryImages = await GalleryModel.findByIdAndUpdate(
+            req.params.id,
+            {
+                $set: {
+                    id: appwriteFile.$id,
+                    image: fileUrl, // Save the file URL
+                },
+            },
+            { new: true, runValidators: true }
+        );
+
+        // Check if document was found and updated
+        if (!galleryImages) {
+            return res.status(404).json({ error: "Image not found" });
+        }
+
+        res.status(200).json(galleryImages);
+    } catch (error) {
+        console.error("Error uploading image:", error);
         res.status(500).json({ error: error.message });
     }
 };
