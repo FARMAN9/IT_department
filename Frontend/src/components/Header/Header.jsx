@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
-import { NavLink } from "react-router-dom";
+import { NavLink ,Link} from "react-router-dom";
 
 function Header() {
   const toggleMenu = (setMenu) => {
@@ -26,14 +26,20 @@ function Header() {
 
   return (
     <>
-      <header className="z-20  bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded border-gray-300 text-lg  font-semibold border  w-full">
+      <header className="z-20  bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded text-lg  font-semibold border  w-full">
         <div className="container mx-auto flex justify-between items-center md:p-2 py-2 px-full">
           <div className="flex items-center text-lg font-bold space-x-1">
-            <img
+          <Link
+          to='/'
+          
+          >
+          <img
               className="w-20 h-20 md:w-20 md:h-20 transition-transform duration-500 transform "
               src="https://nitsri.ac.in/images/nit-logo.png"
               alt="nit logo"
             />
+          </Link>
+           
             <div className="md:flex-col sm:flex-col self-center text-center md:text-left">
               <NavLink
                 to="/"

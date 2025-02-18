@@ -4,10 +4,14 @@ function NavAdmin() {
   return (
     <>
       <div className="w-full flex justify-between relative">
-        <div className="navbar bg-primary text-primary-content">
-          <div className="flex-1"></div>
+        <div className="navbar bg-gradient-to-r from-cyan-500 to-blue-500 text-primary-content">
+          <div className="flex-1">
+            
+          </div>
           <div className="flex-none pr-[10px]">
             <ul className="menu menu-horizontal">
+
+              
               <Link
                 className="btn btn-outline btn-primary bg-slate-50 btn-xs sm:btn-sm md:btn-md lg:btn-md xl:btn-md"
                 to="/login"

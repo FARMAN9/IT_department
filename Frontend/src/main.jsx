@@ -39,6 +39,7 @@ import AdminGallery from "./components/Admin/Gallery/AdminGallery.jsx";
 import Vision from "./components/Admin/VisionAndMission/Visions.jsx";
 import Mission from "./components/Admin/VisionAndMission/Mission.jsx";
 import Hod from "./components/Admin/Hod_information/Hod.jsx";
+import Page404 from "./components/UtilityCompoments/Page404.jsx";
 
 const router = createBrowserRouter([
   {
@@ -157,7 +158,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <div>404</div>,
+    element: <Page404/>,
   },
   {
     path: "/admin",
