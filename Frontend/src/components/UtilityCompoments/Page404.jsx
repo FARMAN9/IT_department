@@ -1,3 +1,5 @@
+// This file has been renamed to Page404.jsx to resolve casing conflict.
+
 import React from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../../assets/favicon.png'

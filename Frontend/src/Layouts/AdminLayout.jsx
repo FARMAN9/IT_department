@@ -49,6 +49,10 @@ const Layout = () => {
           secureRouter: true,
         },
         {
+          label: "Department information",
+          link: "/admin/main-information",
+        },
+        {
           label: "Hod Information",
           link: "/admin/hod-info",
         },

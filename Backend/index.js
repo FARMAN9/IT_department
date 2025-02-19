@@ -58,8 +58,10 @@ const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Define a route
-app.get("/", (req, res) => {
-  res.send("Department of it nit");
+app.post("/", (req, res) => {
+  res.status(200).json({
+   farman :'farman'
+  })
 });
 
 
