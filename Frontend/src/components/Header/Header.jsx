@@ -1,74 +1,63 @@
-import React, { useState } from "react";
-import {
-  Home,
-  Info,
-  User,
-  Users,
-  Beaker,
-  ChevronDown,
-  ChevronRight,
-  CircleDot,
-  Menu as MenuIcon,
-  House,
-  X,
-} from "lucide-react";
-import { IoIosArrowDown } from "react-icons/io";
-import { IoIosArrowUp } from "react-icons/io";
-import { NavLink ,Link} from "react-router-dom";
+import React from "react";
+import { House } from "lucide-react";
+import { NavLink, Link } from "react-router-dom";
 
 function Header() {
-  const toggleMenu = (setMenu) => {
-    setMenu((prev) => !prev);
-  };
-  const hideShow = () => {
-    document.querySelector(".mobile-menu").classList.toggle("hidden");
-  };
-
   return (
-    <>
-      <header className="z-20  bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded text-lg  font-semibold border  w-full">
-        <div className="container mx-auto flex justify-between items-center md:p-2 py-2 px-full">
-          <div className="flex items-center text-lg font-bold space-x-1">
-          <Link
-          to='/'
-          
-          >
-          <img
-              className="w-20 h-20 md:w-20 md:h-20 transition-transform duration-500 transform "
+    <header className="z-20 bg-gradient-to-r from-cyan-500 to-blue-500 text-white  shadow-lg w-full">
+      <div className="container mx-auto flex justify-between items-center p-4">
+        {/* Logo and Title */}
+        <div className="flex items-center space-x-4">
+          <Link to="/">
+            <img
+              className="w-16 h-16 md:w-20 md:h-20 transition-transform duration-300 hover:scale-105"
               src="https://nitsri.ac.in/images/nit-logo.png"
-              alt="nit logo"
+              alt="NIT Srinagar Logo"
             />
           </Link>
-           
-            <div className="md:flex-col sm:flex-col self-center text-center md:text-left">
-              <NavLink
-                to="/"
-                className="text-pretty md:text-4xl text-sm font-semibold text-glow  "
-              >
-                INFORMATION TECHNOLOGY
-              </NavLink>
-              <hr className="" />
-              <p className="md:text-sm text-xs text-glow  font-semibold ">
-                National Institute of Technology Srinagar,Jammu & Kashmir
-              </p>
-            </div>
-            <div className="md:hidden lg:hidden visibility:hidden m-1 p-2">
-              <button className="flex z-0 items-center justify-center w-10 lg:hidden md:hidden">
-                {" "}
-              </button>
-            </div>
+          <div className="flex flex-col text-center md:text-left">
+            <NavLink
+              to="/"
+              className="lg:text-2xl md:text-4xl font-semibold hover:text-gray-200 transition-colors duration-200"
+            >
+              INFORMATION TECHNOLOGY
+            </NavLink>
+            <p className="text-sm md:text-base font-semibold mt-1">
+              National Institute of Technology Srinagar, Jammu & Kashmir
+            </p>
           </div>
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex space-x-20 text-xl">
-            <div className="flex-1">
-              <a href="#" className="hover:text-gray-200 ">
-                <House size={36} strokeWidth={2.75} />
-              </a>
-            </div>
-          </nav>
         </div>
-      </header>
-    </>
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center space-x-6">
+          <NavLink
+            to="/"
+            className="hover:text-gray-200 transition-colors duration-200"
+            aria-label="Home"
+          >
+            <House size={36} strokeWidth={2.75} />
+          </NavLink>
+        </nav>
+
+        {/* Mobile Menu Button (Placeholder for future implementation) */}
+        <button className="lg:hidden p-2 hover:bg-blue-600 rounded-lg transition-colors duration-200">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16m-7 6h7"
+            />
+          </svg>
+        </button>
+      </div>
+    </header>
   );
 }
 

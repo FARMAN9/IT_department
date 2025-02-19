@@ -150,7 +150,7 @@ function Main() {
   return (
     <>
       <div className="flex flex-col lg:flex-row min-h-screen">
-        <main className="flex-1 lg:ml-10 p-0 m-1 lg:p-6">
+        <main className="flex-1  p-0 m-1 ">
           {/* Add Edit Button at the top */}
 
           {showDeleteModal && (
@@ -316,7 +316,7 @@ function Main() {
           {/* ... rest of your existing JSX content ... */}
           <>
             <div className="flex flex-col lg:flex-row min-h-screen">
-              <main className="flex-1 lg:ml-10 p-0 m-1 lg:p-6">
+              <main className="flex-1  p-0  m-2 lg:p-2">
                 <div className=" mx-auto pt-4 space-y-8  bg-white">
                   {/* Profile Section */}
                   <div className="flex flex-col md:flex-row gap-8 items-start md:items-center  lg:mt-0">
