@@ -25,7 +25,3 @@ dist-ssr
 *.sw?
 Frontend/.env
 Backend/.env
-Frontend/node_modules
-Frontend/dist
-Backend/node_modules
-Backend/dist

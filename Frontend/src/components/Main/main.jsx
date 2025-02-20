@@ -15,19 +15,21 @@ const Main = () => {
 
   return (
     <>
-      <div className="min-h-auto flex lg:mr-10">
-        <main className="flex-1 lg:ml-10 p-2 lg:p-4">
+      <div className="min-h-auto flex lg:mr-0">
+        <main className="flex-1 lg:ml-0 p-2 lg:p-3">
           <div className="">
             {/* Coordinator Section */}
             <div className="relative">
-              <div className="mt-o rounded-lg shadow-md p-0 ">
+              <div className="rounded-lg  ">
                 <div className="">
-                  <div className="h-full w-full">
+                  <div className="h-full w-full mb-8">
                     <ImageSlide />
+                  
+                    <div className="top-0  left-0 w-full h-full">
+                  <Wellcome />
                   </div>
-                  <div className="flex-1 items-center justify-center">
-                    <Wellcome />
                   </div>
+                 
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4">
                     <DepartmentOfItInfo />
 

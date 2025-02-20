@@ -22,9 +22,42 @@ import {
   Menu as MenuIcon,
   X,
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+
 
 const Layout = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+
+
+  const buttonVariants = {
+    initial: { y: -10, opacity: 0 },
+    animate: { y: 0, opacity: 1 },
+    hover: { scale: 1.05 },
+    tap: { scale: 0.95 }
+  };
+  
+  const arrowVariants = {
+    up: { rotate: 0 },
+    down: { rotate: 180 },
+  };
+
+  const navVariants = {
+    hidden: { 
+      opacity: 0,
+      y: -20,
+      transition: { duration: 0.3, ease: "easeInOut" }
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { 
+        type: "spring",
+        stiffness: 150,
+        damping: 20,
+        mass: 0.5
+      }
+    }
+  };
 
   useEffect(() => {
     document.documentElement.classList.remove("dark"); // Forces light mode
@@ -47,6 +80,10 @@ const Layout = () => {
           label: "Home Slide Images",
           link: "/admin/main-image-slide",
           secureRouter: true,
+        },
+        {
+          label: "Department information",
+          link: "/admin/main-information",
         },
         {
           label: "Hod Information",
@@ -126,55 +163,79 @@ const Layout = () => {
 
   return (
     <>
-      <Toaster
-        position="top-center"
-        gutter={8}
-        reverseOrder={true}
-        className="z-50"
-        toastOptions={{
-          duration: 3000,
-        }}
-      />
-      <div className="w-full">
-        {/* Admin Nav */}
-        <div
-          className={`w-full shadow-md transition-all duration-[1000ms] ease-in-out ${
-            isMenuVisible
-              ? "opacity-100 visible animate-slideInDown"
-              : "hidden opacity-0 animate-slideOutUp"
-          }`}
-        >
-          <NavAdmin />
-        </div>
-        {/* Main Header */}
-      </div>
-      <div className="flex justify-center min-w-full">
-        <button
-          onClick={toggleAdmin}
-          className="bg-blue-700 lg:px-4 px-2 absolute lg:py-1 py-0 rounded-b-full text-white z-50 "
-        >
-          {isMenuVisible ? (
-            <IoIosArrowUp size={20} />
-          ) : (
-            <IoIosArrowDown size={20} />
-          )}
-        </button>
+    <Toaster
+     position="top-center"
+     gutter={8}
+     reverseOrder={true}
+     toastOptions={{
+       duration: 3000,
+       style: {
+         background: '#f8fafc',
+         color: '#0f172a',
+         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+         borderRadius: '12px',
+         border: '1px solid #e2e8f0'
+       }
+     }}
+   />
+   <div className="w-full">
+     {/* Admin Nav */}
+     <AnimatePresence>
+{isMenuVisible && (
+ <motion.div
+   key="nav-admin"
+   initial="hidden"
+   animate="visible"
+   exit="hidden"
+   variants={navVariants}
+   className="w-full shadow-md z-50 bg-white"
+ >
+   <NavAdmin />
+ </motion.div>
+)}
+</AnimatePresence>
+     {/* Main Header */}
+   </div>
+   <div className="flex justify-center min-w-full">
+   <motion.button
+onClick={toggleAdmin}
+className="bg-blue-600 hover:bg-blue-700 px-3 py-1 absolute top-0 right-[50%] translate-x-[50%] rounded-b-xl text-white z-50 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-1"
+variants={buttonVariants}
+initial="initial"
+animate="animate"
+whileHover="hover"
+whileTap="tap"
+aria-label="Toggle admin menu"
+>
+<motion.span
+ variants={arrowVariants}
+ animate={isMenuVisible ? "up" : "down"}
+ transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+>
+ {isMenuVisible ? (
+   <IoIosArrowUp size={18} className="text-white" />
+ ) : (
+   <IoIosArrowDown size={18} className="text-white" />
+ )}
+</motion.span>
 
-        <div className="w-full">
-          <Header />
-        </div>
-      </div>
+</motion.button>
 
-      <div className="flex flex-col ">
-        <div className="flex flex-1 h w-full">
-          <Sidebar adminNavopen={isMenuVisible} menuItems={menuItems} />
-          <main className="flex-1 m-0">
-            <Outlet />
-          </main>
-        </div>
-        <Footer />
-      </div>
-    </>
+     <div className="w-full">
+       <Header />
+     </div>
+   </div>
+
+   <div className="flex flex-col">
+     <div className="flex flex-1 h w-full">
+       <Sidebar adminNavopen={isMenuVisible} menuItems={menuItems} />
+       <div className="flex-1 ">
+         <Outlet />
+       </div>
+     </div>
+     <Footer />
+   </div>
+ </>
   );
 };
 

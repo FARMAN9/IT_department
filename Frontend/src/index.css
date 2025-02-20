@@ -1,9 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&display=swap');
 :root {
   color-scheme: light;
+
 }
 
 html {
@@ -13,8 +14,7 @@ html {
 
 
 *{
-  margin: 0;
-  padding: 0;
+ 
   box-sizing: border-box;
   padding: 0;
 }
