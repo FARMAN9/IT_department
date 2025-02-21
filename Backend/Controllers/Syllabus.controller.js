@@ -4,7 +4,7 @@ import {asFiletoCloud} from "../Utility/Utility.js";
 
 export const GetAllSyllabus = async (req, res) => {
     try {
-        const Syllabus = await SyllabusModel.find({});
+        const Syllabus = await SyllabusModel.find({}).sort({'createdAt':-1}||{'updatedAt':-1});
         res.status(200).json({data:Syllabus,
             message:"Syllabus Fetched Successfully"
         });
@@ -34,7 +34,7 @@ export const PostSyllabus = async (req, res) => {
            Syllabus: fileUrl,
            Programe: req.body.Programe,
            Batch: req.body.Batch,
-           Coordinators: req.body.Coordinators
+          
         });
         res.status(201).json({data:newSyllabus,
             message:"Syllabus Created Successfully"

@@ -15,7 +15,7 @@ const SyllabusSchema = new mongoose.Schema({
     },                      
     Coordinators:{
         type: String,
-        required: true
+        required: false
     }
     
     

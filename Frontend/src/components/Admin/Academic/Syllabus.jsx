@@ -8,6 +8,7 @@ import {
   HiPencil,
   HiTrash,
 } from "react-icons/hi";
+import { FaFilePdf } from "react-icons/fa6";
 import axios from "axios";
 import toast from "react-hot-toast";
 import MainCard from "../../Activites/MainCard";
@@ -20,19 +21,33 @@ function Syllabus() {
     (state) => state.SyllabusData
   );
 
+  // State Management
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [showUploadModal, setShowUploadModal] = useState(false);
-  const [file, setFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [selectedSyllabus, setSelectedSyllabus] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedSyllabus, setSelectedSyllabus] = useState(null);
 
+  // Form States
+  const [uploadForm, setUploadForm] = useState({
+    programme: "",
+    batch: "",
+    file: null,
+  });
+  const [editForm, setEditForm] = useState({
+    programme: "",
+    batch: "",
+    file: null,
+  });
+
+  // Fetch data on mount
   useEffect(() => {
     dispatch(fetchSyllabusData());
   }, [dispatch]);
 
+  // Error handling
   const handleApiError = (err, action) => {
     const errorMessage =
       err.response?.data?.message ||
@@ -41,22 +56,25 @@ function Syllabus() {
     toast.error(errorMessage);
   };
 
-  const handleFileUpload = async () => {
-    if (!file) return toast.error("Please select a file");
+  // Upload Handler
+  const handleUpload = async () => {
+    if (!uploadForm.file || !uploadForm.programme || !uploadForm.batch) {
+      return toast.error("Please fill all required fields");
+    }
 
     const MAX_SIZE_MB = 5;
-    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+    if (uploadForm.file.size > MAX_SIZE_MB * 1024 * 1024) {
       return toast.error(`File size exceeds ${MAX_SIZE_MB}MB limit`);
     }
 
     const formData = new FormData();
-    formData.append("syllabus", file);
+    formData.append("Programe", uploadForm.programme);
+    formData.append("Batch", uploadForm.batch);
+    formData.append("pdf", uploadForm.file);
 
     try {
-      setUploading(true);
       const loadingToast = toast.loading("Uploading syllabus...");
-
-      await axios.post("http://localhost:4000/api/syllabus", formData, {
+      await axios.post("http://localhost:4000/api/uploadSyllabus", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -66,23 +84,55 @@ function Syllabus() {
       await dispatch(fetchSyllabusData());
       toast.success("Syllabus uploaded successfully!");
       setShowUploadModal(false);
-      setFile(null);
+      setUploadForm({ programme: "", batch: "", file: null });
       toast.dismiss(loadingToast);
     } catch (err) {
       handleApiError(err, "upload");
-    } finally {
-      setUploading(false);
     }
   };
 
-  const handleDelete = async () => {
-    if (!selectedSyllabus) return;
+  // Update Handler
+  const handleUpdate = async () => {
+    if (!editForm.programme || !editForm.batch) {
+      return toast.error("Please fill required fields");
+    }
+
+    const formData = new FormData();
+    formData.append("Programe", editForm.programme);
+    formData.append("Batch", editForm.batch);
+    if (editForm.file) {
+      formData.append("pdf", editForm.file);
+    }
 
     try {
-      const loadingToast = toast.loading("Deleting syllabus...");
+      const loadingToast = toast.loading("Updating syllabus...");
+      await axios.put(
+        `http://localhost:4000/api/uploadSyllabus/${selectedSyllabus._id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
+      await dispatch(fetchSyllabusData());
+      toast.success("Syllabus updated successfully!");
+      setShowEditModal(false);
+      setEditForm({ programme: "", batch: "", file: null });
+      toast.dismiss(loadingToast);
+    } catch (err) {
+      handleApiError(err, "update");
+    }
+  };
+
+  // Delete Handler
+  const handleDelete = async () => {
+    try {
+      const loadingToast = toast.loading("Deleting syllabus...");
       await axios.delete(
-        `http://localhost:4000/api/syllabus/${selectedSyllabus._id}`,
+        `http://localhost:4000/api/deleteSyllabus/${selectedSyllabus._id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -100,6 +150,7 @@ function Syllabus() {
     }
   };
 
+  // Search and Pagination
   const filteredSyllabus = useMemo(() => {
     const lowerSearch = search.toLowerCase();
     return syllabus.filter((item) =>
@@ -114,11 +165,12 @@ function Syllabus() {
   const totalPages = Math.ceil(filteredSyllabus.length / rowsPerPage);
   const currentRows = filteredSyllabus.slice(indexOfFirstRow, indexOfLastRow);
 
+  // Mobile Card Component
   const MobileCard = ({ item }) => (
     <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-teal-600 mb-3">
       <div className="space-y-2">
         <div className="flex justify-between items-start">
-          <h3 className="font-semibold text-gray-800">{item.Programme}</h3>
+          <h3 className="font-semibold text-gray-800">{item.Programe}</h3>
           <span className="text-sm bg-teal-100 text-teal-800 px-2 py-1 rounded">
             Batch {item.Batch}
           </span>
@@ -145,15 +197,31 @@ function Syllabus() {
               />
             </svg>
           </a>
-          <button
-            onClick={() => {
-              setSelectedSyllabus(item);
-              setShowDeleteModal(true);
-            }}
-            className="text-red-600 hover:text-red-800"
-          >
-            <HiTrash className="w-5 h-5" />
-          </button>
+          <div className="flex gap-4">
+            <button
+              onClick={() => {
+                setSelectedSyllabus(item);
+                setEditForm({
+                  programme: item.Programme,
+                  batch: item.Batch,
+                  file: null,
+                });
+                setShowEditModal(true);
+              }}
+              className="text-blue-600 hover:text-blue-800"
+            >
+              <HiPencil className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => {
+                setSelectedSyllabus(item);
+                setShowDeleteModal(true);
+              }}
+              className="text-red-600 hover:text-red-800"
+            >
+              <HiTrash className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -179,10 +247,7 @@ function Syllabus() {
               >
                 Cancel
               </button>
-              <button
-                onClick={handleDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-              >
+              <button onClick={handleDelete} className="btn btn-error">
                 Delete
               </button>
             </div>
@@ -193,30 +258,124 @@ function Syllabus() {
       {/* Upload Modal */}
       {showUploadModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-6 max-w-sm w-full">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full">
             <h3 className="text-lg font-bold mb-4">Upload New Syllabus</h3>
-            <input
-              type="file"
-              className="file-input file-input-bordered w-full mb-4"
-              onChange={(e) => setFile(e.target.files[0])}
-              accept="application/pdf"
-            />
-            <div className="flex justify-end gap-3">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Programme
+                </label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded-md"
+                  value={uploadForm.programme}
+                  onChange={(e) =>
+                    setUploadForm({ ...uploadForm, programme: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Batch</label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded-md"
+                  value={uploadForm.batch}
+                  onChange={(e) =>
+                    setUploadForm({ ...uploadForm, batch: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Syllabus File (PDF)
+                </label>
+                <input
+                  type="file"
+                  className="file-input file-input-bordered w-full"
+                  onChange={(e) =>
+                    setUploadForm({ ...uploadForm, file: e.target.files[0] })
+                  }
+                  accept="application/pdf"
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 mt-6">
               <button
-                onClick={() => {
-                  setShowUploadModal(false);
-                  setFile(null);
-                }}
+                onClick={() => setShowUploadModal(false)}
                 className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
               >
                 Cancel
               </button>
+              <button onClick={handleUpload} className="btn btn-primary">
+                Upload
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+            <h3 className="text-lg font-bold mb-4">Edit Syllabus</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Programme
+                </label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded-md"
+                  value={editForm.programme}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, programme: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Batch</label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded-md"
+                  value={editForm.batch}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, batch: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Update File{" "}
+                  <div className="text-red-500 border border-gray-300 p-2 flex rounded-md w-full flex-wrap overflow-hidden">
+                    <p className="text-xs w-full">
+                      <a href={selectedSyllabus.Syllabus}>
+                        <FaFilePdf size={20} /> {selectedSyllabus.Syllabus}
+                      </a>
+                    </p>
+                  </div>
+                </label>
+
+                <input
+                  type="file"
+                  required
+                  className="file-input file-input-bordered w-full"
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, file: e.target.files[0] })
+                  }
+                  accept="application/pdf"
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 mt-6">
               <button
-                onClick={handleFileUpload}
-                className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
-                disabled={!file || uploading}
+                onClick={() => setShowEditModal(false)}
+                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
               >
-                {uploading ? "Uploading..." : "Upload"}
+                Cancel
+              </button>
+              <button onClick={handleUpdate} className="btn btn-primary">
+                Update
               </button>
             </div>
           </div>
@@ -265,15 +424,14 @@ function Syllabus() {
                         ))}
                       </select>
                     </div>
-
-                    <button
-                      onClick={() => setShowUploadModal(true)}
-                      className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
-                    >
-                      <HiPencil className="w-5 h-5" />
-                      Upload New
-                    </button>
                   </div>
+                  <button
+                    onClick={() => setShowUploadModal(true)}
+                    className="btn btn-sm btn-warning rounded-lg"
+                  >
+                    <HiPencil className="w-5 h-5" />
+                    Upload New
+                  </button>
                 </div>
 
                 {/* Desktop Table */}
@@ -287,6 +445,9 @@ function Syllabus() {
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
                           Batch
                         </th>
+                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
+                          Download
+                        </th>
                         <th className="py-3 px-4 text-center text-sm font-medium text-gray-700 uppercase">
                           Actions
                         </th>
@@ -296,12 +457,12 @@ function Syllabus() {
                       {currentRows.map((item, index) => (
                         <tr key={index} className="hover:bg-gray-50">
                           <td className="py-3 px-4 text-gray-900">
-                            {item.Programme}
+                            {item.Programe}
                           </td>
                           <td className="py-3 px-4 text-gray-900">
                             Batch {item.Batch}
                           </td>
-                          <td className="py-3 px-4 text-center flex justify-center items-center gap-4">
+                          <td className="py-3 px-4 text-gray-900">
                             <a
                               href={item.Syllabus}
                               className="text-teal-600 hover:text-teal-800 font-medium inline-flex items-center gap-1"
@@ -323,12 +484,28 @@ function Syllabus() {
                                 />
                               </svg>
                             </a>
+                          </td>
+                          <td className="py-3 px-4 text-center flex justify-center items-center gap-4">
+                            <button
+                              onClick={() => {
+                                setSelectedSyllabus(item);
+                                setEditForm({
+                                  programme: item.Programe,
+                                  batch: item.Batch,
+                                  file: null,
+                                });
+                                setShowEditModal(true);
+                              }}
+                              className="btn btn-sm  z-10 btn-warning rounded-lg"
+                            >
+                              <HiPencil className="w-5 h-5" />
+                            </button>
                             <button
                               onClick={() => {
                                 setSelectedSyllabus(item);
                                 setShowDeleteModal(true);
                               }}
-                              className="text-red-600 hover:text-red-800"
+                              className="btn btn-sm z-10 btn-error rounded-lg"
                             >
                               <HiTrash className="w-5 h-5" />
                             </button>
