@@ -71,7 +71,7 @@ export const putImage = async (req, res) => {
 
 export const postMainInfo = async (req, res) => {
     try {
-        const { name, description, city, state, pinCode, officeMail, phoneNumber } = req.body;
+        const { name, description, city, state, pinCode, officeMail, phoneNumber,imageUrl,youtubeLink} = req.body;
 
         // Validate required fields
         if (!name) return res.status(400).json({ error: "Name is required" });
@@ -94,6 +94,8 @@ export const postMainInfo = async (req, res) => {
             mainInfo.pinCode = pinCode;
             mainInfo.officeMail = officeMail;
             mainInfo.phoneNumber = phoneNumber;
+            mainInfo.image = imageUrl;
+            mainInfo.Youtube_Link = youtubeLink;
 
             await mainInfo.save();
 
@@ -162,5 +164,26 @@ export const getMainInfoById = async (req, res) => {
             error: "Internal Server Error",
             details: error.message,
         });
+    }
+};
+
+
+
+export const removeMainImage = async (req, res) => {
+    try {
+        const mainId = req.params.id || MainID; // Use the ID from params or default to MainID
+        let mainInfo = await MainInfo.findById(mainId);
+        if (!mainInfo) {
+            return res.status(404).json({ error: "MainInfo not found" });
+        }
+        mainInfo.image = '';
+        await mainInfo.save();
+        return res.status(200).json({
+            success: true,
+            data: mainInfo,
+            message: "Image removed and record updated successfully",
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message }); 
     }
 };

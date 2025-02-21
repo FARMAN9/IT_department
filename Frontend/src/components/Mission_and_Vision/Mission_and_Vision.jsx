@@ -7,6 +7,7 @@ import {
   fetchMissions,
   fetchVisions,
 } from "../../Features/VisionAndMissionslice";
+import { fetchMainDepartmentData } from "../../Features/MainDepartmentSlice";
 
 const MissionAndVision = () => {
   const dispatch = useDispatch();
@@ -15,9 +16,14 @@ const MissionAndVision = () => {
     (state) => state.VisionAndMissionData
   );
 
+  const { MainDepartmentInfo } = useSelector(
+    (state) => state.MainDepartmentData
+  );
+
   useEffect(() => {
     dispatch(fetchMissions());
     dispatch(fetchVisions());
+    dispatch(fetchMainDepartmentData());
   }, [dispatch]);
 
   const handleReadMore = (e) => {
@@ -46,7 +52,7 @@ const MissionAndVision = () => {
         <figure className="h-[40%]">
           <iframe
             className=" h-full w-full"
-            src="https://www.youtube.com/embed/gPfEJLt4nCc"
+            src={MainDepartmentInfo.Youtube_Link}
             title="Mission and Vision Video"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           />

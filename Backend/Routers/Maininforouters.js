@@ -1,12 +1,13 @@
 import express from "express";
-import { postMainInfo, getMainInfoById, putImage } from "../Controllers/MainINFO.conroller.js";
+import { postMainInfo, getMainInfoById, putImage ,removeMainImage} from "../Controllers/MainINFO.conroller.js";
 const router = express.Router();
 import {handleUpload} from "../Middleware/ImageMiddleWare.js"
 
 
 router.put("/uplaodMainInfo", postMainInfo);
-router.put("/mainImage/", handleUpload ,putImage);
-router.get("/getMainInfo",getMainInfoById);
+router.put("/updateMainDepartmentImage", handleUpload ,putImage);
+router.get("/getMainInfo", getMainInfoById);
+router.delete("/deleteMainDepartmentImage/", removeMainImage);
 
 
 

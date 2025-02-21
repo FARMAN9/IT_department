@@ -41,6 +41,8 @@ import Mission from "./components/Admin/VisionAndMission/Mission.jsx";
 import Hod from "./components/Admin/Hod_information/Hod.jsx";
 import Page404 from "./components/UtilityCompoments/Page404.jsx";
 import Main_information from "./components/Admin/Main_information/Main_information.jsx";
+import Department_information from "./components/Admin/Main_information/Department_information.jsx";
+import Syllabus from "./components/Admin/Academic/Syllabus.jsx";
 
 const router = createBrowserRouter([
   {
@@ -159,8 +161,8 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <Page404/>,
-  },
+    element: <Page404 />,
+  }, //admin routes
   {
     path: "/admin",
     element: <AdminLayout />,
@@ -192,7 +194,15 @@ const router = createBrowserRouter([
       {
         path: "/admin/main-information",
         element: <Main_information />,
-      }
+      },
+      {
+        path: "/admin/department-information",
+        element: <Department_information />,
+      },
+      {
+        path: "/admin/academic/syllabus",
+        element: <Syllabus />,
+      },
     ],
   },
   {

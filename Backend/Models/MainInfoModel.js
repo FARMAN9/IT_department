@@ -41,7 +41,12 @@ const MainInfoSchema = new mongoose.Schema({
     phoneNumber:{
         type: String,
         required: true
-    }
+    },
+     Youtube_Link:{
+            type: String,
+            required: false
+        }
+    
 
     
 
