@@ -43,6 +43,8 @@ import Page404 from "./components/UtilityCompoments/Page404.jsx";
 import Main_information from "./components/Admin/Main_information/Main_information.jsx";
 import Department_information from "./components/Admin/Main_information/Department_information.jsx";
 import Syllabus from "./components/Admin/Academic/Syllabus.jsx";
+import Timetable from "./components/Admin/Academic/Timetable.jsx";
+import AcademicCoordinator from "./components/Admin/Academic/AcademicCord.jsx";
 
 const router = createBrowserRouter([
   {
@@ -202,6 +204,14 @@ const router = createBrowserRouter([
       {
         path: "/admin/academic/syllabus",
         element: <Syllabus />,
+      },
+      {
+        path: "/admin/academic/timetable",
+        element: <Timetable />,
+      },
+      {
+        path: "/admin/academic/coordinator",
+        element: <AcademicCoordinator />,
       },
     ],
   },

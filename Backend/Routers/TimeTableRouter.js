@@ -4,8 +4,8 @@ const router = express.Router();
 import {handleUpload,handleUploadPDF} from "../Middleware/ImageMiddleWare.js"
 
 
-router.post("/uplaodTimeTable", handleUploadPDF ,PostTimeTable);
-router.put("/uplaodTimeTable/:id", handleUploadPDF ,UpdateTimeTable);
+router.post("/uploadTimeTable", handleUploadPDF ,PostTimeTable);
+router.put("/uploadTimeTable/:id", handleUploadPDF ,UpdateTimeTable);
 router.get("/getTimeTable",GetAllTimeTable); 
 router.delete("/deleteTimeTable/:id",DeleteTimeTable);
 

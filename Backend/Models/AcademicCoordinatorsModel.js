@@ -5,7 +5,19 @@ const AcademicCoordinatorsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    Batch:{
+        type: String,
+        required: true
+    },
+    Semester:{
+        type: String,
+        required: true
+    },
     Coordinators:{
+        type: String,
+        required: true
+    },
+    Session:{
         type: String,
         required: true
     }
@@ -15,6 +27,7 @@ const AcademicCoordinatorsSchema = new mongoose.Schema({
 },{timestamps:true})
 
 const AcademicCoordinatorsModel = mongoose.model('AcademicCoordinators',AcademicCoordinatorsSchema);
+
 
 
 export default AcademicCoordinatorsModel;

@@ -3,7 +3,7 @@ import  AcademicCoordinatorsModel  from "../Models/AcademicCoordinatorsModel.js"
 
 export const GetAllAcademicCoordinators = async (req, res) => {
     try {
-        const AcademicCoordinators = await AcademicCoordinatorsModel.find({});
+        const AcademicCoordinators = await AcademicCoordinatorsModel.find({}).sort({'createdAt':-1}||{'updatedAt':-1});
         res.status(200).json({data:AcademicCoordinators,
             message:"AcademicCoordinators Fetched Successfully"
         });
@@ -18,7 +18,10 @@ export const PostAcademicCoordinators = async (req, res) => {
        
         const newAcademicCoordinators = await AcademicCoordinatorsModel.create({
            Coordinators: req.body.Coordinators,
-           Programe: req.body.Programe
+            Programe: req.body.Programe,
+            Batch: req.body.Batch,
+            Semester: req.body.Semester,
+            Session: req.body.Session
         });
         res.status(201).json({data:newAcademicCoordinators,
             message:"Academic Coordinator Created Successfully"

@@ -118,9 +118,13 @@ const Layout = () => {
       link: "/academic",
       submenu: [
         { label: "Programmes", link: "/academic/programmes" },
-        { label: "Academic Coordinators", link: "/academic/coordinators" },
+        {
+          label: "Academic Coordinators",
+          link: "/admin/academic/coordinator",
+        },
         { label: "Syllabus", link: "/admin/academic/syllabus" },
-        { label: "TimeTable", link: "/academic/timetable" },
+        { label: "TimeTable", link: "/admin/academic/timetable" },
+
         {
           label: "Department Activities Calendar",
           link: "/academic/calendar",
