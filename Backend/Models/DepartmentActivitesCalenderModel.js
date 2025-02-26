@@ -11,14 +11,13 @@ const DepartmentActivitesCalenderSchema = new mongoose.Schema({
     },
     Department:{
         type: String,
-       
     },
     Year:{
         type: String,
     },
     ActivitesCalender:{
         type: String,
-        required: true
+       
     }   
 }, { timestamps: true })
 

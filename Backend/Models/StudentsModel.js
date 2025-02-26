@@ -3,15 +3,15 @@ import mongoose from "mongoose";
 
 
 const StudentsSchema = new mongoose.Schema({
-  program:{
+  Programe:{
       type: String,
       required: true
   },
-  batch:{
+  Batch:{
       type: String,
       required: true
     },
-  pdf:{
+    Students:{
       type: String,
       required: true
     }

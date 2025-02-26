@@ -1,12 +1,12 @@
 import express from "express";
-import {UplaodActivitesCalender,GetActivitesCalender} from "../Controllers/DepartmentActivitesCalender.conroller.js"
+import {UplaodActivitesCalender,GetActivitesCalender,DeleteActivitesCalender} from "../Controllers/DepartmentActivitesCalender.conroller.js"
 const router = express.Router();
 import {handleUpload,handleUploadPDF} from "../Middleware/ImageMiddleWare.js"
 
 
-router.post("/uplaodActivitesCalender", handleUploadPDF ,UplaodActivitesCalender);
-router.get("/getActivitesCalender",GetActivitesCalender); 
-
+router.post("/uploadActivitesCalender", handleUploadPDF ,UplaodActivitesCalender);
+router.get("/getActivitesCalender", GetActivitesCalender); 
+router.delete("/deleteActivitesCalender",DeleteActivitesCalender);
 
 
 

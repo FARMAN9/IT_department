@@ -8,6 +8,7 @@ import SyllabusSlice from '../Features/SyllabusSlice'
 import AcademicCoordinatorSlice from '../Features/AcademicCoordinatorSlice'
 import TimeTableSlice from '../Features/TimeTabelSlice'
 import DepartmentActivitesCalenderSlice from '../Features/DepartmentActivitesCalendarslice'
+import StudentsSlice from '../Features/studentsSlice'
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
     , SyllabusData: SyllabusSlice,
     AcademicCoordinatorData: AcademicCoordinatorSlice,
     TimeTableData: TimeTableSlice,
-    DepartmentActivitesCalenderData: DepartmentActivitesCalenderSlice
+    DepartmentActivitesCalenderData: DepartmentActivitesCalenderSlice,
+    StudentsData: StudentsSlice
   }
 })

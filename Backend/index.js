@@ -16,7 +16,7 @@ import SyllabusRouter from "./Routers/Syllabusrouter.js";
 import AcademicCoordinatorRouter from "./Routers/AcademicCoordinatorrouters.js";
 import TimeTableRouter from "./Routers/TimeTableRouter.js";
 import DepartmentActivitesCalenderRouter from "./Routers/DepartmentActivitesCalendarrouter.js";
-
+import StudentsRouter from "./Routers/Studentsrouter.js";
 import Userrouter from "./Routers/Userrouter.js";
 import path from "path";
 
@@ -76,6 +76,7 @@ app.use("/api", SyllabusRouter);
 app.use("/api", AcademicCoordinatorRouter);
 app.use("/api", TimeTableRouter);
 app.use("/api", DepartmentActivitesCalenderRouter);
+app.use("/api", StudentsRouter);
 
 // Start the server
 app.listen(PORT, () => {

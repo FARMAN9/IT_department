@@ -45,6 +45,8 @@ import Department_information from "./components/Admin/Main_information/Departme
 import Syllabus from "./components/Admin/Academic/Syllabus.jsx";
 import Timetable from "./components/Admin/Academic/Timetable.jsx";
 import AcademicCoordinator from "./components/Admin/Academic/AcademicCord.jsx";
+import DepartmentActivitesCalendar from "./components/Admin/Academic/DepartmentActivitesCalendar.jsx";
+import AdminStudents from "./components/Admin/People/Students.jsx";
 
 const router = createBrowserRouter([
   {
@@ -212,6 +214,14 @@ const router = createBrowserRouter([
       {
         path: "/admin/academic/coordinator",
         element: <AcademicCoordinator />,
+      },
+      {
+        path: "/admin/academic/department-activities-calendar",
+        element: <DepartmentActivitesCalendar />,
+      },
+      {
+        path: "/admin/academic/students",
+        element: <AdminStudents />,
       },
     ],
   },

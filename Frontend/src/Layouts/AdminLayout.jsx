@@ -127,7 +127,7 @@ const Layout = () => {
 
         {
           label: "Department Activities Calendar",
-          link: "/academic/calendar",
+          link: "/admin/academic/department-activities-calendar",
         },
       ],
     },
@@ -139,7 +139,7 @@ const Layout = () => {
       submenu: [
         { label: "Faculty", link: "/people/faculty" },
         { label: "PhD Scholars", link: "/people/phd-scholars" },
-        { label: "Students", link: "/people/students" },
+        { label: "Students", link: "/admin/academic/students" },
         { label: "Alumni", link: "/people/alumni" },
         { label: "Staff", link: "/people/staff" },
       ],

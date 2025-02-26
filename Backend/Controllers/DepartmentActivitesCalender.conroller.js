@@ -66,3 +66,20 @@ export const GetActivitesCalender = async (req, res) => {
         });
     }
 };
+
+
+export const DeleteActivitesCalender = async (req, res) => {
+    try {
+        const deletedActivitesCalender = await DepartmentActivitesCalenderModel.findById(req.params.id||MainID);
+        if (!deletedActivitesCalender) {
+            return res.status(404).json({ error: "Activites Calender not found" });
+        }
+        deletedActivitesCalender.ActivitesCalender=null;
+        await deletedActivitesCalender.save();
+        res.status(200).json({data:deletedActivitesCalender,
+            message:"Activites Calender Deleted Successfully"
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
