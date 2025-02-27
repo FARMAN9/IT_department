@@ -20,7 +20,6 @@ const PhdscholarsSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-
     linkedin:{
         type: String,
         required: false
@@ -42,9 +41,6 @@ const PhdscholarsSchema = new mongoose.Schema({
         required: false
     }
      
-    
-
-
   
 }, { timestamps: true });
 

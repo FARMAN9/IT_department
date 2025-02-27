@@ -47,6 +47,8 @@ import Timetable from "./components/Admin/Academic/Timetable.jsx";
 import AcademicCoordinator from "./components/Admin/Academic/AcademicCord.jsx";
 import DepartmentActivitesCalendar from "./components/Admin/Academic/DepartmentActivitesCalendar.jsx";
 import AdminStudents from "./components/Admin/People/Students.jsx";
+import AdminPhdScholars from "./components/Admin/People/PhdScholars.jsx";
+import AdminStaff from "./components/Admin/People/Staffs.jsx";
 
 const router = createBrowserRouter([
   {
@@ -222,6 +224,14 @@ const router = createBrowserRouter([
       {
         path: "/admin/academic/students",
         element: <AdminStudents />,
+      },
+      {
+        path: "/admin/academic/phd-scholars",
+        element: <AdminPhdScholars />,
+      },
+      {
+        path: "/admin/academic/staff",
+        element: <AdminStaff />,
       },
     ],
   },

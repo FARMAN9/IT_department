@@ -138,10 +138,10 @@ const Layout = () => {
       link: "/people",
       submenu: [
         { label: "Faculty", link: "/people/faculty" },
-        { label: "PhD Scholars", link: "/people/phd-scholars" },
+        { label: "PhD Scholars", link: "/admin/academic/phd-scholars" },
         { label: "Students", link: "/admin/academic/students" },
         { label: "Alumni", link: "/people/alumni" },
-        { label: "Staff", link: "/people/staff" },
+        { label: "Staff", link: "/admin/academic/staff" },
       ],
     },
     {
