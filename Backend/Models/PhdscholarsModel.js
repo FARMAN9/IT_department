@@ -8,13 +8,17 @@ const PhdscholarsSchema = new mongoose.Schema({
     },
     name:{
         type: String,
+        required: true
+    },
+    researchGate :{
+        type: String,
         required: true,
 
     },
     image:{
         type: String,
         required: false,
-        default: ""
+      
     },
     mobile:{
         type: String,

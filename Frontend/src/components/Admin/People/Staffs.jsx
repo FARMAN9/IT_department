@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStudentsData } from "../../../Features/StudentsSlice";
+import { fetchPhdscholarsData } from "../../../Features/PhdscholarsSlice";
 import {
   HiChevronLeft,
   HiChevronRight,
@@ -8,6 +8,7 @@ import {
   HiPencil,
   HiTrash,
 } from "react-icons/hi";
+import { MdImageNotSupported } from "react-icons/md";
 import { FaFilePdf } from "react-icons/fa6";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -15,10 +16,10 @@ import MainCard from "../../Activites/MainCard";
 import Loading from "../../UtilityCompoments/Loading";
 import Errors from "../../UtilityCompoments/Errors";
 
-function Students() {
+function PhdScholars() {
   const dispatch = useDispatch();
-  const { students, loading, error } = useSelector(
-    (state) => state.StudentsData
+  const { phdscholars, loading, error } = useSelector(
+    (state) => state.PhdScholarsData
   );
 
   // State Management
@@ -28,86 +29,90 @@ function Students() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showRemoveImageModal, setShowRemoveImageModal] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
 
   // Form States
   const [uploadForm, setUploadForm] = useState({
-    programme: "",
-    batch: "",
+    name: "",
+    email: "",
+    mobile: "",
+    linkedin: "",
+    googleScholars: "",
+    researchGate: "",
+    personallink: "",
+    others: "",
     file: null,
   });
   const [editForm, setEditForm] = useState({
-    programme: "",
-    batch: "",
+    name: "",
+    email: "",
+    mobile: "",
+    linkedin: "",
+    googleScholars: "",
+    researchGate: "",
+    personallink: "",
+    others: "",
     file: null,
   });
 
   // Fetch data on mount
   useEffect(() => {
-    dispatch(fetchStudentsData());
+    dispatch(fetchPhdscholarsData());
   }, [dispatch]);
 
   // Error handling
   const handleApiError = (err, action) => {
     const errorMessage =
-      err.response?.data?.message ||
-      err.message ||
-      `${action} failed. Please try again.`;
+      err.response?.error || err.error || `${action} failed. Please try again.`;
     toast.error(errorMessage);
+  };
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   // Upload Handler
   const handleUpload = async () => {
-    if (!uploadForm.file || !uploadForm.programme || !uploadForm.batch) {
-      return toast.error("Please fill all required fields");
+    if (!uploadForm.name || !uploadForm.email) {
+      return toast.error("Name and email are required");
+    }
+    if (!isValidEmail(uploadForm.email)) {
+      return toast.error("Please enter a valid email address");
+    }
+
+    // Check for existing email
+    const emailExists = phdscholars.some(
+      (scholar) =>
+        scholar.email.toLowerCase() === uploadForm.email.toLowerCase()
+    );
+    if (emailExists) {
+      return toast.error("Email already exists");
     }
 
     const MAX_SIZE_MB = 5;
-    if (uploadForm.file.size > MAX_SIZE_MB * 1024 * 1024) {
-      return toast.error(`File size exceeds ${MAX_SIZE_MB}MB limit`);
+    if (uploadForm.file) {
+      if (!uploadForm.file.type.startsWith("image/")) {
+        setUploadForm({ ...uploadForm, file: null });
+        return toast.error("Please upload an image file (JPEG, PNG, etc.)");
+      }
+      if (uploadForm.file.size > MAX_SIZE_MB * 1024 * 1024) {
+        setUploadForm({ ...uploadForm, file: null });
+        return toast.error(`File size exceeds ${MAX_SIZE_MB}MB limit`);
+      }
     }
 
     const formData = new FormData();
-    formData.append("Programe", uploadForm.programme);
-    formData.append("Batch", uploadForm.batch);
-    formData.append("pdf", uploadForm.file);
+    Object.entries(uploadForm).forEach(([key, value]) => {
+      if (key !== "file" && value) formData.append(key, value);
+    });
+    if (uploadForm.file) formData.append("image", uploadForm.file);
 
     try {
-      const loadingToast = toast.loading("Uploading syllabus...");
-      await axios.post("http://localhost:4000/api/uploadStudents", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      await dispatch(fetchStudentsData());
-      toast.success("Students uploaded successfully!");
-      setShowUploadModal(false);
-      setUploadForm({ programme: "", batch: "", file: null });
-      toast.dismiss(loadingToast);
-    } catch (err) {
-      handleApiError(err, "upload");
-    }
-  };
-
-  // Update Handler
-  const handleUpdate = async () => {
-    if (!editForm.programme || !editForm.batch) {
-      return toast.error("Please fill required fields");
-    }
-
-    const formData = new FormData();
-    formData.append("Programe", editForm.programme);
-    formData.append("Batch", editForm.batch);
-    if (editForm.file) {
-      formData.append("pdf", editForm.file);
-    }
-
-    try {
-      const loadingToast = toast.loading("Updating Students...");
-      await axios.put(
-        `http://localhost:4000/api/uploadStudents/${selectedStudent._id}`,
+      const loadingToast = toast.loading("Uploading scholar...");
+      await axios.post(
+        "http://localhost:4000/api/uploadPhdScholars",
         formData,
         {
           headers: {
@@ -117,22 +122,94 @@ function Students() {
         }
       );
 
-      await dispatch(fetchStudentsData());
-      toast.success("Students updated successfully!");
-      setShowEditModal(false);
-      setEditForm({ programme: "", batch: "", file: null });
+      await dispatch(fetchPhdscholarsData());
+      toast.success("PhD scholar uploaded successfully!");
+      setShowUploadModal(false);
+      setUploadForm({
+        name: "",
+        email: "",
+        mobile: "",
+        linkedin: "",
+        googleScholars: "",
+        researchGate: "",
+        personallink: "",
+        others: "",
+        file: null,
+      });
       toast.dismiss(loadingToast);
     } catch (err) {
-      handleApiError(err, "update");
+      console.log(JSON.stringify(err));
+      handleApiError(err, "Upload");
+    }
+  };
+
+  // Update Handler
+  const handleUpdate = async () => {
+    if (!isValidEmail(editForm.email)) {
+      return toast.error("Please enter a valid email address");
+    }
+    // Check for existing email
+    const emailExists = phdscholars.some(
+      (scholar) =>
+        scholar.email.toLowerCase() === editForm.email.toLowerCase() &&
+        scholar._id !== selectedStudent._id
+    );
+    if (emailExists) {
+      return toast.error("Email already exists");
+    }
+
+    const MAX_SIZE_MB = 5;
+    if (uploadForm.file) {
+      if (!uploadForm.file.type.startsWith("image/")) {
+        setUploadForm({ ...uploadForm, file: null });
+        return toast.error("Please upload an image file (JPEG, PNG, etc.)");
+      }
+      if (uploadForm.file.size > MAX_SIZE_MB * 1024 * 1024) {
+        setUploadForm({ ...uploadForm, file: null });
+        return toast.error(`File size exceeds ${MAX_SIZE_MB}MB limit`);
+      }
+    }
+
+    const formData = new FormData();
+    formData.append("name", editForm.name || "");
+    formData.append("email", editForm.email || "");
+    formData.append("mobile", editForm.mobile || "");
+    formData.append("linkedin", editForm.linkedin || "");
+    formData.append("googleScholars", editForm.googleScholars || "");
+    formData.append("researchGate", editForm.researchGate || "");
+    formData.append("personallink", editForm.personallink || "");
+    formData.append("others", editForm.others || "");
+
+    if (editForm.file) formData.append("image", editForm.file);
+
+    try {
+      const loadingToast = toast.loading("Updating scholar...");
+      const response = await axios.put(
+        `http://localhost:4000/api/updatePhdScholars/${selectedStudent._id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log("response", response);
+      await dispatch(fetchPhdscholarsData());
+      toast.success("Scholar updated successfully!");
+      setShowEditModal(false);
+      toast.dismiss(loadingToast);
+    } catch (err) {
+      handleApiError(err, "Update");
     }
   };
 
   // Delete Handler
   const handleDelete = async () => {
     try {
-      const loadingToast = toast.loading("Deleting Students...");
+      const loadingToast = toast.loading("Deleting scholar...");
       await axios.delete(
-        `http://localhost:4000/api/deleteStudents/${selectedStudent._id}`,
+        `http://localhost:4000/api/deletePhdScholars/${selectedStudent._id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -140,25 +217,45 @@ function Students() {
         }
       );
 
-      await dispatch(fetchStudentsData());
-      toast.success("Students deleted successfully!");
+      await dispatch(fetchPhdscholarsData());
+      toast.success("Scholar deleted successfully!");
       setShowDeleteModal(false);
       setSelectedStudent(null);
       toast.dismiss(loadingToast);
     } catch (err) {
-      handleApiError(err, "delete");
+      handleApiError(err, "Delete");
+    }
+  };
+  const handleRemoveImage = async () => {
+    try {
+      const loadingToast = toast.loading("Removing image...");
+      await axios.put(
+        `http://localhost:4000/api/removePhdscholarsImage/${selectedStudent._id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      await dispatch(fetchPhdscholarsData());
+      toast.success("Image removed successfully!");
+      setShowRemoveImageModal(false);
+      toast.dismiss(loadingToast);
+    } catch (err) {
+      handleApiError(err, "Remove Image");
     }
   };
 
   // Search and Pagination
   const filteredStudents = useMemo(() => {
     const lowerSearch = search.toLowerCase();
-    return students.filter((item) =>
+    return phdscholars.filter((item) =>
       Object.values(item).some((value) =>
-        value.toString().toLowerCase().includes(lowerSearch)
+        value?.toString().toLowerCase().includes(lowerSearch)
       )
     );
-  }, [search, students]);
+  }, [search, phdscholars]);
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -167,61 +264,110 @@ function Students() {
 
   // Mobile Card Component
   const MobileCard = ({ item }) => (
-    <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-teal-600 mb-3">
-      <div className="space-y-2">
-        <div className="flex justify-between items-start">
-          <h3 className="font-semibold text-gray-800">{item.Programe}</h3>
-          <span className="text-sm bg-teal-100 text-teal-800 px-2 py-1 rounded">
-            Batch {item.Batch}
-          </span>
+    <div className="card bg-base-100 max-w-xs  shadow-xl">
+      <figure className="px-10 pt-10 ">
+        <img
+          src={item.image}
+          alt={item.name}
+          className="w-60 h-60 rounded-md object-cover border-2 border-teal-600 border-dashed"
+        />
+      </figure>
+      <div className="card-body items-center text-center">
+        <h2 className="card-title overflow-hidden whitespace-pre-wrapb break-all ">
+          {item.name}
+        </h2>
+        <a
+          className="text-blue-500 hover:text-blue-700"
+          href={`mailto:${item.email || "N/A"}`}
+        >
+          {item.email || "N/A"}
+        </a>
+        <hr className="bg-black flex-wrap w-full h-0.5" />
+        <div className="card-actions p-0  w-full flex-wrap  items-start">
+          <div className="flex flex-col items-start justify-start ">
+            <div className=" flex  w-full ">
+              <p>Mobile :</p>
+              <a
+                href={`tel:${item.mobile}`}
+                className="break-all text-sm text-info"
+              >
+                {item.mobile || "N/A"}
+              </a>
+            </div>
+            <div className="flex  w-full ">
+              <p>Linkedin :</p>
+              <a href={item.linkedin} className="break-all text-sm text-info">
+                {item.linkedin || "N/A"}
+              </a>
+            </div>
+
+            <div className=" flex  w-full ">
+              <p>Google Scholar : </p>
+              <a
+                href={item.googleScholars}
+                className="break-all text-sm text-info"
+              >
+                {item.googleScholars || "N/A"}
+              </a>
+            </div>
+            <div className=" flex  w-full ">
+              <p>Research Gate : </p>
+              <a
+                href={item.researchGate}
+                className="break-all text-sm text-info"
+              >
+                {item.researchGate || "N/A"}
+              </a>
+            </div>
+            <div className=" flex  w-full ">
+              <p>Personal Link : </p>
+              <a
+                href={item.personallink}
+                className="break-all text-sm text-info"
+              >
+                {item.personallink || "N/A"}
+              </a>
+            </div>
+            <div className=" flex  w-full ">
+              <p>Others : </p>
+              <p className="break-all text-sm text-info">
+                {item.others || "N/A"}
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="mt-2 flex justify-between items-center">
-          <a
-            href={item.Syllabus}
-            className="inline-flex items-center text-teal-600 hover:text-teal-800 font-medium"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Download
-            <svg
-              className="w-4 h-4 ml-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-              />
-            </svg>
-          </a>
-          <div className="flex gap-4">
+        <div className="card-actions p-0  w-full flex-wrap  items-end">
+          <td className="py-3 px-4 text-center flex justify-center items-center gap-4 break-all">
             <button
               onClick={() => {
-                setSelectedSyllabus(item);
-                setEditForm({
-                  programme: item.Programme,
-                  batch: item.Batch,
-                  file: null,
-                });
+                setSelectedStudent(item);
+                setEditForm({ ...item, file: null });
                 setShowEditModal(true);
               }}
-              className="text-blue-600 hover:text-blue-800"
+              className="btn btn-sm z-10 btn-warning rounded-lg"
             >
               <HiPencil className="w-5 h-5" />
             </button>
             <button
               onClick={() => {
-                setSelectedSyllabus(item);
+                setSelectedStudent(item);
                 setShowDeleteModal(true);
               }}
-              className="text-red-600 hover:text-red-800"
+              className="btn btn-sm z-10 btn-error rounded-lg"
             >
               <HiTrash className="w-5 h-5" />
             </button>
-          </div>
+
+            <button
+              onClick={() => {
+                setSelectedStudent(item);
+                setShowRemoveImageModal(true);
+              }}
+              className="btn btn-sm z-10 btn-info rounded-lg"
+            >
+              <MdImageNotSupported className="w-5 h-5" />
+            </button>
+          </td>
         </div>
       </div>
     </div>
@@ -233,12 +379,32 @@ function Students() {
   return (
     <>
       {/* Delete Confirmation Modal */}
+      {showRemoveImageModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-6 max-w-sm w-full">
+            <h3 className="text-lg font-bold mb-4">Confirm Delete</h3>
+            <p className="mb-6">Are you sure you want to remove this image?</p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowRemoveImageModal(false)}
+                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button onClick={handleRemoveImage} className="btn btn-error">
+                Remove Image
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg p-6 max-w-sm w-full">
             <h3 className="text-lg font-bold mb-4">Confirm Delete</h3>
             <p className="mb-6">
-              Are you sure you want to delete this students ?{" "}
+              Are you sure you want to delete this scholar?
             </p>
             <div className="flex justify-end gap-3">
               <button
@@ -257,49 +423,50 @@ function Students() {
 
       {/* Upload Modal */}
       {showUploadModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4 overflow-auto">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-lg font-bold mb-4">Upload New Syllabus</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Programme
-                </label>
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded-md"
-                  value={uploadForm.programme}
-                  onChange={(e) =>
-                    setUploadForm({ ...uploadForm, programme: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Batch</label>
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded-md"
-                  value={uploadForm.batch}
-                  onChange={(e) =>
-                    setUploadForm({ ...uploadForm, batch: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Student File (PDF)
-                </label>
-                <input
-                  type="file"
-                  className="file-input file-input-bordered w-full"
-                  onChange={(e) =>
-                    setUploadForm({ ...uploadForm, file: e.target.files[0] })
-                  }
-                  accept="application/pdf"
-                />
-              </div>
+            <h3 className="text-lg font-bold mb-4">Add New PhD Scholar</h3>
+            {/* Responsive grid: one column on xs, two on sm+ */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                "name",
+                "email",
+                "mobile",
+                "linkedin",
+                "googleScholars",
+                "researchGate",
+                "personallink",
+                "others",
+              ].map((field) => (
+                <div key={field}>
+                  <label className="block text-sm font-medium mb-1">
+                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full p-2 border rounded-md"
+                    value={uploadForm[field]}
+                    onChange={(e) =>
+                      setUploadForm({ ...uploadForm, [field]: e.target.value })
+                    }
+                  />
+                </div>
+              ))}
             </div>
-            <div className="flex justify-end gap-3 mt-6">
+            <div className="mt-4">
+              <label className="block text-sm font-medium mb-1">
+                IMAGE (profile picture)
+              </label>
+              <input
+                type="file"
+                className="file-input file-input-bordered w-full"
+                onChange={(e) =>
+                  setUploadForm({ ...uploadForm, file: e.target.files[0] })
+                }
+                accept="image/*"
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
               <button
                 onClick={() => setShowUploadModal(false)}
                 className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
@@ -315,59 +482,65 @@ function Students() {
       )}
 
       {/* Edit Modal */}
-      {showEditModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4">
+      {showEditModal && selectedStudent && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4 overflow-auto">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-lg font-bold mb-4">Edit Student</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Programme
-                </label>
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded-md"
-                  value={editForm.programme}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, programme: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Batch</label>
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded-md"
-                  value={editForm.batch}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, batch: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Update File{" "}
-                  <div className="text-red-500 border border-gray-300 p-2 flex rounded-md w-full flex-wrap overflow-hidden">
+            <h3 className="text-lg font-bold mb-4">Edit Scholar</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
+              {[
+                "name",
+                "email",
+                "mobile",
+                "linkedin",
+                "googleScholars",
+                "researchGate",
+                "personallink",
+                "others",
+              ].map((field) => (
+                <div key={field}>
+                  <label className="block text-sm font-medium mb-1">
+                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full p-2 border rounded-md"
+                    value={editForm[field]}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, [field]: e.target.value })
+                    }
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="mt-4">
+              <label className="block text-sm font-medium mb-1">
+                IMAGE
+                {selectedStudent.image && (
+                  <div className="text-red-500 border border-gray-300 p-2 flex rounded-md w-full flex-wrap overflow-hidden mt-2">
                     <p className="text-xs w-full">
-                      <a href={selectedStudent.Students}>
-                        <FaFilePdf size={20} /> {selectedStudent.Students}
+                      <a href={selectedStudent.image}>
+                        <img
+                          src={selectedStudent.image}
+                          alt="image"
+                          className="w-full h-auto"
+                          width={100}
+                          height={100}
+                        />
                       </a>
                     </p>
                   </div>
-                </label>
-
-                <input
-                  type="file"
-                  required
-                  className="file-input file-input-bordered w-full"
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, file: e.target.files[0] })
-                  }
-                  accept="application/pdf"
-                />
-              </div>
+                )}
+              </label>
+              <input
+                type="file"
+                className="file-input file-input-bordered w-full"
+                onChange={(e) =>
+                  setEditForm({ ...editForm, file: e.target.files[0] })
+                }
+                accept="image/*"
+              />
             </div>
-            <div className="flex justify-end gap-3 mt-6">
+            <div className="flex flex-row md:flex-row justify-end gap-3 mt-6">
               <button
                 onClick={() => setShowEditModal(false)}
                 className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
@@ -382,7 +555,7 @@ function Students() {
         </div>
       )}
 
-      <MainCard title="Staffs">
+      <MainCard title="PhD Scholars">
         <div className="min-h-auto flex m-0">
           <main className="flex-1">
             <div className="mx-auto">
@@ -393,7 +566,7 @@ function Students() {
                     <input
                       type="text"
                       className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                      placeholder="Search Students..."
+                      placeholder="Search scholars..."
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                     />
@@ -430,7 +603,7 @@ function Students() {
                     className="btn btn-sm btn-warning rounded-lg"
                   >
                     <HiPencil className="w-5 h-5" />
-                    Upload New
+                    Add New
                   </button>
                 </div>
 
@@ -440,13 +613,32 @@ function Students() {
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          Programme
+                          IMAGE
+                        </th>
+
+                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
+                          Name
                         </th>
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          Batch
+                          Email
                         </th>
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          Download
+                          Phone
+                        </th>
+                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
+                          LinkedIn
+                        </th>
+                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
+                          google Scholars
+                        </th>
+                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
+                          Research Gate
+                        </th>
+                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
+                          Personal Link
+                        </th>
+                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
+                          other
                         </th>
                         <th className="py-3 px-4 text-center text-sm font-medium text-gray-700 uppercase">
                           Actions
@@ -456,47 +648,46 @@ function Students() {
                     <tbody className="divide-y divide-gray-200">
                       {currentRows.map((item, index) => (
                         <tr key={index} className="hover:bg-gray-50">
-                          <td className="py-3 px-4 text-gray-900">
-                            {item.Programe}
+                          <td className="py-3 px-4 text-center text-gray-900">
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              className="w-60 h-60 rounded-md object-cover border-2 border-teal-600 border-dashed break-all"
+                            />
                           </td>
-                          <td className="py-3 px-4 text-gray-900">
-                            Batch {item.Batch}
+                          <td className="py-3 px-4 text-gray-900 break-all">
+                            {item.name}
                           </td>
-                          <td className="py-3 px-4 text-gray-900">
-                            <a
-                              href={item.Students}
-                              className="text-teal-600 hover:text-teal-800 font-medium inline-flex items-center gap-1"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              Download
-                              <svg
-                                className="w-4 h-4"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                                />
-                              </svg>
-                            </a>
+                          <td className="py-3 px-4 text-gray-900 break-all">
+                            {item.email}
                           </td>
-                          <td className="py-3 px-4 text-center flex justify-center items-center gap-4">
+                          <td className="py-3 px-4 text-gray-900 break-all">
+                            {item.mobile || "N/A"}
+                          </td>
+                          <td className="py-3 px-4 text-gray-900 break-all">
+                            {item.linkedin || "N/A"}
+                          </td>
+                          <td className="py-3 px-4 text-gray-900 break-all">
+                            {item.googleScholars || "N/A"}
+                          </td>
+                          <td className="py-3 px-4 text-gray-900 break-all">
+                            {item.researchGate || "N/A"}
+                          </td>
+                          <td className="py-3 px-4 text-gray-900 break-all">
+                            {item.personallink || "N/A"}
+                          </td>
+                          <td className="py-3 px-4 text-gray-900 break-all">
+                            {item.others || "N/A"}
+                          </td>
+
+                          <td className="py-3 px-4 text-center flex justify-center items-center gap-4 break-all">
                             <button
                               onClick={() => {
                                 setSelectedStudent(item);
-                                setEditForm({
-                                  programme: item.Programe,
-                                  batch: item.Batch,
-                                  file: null,
-                                });
+                                setEditForm({ ...item, file: null });
                                 setShowEditModal(true);
                               }}
-                              className="btn btn-sm  z-10 btn-warning rounded-lg"
+                              className="btn btn-sm z-10 btn-warning rounded-lg"
                             >
                               <HiPencil className="w-5 h-5" />
                             </button>
@@ -508,6 +699,16 @@ function Students() {
                               className="btn btn-sm z-10 btn-error rounded-lg"
                             >
                               <HiTrash className="w-5 h-5" />
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                setSelectedStudent(item);
+                                setShowRemoveImageModal(true);
+                              }}
+                              className="btn btn-sm z-10 btn-info rounded-lg"
+                            >
+                              <MdImageNotSupported className="w-5 h-5" />
                             </button>
                           </td>
                         </tr>
@@ -578,4 +779,4 @@ function Students() {
   );
 }
 
-export default Students;
+export default PhdScholars;
