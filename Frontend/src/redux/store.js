@@ -10,6 +10,7 @@ import TimeTableSlice from '../Features/TimeTabelSlice'
 import DepartmentActivitesCalenderSlice from '../Features/DepartmentActivitesCalendarslice'
 import StudentsSlice from '../Features/studentsSlice'
 import PhdScholarsSlice from '../Features/PhdscholarsSlice'
+import StaffsSlice from '../Features/StaffsSlice'
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
     TimeTableData: TimeTableSlice,
     DepartmentActivitesCalenderData: DepartmentActivitesCalenderSlice,
     StudentsData: StudentsSlice,
-    PhdScholarsData: PhdScholarsSlice
+    PhdScholarsData: PhdScholarsSlice,
+    StaffsData: StaffsSlice
   }
 })

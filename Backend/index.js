@@ -19,6 +19,7 @@ import DepartmentActivitesCalenderRouter from "./Routers/DepartmentActivitesCale
 import StudentsRouter from "./Routers/Studentsrouter.js";
 import Userrouter from "./Routers/Userrouter.js";
 import PhdScholarsRouter from "./Routers/PhdScholarsrouter.js";
+import StaffsRouter from "./Routers/Staffsrouter.js";
 import path from "path";
 
 
@@ -79,6 +80,7 @@ app.use("/api", TimeTableRouter);
 app.use("/api", DepartmentActivitesCalenderRouter);
 app.use("/api", StudentsRouter);
 app.use("/api", PhdScholarsRouter);
+app.use("/api", StaffsRouter);
 
 // Start the server
 app.listen(PORT, () => {

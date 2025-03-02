@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPhdscholarsData } from "../../../Features/PhdscholarsSlice";
+
+import { fetchStaffsData } from "../../../Features/StaffsSlice";
 import {
   HiChevronLeft,
   HiChevronRight,
@@ -16,11 +17,9 @@ import MainCard from "../../Activites/MainCard";
 import Loading from "../../UtilityCompoments/Loading";
 import Errors from "../../UtilityCompoments/Errors";
 
-function PhdScholars() {
+function Staffs() {
   const dispatch = useDispatch();
-  const { phdscholars, loading, error } = useSelector(
-    (state) => state.PhdScholarsData
-  );
+  const { staffs, loading, error } = useSelector((state) => state.StaffsData);
 
   // State Management
   const [search, setSearch] = useState("");
@@ -30,35 +29,27 @@ function PhdScholars() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showRemoveImageModal, setShowRemoveImageModal] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [selectedStaff, setSelectedStaff] = useState(null);
 
   // Form States
   const [uploadForm, setUploadForm] = useState({
     name: "",
     email: "",
     mobile: "",
-    linkedin: "",
-    googleScholars: "",
-    researchGate: "",
-    personallink: "",
-    others: "",
+
     file: null,
   });
   const [editForm, setEditForm] = useState({
     name: "",
     email: "",
     mobile: "",
-    linkedin: "",
-    googleScholars: "",
-    researchGate: "",
-    personallink: "",
-    others: "",
+
     file: null,
   });
 
   // Fetch data on mount
   useEffect(() => {
-    dispatch(fetchPhdscholarsData());
+    dispatch(fetchStaffsData());
   }, [dispatch]);
 
   // Error handling
@@ -83,9 +74,8 @@ function PhdScholars() {
     }
 
     // Check for existing email
-    const emailExists = phdscholars.some(
-      (scholar) =>
-        scholar.email.toLowerCase() === uploadForm.email.toLowerCase()
+    const emailExists = staffs.some(
+      (staff) => staff.email.toLowerCase() === uploadForm.email.toLowerCase()
     );
     if (emailExists) {
       return toast.error("Email already exists");
@@ -110,30 +100,21 @@ function PhdScholars() {
     if (uploadForm.file) formData.append("image", uploadForm.file);
 
     try {
-      const loadingToast = toast.loading("Uploading scholar...");
-      await axios.post(
-        "http://localhost:4000/api/uploadPhdScholars",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const loadingToast = toast.loading("Uploading staff...");
+      await axios.post("http://localhost:4000/api/uploadStaffs", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
-      await dispatch(fetchPhdscholarsData());
-      toast.success("PhD scholar uploaded successfully!");
+      await dispatch(fetchStaffsData());
+      toast.success("Staff uploaded successfully!");
       setShowUploadModal(false);
       setUploadForm({
         name: "",
         email: "",
         mobile: "",
-        linkedin: "",
-        googleScholars: "",
-        researchGate: "",
-        personallink: "",
-        others: "",
         file: null,
       });
       toast.dismiss(loadingToast);
@@ -149,10 +130,10 @@ function PhdScholars() {
       return toast.error("Please enter a valid email address");
     }
     // Check for existing email
-    const emailExists = phdscholars.some(
-      (scholar) =>
-        scholar.email.toLowerCase() === editForm.email.toLowerCase() &&
-        scholar._id !== selectedStudent._id
+    const emailExists = staffs.some(
+      (staff) =>
+        staff.email.toLowerCase() === editForm.email.toLowerCase() &&
+        staff._id !== selectedStaff._id
     );
     if (emailExists) {
       return toast.error("Email already exists");
@@ -174,18 +155,13 @@ function PhdScholars() {
     formData.append("name", editForm.name || "");
     formData.append("email", editForm.email || "");
     formData.append("mobile", editForm.mobile || "");
-    formData.append("linkedin", editForm.linkedin || "");
-    formData.append("googleScholars", editForm.googleScholars || "");
-    formData.append("researchGate", editForm.researchGate || "");
-    formData.append("personallink", editForm.personallink || "");
-    formData.append("others", editForm.others || "");
 
     if (editForm.file) formData.append("image", editForm.file);
 
     try {
-      const loadingToast = toast.loading("Updating scholar...");
+      const loadingToast = toast.loading("Updating staff...");
       const response = await axios.put(
-        `http://localhost:4000/api/updatePhdScholars/${selectedStudent._id}`,
+        `http://localhost:4000/api/updateStaffs/${selectedStaff._id}`,
         formData,
         {
           headers: {
@@ -195,8 +171,8 @@ function PhdScholars() {
         }
       );
       console.log("response", response);
-      await dispatch(fetchPhdscholarsData());
-      toast.success("Scholar updated successfully!");
+      await dispatch(fetchStaffsData());
+      toast.success("Staff updated successfully!");
       setShowEditModal(false);
       toast.dismiss(loadingToast);
     } catch (err) {
@@ -207,9 +183,9 @@ function PhdScholars() {
   // Delete Handler
   const handleDelete = async () => {
     try {
-      const loadingToast = toast.loading("Deleting scholar...");
+      const loadingToast = toast.loading("Deleting staff...");
       await axios.delete(
-        `http://localhost:4000/api/deletePhdScholars/${selectedStudent._id}`,
+        `http://localhost:4000/api/deleteStaffs/${selectedStaff._id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -217,10 +193,10 @@ function PhdScholars() {
         }
       );
 
-      await dispatch(fetchPhdscholarsData());
-      toast.success("Scholar deleted successfully!");
+      await dispatch(fetchStaffsData());
+      toast.success("Staff deleted successfully!");
       setShowDeleteModal(false);
-      setSelectedStudent(null);
+      setSelectedStaff(null);
       toast.dismiss(loadingToast);
     } catch (err) {
       handleApiError(err, "Delete");
@@ -230,7 +206,7 @@ function PhdScholars() {
     try {
       const loadingToast = toast.loading("Removing image...");
       await axios.put(
-        `http://localhost:4000/api/removePhdscholarsImage/${selectedStudent._id}`,
+        `http://localhost:4000/api/removeStaffsImage/${selectedStaff._id}`,
         {},
         {
           headers: {
@@ -238,7 +214,7 @@ function PhdScholars() {
           },
         }
       );
-      await dispatch(fetchPhdscholarsData());
+      await dispatch(fetchStaffsData());
       toast.success("Image removed successfully!");
       setShowRemoveImageModal(false);
       toast.dismiss(loadingToast);
@@ -248,19 +224,19 @@ function PhdScholars() {
   };
 
   // Search and Pagination
-  const filteredStudents = useMemo(() => {
+  const filteredStaffs = useMemo(() => {
     const lowerSearch = search.toLowerCase();
-    return phdscholars.filter((item) =>
+    return staffs.filter((item) =>
       Object.values(item).some((value) =>
         value?.toString().toLowerCase().includes(lowerSearch)
       )
     );
-  }, [search, phdscholars]);
+  }, [search, staffs]);
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const totalPages = Math.ceil(filteredStudents.length / rowsPerPage);
-  const currentRows = filteredStudents.slice(indexOfFirstRow, indexOfLastRow);
+  const totalPages = Math.ceil(filteredStaffs.length / rowsPerPage);
+  const currentRows = filteredStaffs.slice(indexOfFirstRow, indexOfLastRow);
 
   // Mobile Card Component
   const MobileCard = ({ item }) => (
@@ -294,53 +270,13 @@ function PhdScholars() {
                 {item.mobile || "N/A"}
               </a>
             </div>
-            <div className="flex  w-full ">
-              <p>Linkedin :</p>
-              <a href={item.linkedin} className="break-all text-sm text-info">
-                {item.linkedin || "N/A"}
-              </a>
-            </div>
-
-            <div className=" flex  w-full ">
-              <p>Google Scholar : </p>
-              <a
-                href={item.googleScholars}
-                className="break-all text-sm text-info"
-              >
-                {item.googleScholars || "N/A"}
-              </a>
-            </div>
-            <div className=" flex  w-full ">
-              <p>Research Gate : </p>
-              <a
-                href={item.researchGate}
-                className="break-all text-sm text-info"
-              >
-                {item.researchGate || "N/A"}
-              </a>
-            </div>
-            <div className=" flex  w-full ">
-              <p>Personal Link : </p>
-              <a
-                href={item.personallink}
-                className="break-all text-sm text-info"
-              >
-                {item.personallink || "N/A"}
-              </a>
-            </div>
-            <div className=" flex  w-full ">
-              <p>Others : </p>
-              <p className="break-all text-sm text-info">
-                {item.others || "N/A"}
-              </p>
-            </div>
           </div>
         </div>
         <div className="card-actions p-0  w-full flex-wrap  items-end">
           <td className="py-3 px-4 text-center flex justify-center items-center gap-4 break-all">
             <button
               onClick={() => {
-                setSelectedStudent(item);
+                setSelectedStaff(item);
                 setEditForm({ ...item, file: null });
                 setShowEditModal(true);
               }}
@@ -350,7 +286,7 @@ function PhdScholars() {
             </button>
             <button
               onClick={() => {
-                setSelectedStudent(item);
+                setSelectedStaff(item);
                 setShowDeleteModal(true);
               }}
               className="btn btn-sm z-10 btn-error rounded-lg"
@@ -360,7 +296,7 @@ function PhdScholars() {
 
             <button
               onClick={() => {
-                setSelectedStudent(item);
+                setSelectedStaff(item);
                 setShowRemoveImageModal(true);
               }}
               className="btn btn-sm z-10 btn-info rounded-lg"
@@ -403,9 +339,7 @@ function PhdScholars() {
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg p-6 max-w-sm w-full">
             <h3 className="text-lg font-bold mb-4">Confirm Delete</h3>
-            <p className="mb-6">
-              Are you sure you want to delete this scholar?
-            </p>
+            <p className="mb-6">Are you sure you want to delete this staff?</p>
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
@@ -425,19 +359,10 @@ function PhdScholars() {
       {showUploadModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4 overflow-auto">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-lg font-bold mb-4">Add New PhD Scholar</h3>
+            <h3 className="text-lg font-bold mb-4">Add New Staff</h3>
             {/* Responsive grid: one column on xs, two on sm+ */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[
-                "name",
-                "email",
-                "mobile",
-                "linkedin",
-                "googleScholars",
-                "researchGate",
-                "personallink",
-                "others",
-              ].map((field) => (
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
+              {["name", "email", "mobile"].map((field) => (
                 <div key={field}>
                   <label className="block text-sm font-medium mb-1">
                     {field.charAt(0).toUpperCase() + field.slice(1)}
@@ -466,7 +391,7 @@ function PhdScholars() {
                 accept="image/*"
               />
             </div>
-            <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
+            <div className="flex flex-row sm:flex-row justify-end gap-3 mt-6">
               <button
                 onClick={() => setShowUploadModal(false)}
                 className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
@@ -482,21 +407,12 @@ function PhdScholars() {
       )}
 
       {/* Edit Modal */}
-      {showEditModal && selectedStudent && (
+      {showEditModal && selectedStaff && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4 overflow-auto">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-lg font-bold mb-4">Edit Scholar</h3>
+            <h3 className="text-lg font-bold mb-4">Edit Staff</h3>
             <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
-              {[
-                "name",
-                "email",
-                "mobile",
-                "linkedin",
-                "googleScholars",
-                "researchGate",
-                "personallink",
-                "others",
-              ].map((field) => (
+              {["name", "email", "mobile"].map((field) => (
                 <div key={field}>
                   <label className="block text-sm font-medium mb-1">
                     {field.charAt(0).toUpperCase() + field.slice(1)}
@@ -515,12 +431,12 @@ function PhdScholars() {
             <div className="mt-4">
               <label className="block text-sm font-medium mb-1">
                 IMAGE
-                {selectedStudent.image && (
+                {selectedStaff.image && (
                   <div className="text-red-500 border border-gray-300 p-2 flex rounded-md w-full flex-wrap overflow-hidden mt-2">
                     <p className="text-xs w-full">
-                      <a href={selectedStudent.image}>
+                      <a href={selectedStaff.image}>
                         <img
-                          src={selectedStudent.image}
+                          src={selectedStaff.image}
                           alt="image"
                           className="w-full h-auto"
                           width={100}
@@ -555,7 +471,7 @@ function PhdScholars() {
         </div>
       )}
 
-      <MainCard title="PhD Scholars">
+      <MainCard title="Staff">
         <div className="min-h-auto flex m-0">
           <main className="flex-1">
             <div className="mx-auto">
@@ -625,21 +541,7 @@ function PhdScholars() {
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
                           Phone
                         </th>
-                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          LinkedIn
-                        </th>
-                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          google Scholars
-                        </th>
-                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          Research Gate
-                        </th>
-                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          Personal Link
-                        </th>
-                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          other
-                        </th>
+
                         <th className="py-3 px-4 text-center text-sm font-medium text-gray-700 uppercase">
                           Actions
                         </th>
@@ -664,26 +566,11 @@ function PhdScholars() {
                           <td className="py-3 px-4 text-gray-900 break-all">
                             {item.mobile || "N/A"}
                           </td>
-                          <td className="py-3 px-4 text-gray-900 break-all">
-                            {item.linkedin || "N/A"}
-                          </td>
-                          <td className="py-3 px-4 text-gray-900 break-all">
-                            {item.googleScholars || "N/A"}
-                          </td>
-                          <td className="py-3 px-4 text-gray-900 break-all">
-                            {item.researchGate || "N/A"}
-                          </td>
-                          <td className="py-3 px-4 text-gray-900 break-all">
-                            {item.personallink || "N/A"}
-                          </td>
-                          <td className="py-3 px-4 text-gray-900 break-all">
-                            {item.others || "N/A"}
-                          </td>
 
                           <td className="py-3 px-4 text-center flex justify-center items-center gap-4 break-all">
                             <button
                               onClick={() => {
-                                setSelectedStudent(item);
+                                setSelectedStaff(item);
                                 setEditForm({ ...item, file: null });
                                 setShowEditModal(true);
                               }}
@@ -693,7 +580,7 @@ function PhdScholars() {
                             </button>
                             <button
                               onClick={() => {
-                                setSelectedStudent(item);
+                                setSelectedStaff(item);
                                 setShowDeleteModal(true);
                               }}
                               className="btn btn-sm z-10 btn-error rounded-lg"
@@ -703,7 +590,7 @@ function PhdScholars() {
 
                             <button
                               onClick={() => {
-                                setSelectedStudent(item);
+                                setSelectedStaff(item);
                                 setShowRemoveImageModal(true);
                               }}
                               className="btn btn-sm z-10 btn-info rounded-lg"
@@ -728,8 +615,8 @@ function PhdScholars() {
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4">
                   <div className="text-sm text-gray-600">
                     Showing {indexOfFirstRow + 1} to{" "}
-                    {Math.min(indexOfLastRow, filteredStudents.length)} of{" "}
-                    {filteredStudents.length} entries
+                    {Math.min(indexOfLastRow, filteredStaffs.length)} of{" "}
+                    {filteredStaffs.length} entries
                   </div>
 
                   <div className="flex items-center gap-2">
@@ -779,4 +666,4 @@ function PhdScholars() {
   );
 }
 
-export default PhdScholars;
+export default Staffs;

@@ -427,7 +427,7 @@ function PhdScholars() {
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
             <h3 className="text-lg font-bold mb-4">Add New PhD Scholar</h3>
             {/* Responsive grid: one column on xs, two on sm+ */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
               {[
                 "name",
                 "email",
@@ -466,7 +466,7 @@ function PhdScholars() {
                 accept="image/*"
               />
             </div>
-            <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
+            <div className="flex flex-row sm:flex-row justify-end gap-3 mt-6">
               <button
                 onClick={() => setShowUploadModal(false)}
                 className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
