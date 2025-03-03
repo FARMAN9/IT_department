@@ -142,6 +142,7 @@ const Layout = () => {
         { label: "Students", link: "/admin/academic/students" },
         { label: "Alumni", link: "/people/alumni" },
         { label: "Staff", link: "/admin/academic/staff" },
+        { label: "Current Top Placements", link: "/admin/people/staffs" },
       ],
     },
     {

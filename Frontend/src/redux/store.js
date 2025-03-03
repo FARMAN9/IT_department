@@ -11,6 +11,7 @@ import DepartmentActivitesCalenderSlice from '../Features/DepartmentActivitesCal
 import StudentsSlice from '../Features/studentsSlice'
 import PhdScholarsSlice from '../Features/PhdscholarsSlice'
 import StaffsSlice from '../Features/StaffsSlice'
+import CurrentTopPlacementsSlice from '../Features/TopplacementSlice'
 
 export const store = configureStore({
   reducer: {
@@ -25,6 +26,8 @@ export const store = configureStore({
     DepartmentActivitesCalenderData: DepartmentActivitesCalenderSlice,
     StudentsData: StudentsSlice,
     PhdScholarsData: PhdScholarsSlice,
-    StaffsData: StaffsSlice
+    StaffsData: StaffsSlice,
+    CurrentTopPlacementsData: CurrentTopPlacementsSlice,
+
   }
 })

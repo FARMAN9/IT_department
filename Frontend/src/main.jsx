@@ -49,6 +49,7 @@ import DepartmentActivitesCalendar from "./components/Admin/Academic/DepartmentA
 import AdminStudents from "./components/Admin/People/Students.jsx";
 import AdminPhdScholars from "./components/Admin/People/PhdScholars.jsx";
 import AdminStaff from "./components/Admin/People/Staffs.jsx";
+import TopPlacements from "./components/Admin/People/TopPlacements.jsx";
 
 const router = createBrowserRouter([
   {
@@ -232,6 +233,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/academic/staff",
         element: <AdminStaff />,
+      },
+      {
+        path: "/admin/academic/top-placements",
+        element: <TopPlacements />,
       },
     ],
   },
