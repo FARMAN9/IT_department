@@ -254,8 +254,7 @@ function Staffs() {
         </h2>
         <a
           className="text-blue-500 hover:text-blue-700"
-          href={`mailto:${item.email || "N/A"}`}
-        >
+          href={`mailto:${item.email || "N/A"}`}>
           {item.email || "N/A"}
         </a>
         <hr className="bg-black flex-wrap w-full h-0.5" />
@@ -265,8 +264,7 @@ function Staffs() {
               <p>Mobile :</p>
               <a
                 href={`tel:${item.mobile}`}
-                className="break-all text-sm text-info"
-              >
+                className="break-all text-sm text-info">
                 {item.mobile || "N/A"}
               </a>
             </div>
@@ -280,8 +278,7 @@ function Staffs() {
                 setEditForm({ ...item, file: null });
                 setShowEditModal(true);
               }}
-              className="btn btn-sm z-10 btn-warning rounded-lg"
-            >
+              className="btn btn-sm z-10 btn-warning rounded-lg">
               <HiPencil className="w-5 h-5" />
             </button>
             <button
@@ -289,8 +286,7 @@ function Staffs() {
                 setSelectedStaff(item);
                 setShowDeleteModal(true);
               }}
-              className="btn btn-sm z-10 btn-error rounded-lg"
-            >
+              className="btn btn-sm z-10 btn-error rounded-lg">
               <HiTrash className="w-5 h-5" />
             </button>
 
@@ -299,8 +295,7 @@ function Staffs() {
                 setSelectedStaff(item);
                 setShowRemoveImageModal(true);
               }}
-              className="btn btn-sm z-10 btn-info rounded-lg"
-            >
+              className="btn btn-sm z-10 btn-info rounded-lg">
               <MdImageNotSupported className="w-5 h-5" />
             </button>
           </td>
@@ -323,8 +318,7 @@ function Staffs() {
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowRemoveImageModal(false)}
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-              >
+                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                 Cancel
               </button>
               <button onClick={handleRemoveImage} className="btn btn-error">
@@ -343,8 +337,7 @@ function Staffs() {
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-              >
+                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                 Cancel
               </button>
               <button onClick={handleDelete} className="btn btn-error">
@@ -394,8 +387,7 @@ function Staffs() {
             <div className="flex flex-row sm:flex-row justify-end gap-3 mt-6">
               <button
                 onClick={() => setShowUploadModal(false)}
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-              >
+                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                 Cancel
               </button>
               <button onClick={handleUpload} className="btn btn-primary">
@@ -459,8 +451,7 @@ function Staffs() {
             <div className="flex flex-row md:flex-row justify-end gap-3 mt-6">
               <button
                 onClick={() => setShowEditModal(false)}
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-              >
+                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                 Cancel
               </button>
               <button onClick={handleUpdate} className="btn btn-primary">
@@ -482,7 +473,7 @@ function Staffs() {
                     <input
                       type="text"
                       className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                      placeholder="Search scholars..."
+                      placeholder="Search ..."
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                     />
@@ -493,8 +484,7 @@ function Staffs() {
                     <div className="flex items-center">
                       <label
                         htmlFor="rows-per-page"
-                        className="mr-2 text-sm text-gray-600"
-                      >
+                        className="mr-2 text-sm text-gray-600">
                         Rows:
                       </label>
                       <select
@@ -504,8 +494,7 @@ function Staffs() {
                         onChange={(e) => {
                           setRowsPerPage(Number(e.target.value));
                           setCurrentPage(1);
-                        }}
-                      >
+                        }}>
                         {[5, 10, 25, 50].map((value) => (
                           <option key={value} value={value}>
                             {value}
@@ -516,8 +505,7 @@ function Staffs() {
                   </div>
                   <button
                     onClick={() => setShowUploadModal(true)}
-                    className="btn btn-sm btn-warning rounded-lg"
-                  >
+                    className="btn btn-sm btn-warning rounded-lg">
                     <HiPencil className="w-5 h-5" />
                     Add New
                   </button>
@@ -574,8 +562,7 @@ function Staffs() {
                                 setEditForm({ ...item, file: null });
                                 setShowEditModal(true);
                               }}
-                              className="btn btn-sm z-10 btn-warning rounded-lg"
-                            >
+                              className="btn btn-sm z-10 btn-warning rounded-lg">
                               <HiPencil className="w-5 h-5" />
                             </button>
                             <button
@@ -583,8 +570,7 @@ function Staffs() {
                                 setSelectedStaff(item);
                                 setShowDeleteModal(true);
                               }}
-                              className="btn btn-sm z-10 btn-error rounded-lg"
-                            >
+                              className="btn btn-sm z-10 btn-error rounded-lg">
                               <HiTrash className="w-5 h-5" />
                             </button>
 
@@ -593,8 +579,7 @@ function Staffs() {
                                 setSelectedStaff(item);
                                 setShowRemoveImageModal(true);
                               }}
-                              className="btn btn-sm z-10 btn-info rounded-lg"
-                            >
+                              className="btn btn-sm z-10 btn-info rounded-lg">
                               <MdImageNotSupported className="w-5 h-5" />
                             </button>
                           </td>
@@ -623,8 +608,7 @@ function Staffs() {
                     <button
                       onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                       disabled={currentPage === 1}
-                      className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50"
-                    >
+                      className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50">
                       <HiChevronLeft className="w-5 h-5" />
                     </button>
 
@@ -638,8 +622,7 @@ function Staffs() {
                               page === currentPage
                                 ? "bg-teal-600 text-white"
                                 : "text-gray-700 hover:bg-gray-100"
-                            }`}
-                          >
+                            }`}>
                             {page}
                           </button>
                         )
@@ -651,8 +634,7 @@ function Staffs() {
                         setCurrentPage((p) => Math.min(totalPages, p + 1))
                       }
                       disabled={currentPage === totalPages}
-                      className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50"
-                    >
+                      className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50">
                       <HiChevronRight className="w-5 h-5" />
                     </button>
                   </div>
@@ -666,4 +648,4 @@ function Staffs() {
   );
 }
 
-export default Staffs;
+export default React.memo(Staffs);

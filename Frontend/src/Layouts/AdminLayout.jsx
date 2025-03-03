@@ -142,7 +142,10 @@ const Layout = () => {
         { label: "Students", link: "/admin/academic/students" },
         { label: "Alumni", link: "/people/alumni" },
         { label: "Staff", link: "/admin/academic/staff" },
-        { label: "Current Top Placements", link: "/admin/people/staffs" },
+        {
+          label: "Current Top Placements",
+          link: "/admin/academic/top-placements",
+        },
       ],
     },
     {
@@ -194,8 +197,7 @@ const Layout = () => {
               animate="visible"
               exit="hidden"
               variants={navVariants}
-              className="w-full shadow-md z-50 bg-white"
-            >
+              className="w-full shadow-md z-50 bg-white">
               <NavAdmin />
             </motion.div>
           )}
@@ -211,13 +213,11 @@ const Layout = () => {
           animate="animate"
           whileHover="hover"
           whileTap="tap"
-          aria-label="Toggle admin menu"
-        >
+          aria-label="Toggle admin menu">
           <motion.span
             variants={arrowVariants}
             animate={isMenuVisible ? "up" : "down"}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          >
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}>
             {isMenuVisible ? (
               <IoIosArrowUp size={18} className="text-white" />
             ) : (

@@ -93,12 +93,16 @@ function TopPlacements() {
 
     try {
       const loadingToast = toast.loading("Uploading student...");
-      await axios.post("http://localhost:4000/api/uploadStaffs", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      await axios.post(
+        "http://localhost:4000/api/uploadCurrentTopPlacements",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
       await dispatch(fetchCurrentTopPlacementsData());
       toast.success("Student uploaded successfully!");
@@ -118,10 +122,6 @@ function TopPlacements() {
 
   // Update Handler
   const handleUpdate = async () => {
-    if (!editForm.name || !editForm.company || !editForm.lpa) {
-      return toast.error("Name, Company, and LPA are required");
-    }
-
     const MAX_SIZE_MB = 5;
     if (uploadForm.file) {
       if (!uploadForm.file.type.startsWith("image/")) {
@@ -144,7 +144,7 @@ function TopPlacements() {
     try {
       const loadingToast = toast.loading("Updating student...");
       const response = await axios.put(
-        `http://localhost:4000/api/updateTopPlacements/${selectedStaff._id}`,
+        `http://localhost:4000/api/updateCurrentTopPlacements/${selectedStaff._id}`,
         formData,
         {
           headers: {
@@ -168,7 +168,7 @@ function TopPlacements() {
     try {
       const loadingToast = toast.loading("Deleting staff...");
       await axios.delete(
-        `http://localhost:4000/api/deleteTopPlacements/${selectedStaff._id}`,
+        `http://localhost:4000/api/deleteCurrentTopPlacements/${selectedStaff._id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -189,7 +189,7 @@ function TopPlacements() {
     try {
       const loadingToast = toast.loading("Removing image...");
       await axios.put(
-        `http://localhost:4000/api/removeTopPlacementsImage/${selectedStaff._id}`,
+        `http://localhost:4000/api/removeCurrentTopPlacementsImage/${selectedStaff._id}`,
         {},
         {
           headers: {
@@ -209,12 +209,12 @@ function TopPlacements() {
   // Search and Pagination
   const filteredStaffs = useMemo(() => {
     const lowerSearch = search.toLowerCase();
-    return topPlacements.filter((item) =>
+    return CurrentTopPlacements.filter((item) =>
       Object.values(item).some((value) =>
         value?.toString().toLowerCase().includes(lowerSearch)
       )
     );
-  }, [search, topPlacements]);
+  }, [search, CurrentTopPlacements]);
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -237,8 +237,7 @@ function TopPlacements() {
         </h2>
         <a
           className="text-blue-500 hover:text-blue-700"
-          href={`mailto:${item.email || "N/A"}`}
-        >
+          href={`mailto:${item.email || "N/A"}`}>
           {item.company || "N/A"}
         </a>
         <hr className="bg-black flex-wrap w-full h-0.5" />
@@ -259,8 +258,7 @@ function TopPlacements() {
                 setEditForm({ ...item, file: null });
                 setShowEditModal(true);
               }}
-              className="btn btn-sm z-10 btn-warning rounded-lg"
-            >
+              className="btn btn-sm z-10 btn-warning rounded-lg">
               <HiPencil className="w-5 h-5" />
             </button>
             <button
@@ -268,8 +266,7 @@ function TopPlacements() {
                 setSelectedStaff(item);
                 setShowDeleteModal(true);
               }}
-              className="btn btn-sm z-10 btn-error rounded-lg"
-            >
+              className="btn btn-sm z-10 btn-error rounded-lg">
               <HiTrash className="w-5 h-5" />
             </button>
 
@@ -278,8 +275,7 @@ function TopPlacements() {
                 setSelectedStaff(item);
                 setShowRemoveImageModal(true);
               }}
-              className="btn btn-sm z-10 btn-info rounded-lg"
-            >
+              className="btn btn-sm z-10 btn-info rounded-lg">
               <MdImageNotSupported className="w-5 h-5" />
             </button>
           </td>
@@ -302,8 +298,7 @@ function TopPlacements() {
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowRemoveImageModal(false)}
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-              >
+                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                 Cancel
               </button>
               <button onClick={handleRemoveImage} className="btn btn-error">
@@ -324,8 +319,7 @@ function TopPlacements() {
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-              >
+                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                 Cancel
               </button>
               <button onClick={handleDelete} className="btn btn-error">
@@ -375,8 +369,7 @@ function TopPlacements() {
             <div className="flex flex-row sm:flex-row justify-end gap-3 mt-6">
               <button
                 onClick={() => setShowUploadModal(false)}
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-              >
+                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                 Cancel
               </button>
               <button onClick={handleUpload} className="btn btn-primary">
@@ -440,8 +433,7 @@ function TopPlacements() {
             <div className="flex flex-row md:flex-row justify-end gap-3 mt-6">
               <button
                 onClick={() => setShowEditModal(false)}
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-              >
+                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                 Cancel
               </button>
               <button onClick={handleUpdate} className="btn btn-primary">
@@ -452,7 +444,7 @@ function TopPlacements() {
         </div>
       )}
 
-      <MainCard title="Staff">
+      <MainCard title="Top Placements">
         <div className="min-h-auto flex m-0">
           <main className="flex-1">
             <div className="mx-auto">
@@ -463,7 +455,7 @@ function TopPlacements() {
                     <input
                       type="text"
                       className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                      placeholder="Search scholars..."
+                      placeholder="Search ..."
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                     />
@@ -474,8 +466,7 @@ function TopPlacements() {
                     <div className="flex items-center">
                       <label
                         htmlFor="rows-per-page"
-                        className="mr-2 text-sm text-gray-600"
-                      >
+                        className="mr-2 text-sm text-gray-600">
                         Rows:
                       </label>
                       <select
@@ -485,8 +476,7 @@ function TopPlacements() {
                         onChange={(e) => {
                           setRowsPerPage(Number(e.target.value));
                           setCurrentPage(1);
-                        }}
-                      >
+                        }}>
                         {[5, 10, 25, 50].map((value) => (
                           <option key={value} value={value}>
                             {value}
@@ -497,8 +487,7 @@ function TopPlacements() {
                   </div>
                   <button
                     onClick={() => setShowUploadModal(true)}
-                    className="btn btn-sm btn-warning rounded-lg"
-                  >
+                    className="btn btn-sm btn-warning rounded-lg">
                     <HiPencil className="w-5 h-5" />
                     Add New
                   </button>
@@ -555,8 +544,7 @@ function TopPlacements() {
                                 setEditForm({ ...item, file: null });
                                 setShowEditModal(true);
                               }}
-                              className="btn btn-sm z-10 btn-warning rounded-lg"
-                            >
+                              className="btn btn-sm z-10 btn-warning rounded-lg">
                               <HiPencil className="w-5 h-5" />
                             </button>
                             <button
@@ -564,8 +552,7 @@ function TopPlacements() {
                                 setSelectedStaff(item);
                                 setShowDeleteModal(true);
                               }}
-                              className="btn btn-sm z-10 btn-error rounded-lg"
-                            >
+                              className="btn btn-sm z-10 btn-error rounded-lg">
                               <HiTrash className="w-5 h-5" />
                             </button>
 
@@ -574,8 +561,7 @@ function TopPlacements() {
                                 setSelectedStaff(item);
                                 setShowRemoveImageModal(true);
                               }}
-                              className="btn btn-sm z-10 btn-info rounded-lg"
-                            >
+                              className="btn btn-sm z-10 btn-info rounded-lg">
                               <MdImageNotSupported className="w-5 h-5" />
                             </button>
                           </td>
@@ -604,8 +590,7 @@ function TopPlacements() {
                     <button
                       onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                       disabled={currentPage === 1}
-                      className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50"
-                    >
+                      className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50">
                       <HiChevronLeft className="w-5 h-5" />
                     </button>
 
@@ -619,8 +604,7 @@ function TopPlacements() {
                               page === currentPage
                                 ? "bg-teal-600 text-white"
                                 : "text-gray-700 hover:bg-gray-100"
-                            }`}
-                          >
+                            }`}>
                             {page}
                           </button>
                         )
@@ -632,8 +616,7 @@ function TopPlacements() {
                         setCurrentPage((p) => Math.min(totalPages, p + 1))
                       }
                       disabled={currentPage === totalPages}
-                      className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50"
-                    >
+                      className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50">
                       <HiChevronRight className="w-5 h-5" />
                     </button>
                   </div>
@@ -647,4 +630,4 @@ function TopPlacements() {
   );
 }
 
-export default TopPlacements;
+export default React.memo(TopPlacements);
