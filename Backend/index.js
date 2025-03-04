@@ -4,7 +4,8 @@ import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import mongoose from "mongoose";
-import  cors  from "cors";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 import MainImagesRouter from "./Routers/MainImagesrouter.js";
 import VissionRouter from "./Routers/Vissionrouter.js";
 import MissionRouter from "./Routers/Missionrouter.js";
@@ -31,6 +32,9 @@ const PORT = process.env.PORT || 3000;
 const URI = process.env.MongoDB_URI;
 
 app.use(express.json());
+app.use(cookieParser());
+
+
 
 connectToMongoDB().catch((error) => console.log(error));
 
@@ -66,6 +70,14 @@ app.post("/", (req, res) => {
    farman :'farman'
   })
 });
+
+
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Internal Server Error', error: err.message });
+  next();
+})
 
 
 app.use("/api", Userrouter);

@@ -1,13 +1,11 @@
 import jwt from "jsonwebtoken";
 import User from "../Models/UserModel.js";
-import dotenv from "dotenv";
-dotenv.config();
+
 
 const secureRouter = async (req, res, next) => {
     try {
-        console.log(req.headers)
-        const token = req.cookie.token;
-        console.log(token)
+        console.log(req.cookies)
+        const token = req.cookies.Uid;
         if (!token) {
             return res.status(401).json({ message: "Unauthorized" });
         }

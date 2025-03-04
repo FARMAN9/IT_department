@@ -126,13 +126,8 @@ export const signIn = async (req, res) => {
         if (user.status === 'not verified') {
             return res.status(400).json({ message: "Please wait for admin approval" });
         }
-        const token = await createTokenAndSave(user._id, user.role, res);
-        
-
-       
-
-        
-        return res.status(200).json({
+        createTokenAndSave(user, res);
+        res.status(200).json({
             success: true,
             data: {
                 _id: user._id,
@@ -151,3 +146,15 @@ export const signIn = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 }
+
+
+
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("Uid");
+    res.status(201).json({ message: "User logged out successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
