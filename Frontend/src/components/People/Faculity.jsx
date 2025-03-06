@@ -2,31 +2,31 @@ import React from "react";
 import MainCard from "../Activites/MainCard";
 import FacultyCard from "../Facultycard/FaclutyCard";
 import { Link } from "react-router-dom";
+import NoDP from "../../assets/blankProfile.png";
 
 function Faculity() {
   document.title = "Faculity";
   const facultyData = [
     {
-      image: "https://via.placeholder.com/100", // Replace with actual image URLs
+      image: "", // Replace with actual image URLs
       name: "Dr Vijay Kumar",
       designation: "Associate Professor & Head",
       email: "vijayk@nitj.ac.in",
     },
     {
-      image: "https://via.placeholder.com/100",
+      image: "",
       name: "Dr Kusum Bharti",
       designation: "Assistant Professor (Grade-I)",
       email: "bhartik@nitj.ac.in",
     },
     {
-      image: null,
+      image: "",
       name: "Dr Saniya Malik  ",
       designation: "Assistant Professor (Grade-I)",
       email: "kumarmohit@nitj.ac.in",
     },
     {
-      image:
-        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+      image: "",
       name: "Dr Nisha Chaurasia",
       designation: "Assistant Professor (Grade-I)",
       email: "chaurasian@nitj.ac.in",
@@ -64,7 +64,7 @@ function Faculity() {
               }}
             >
               <FacultyCard
-                image={faculty.image}
+                image={faculty.image === "" ? NoDP : faculty.image}
                 name={faculty.name}
                 designation={faculty.designation}
                 email={faculty.email}

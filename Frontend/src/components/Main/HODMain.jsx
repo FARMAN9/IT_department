@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchHodData } from "../../Features/HodSlice";
+import NoDP from "../../assets/blankProfile.png";
 
 function Main() {
   document.title = "HOD Message";
@@ -36,11 +37,11 @@ function Main() {
                 <div
                   className="absolute inset-0 bg-white rounded-lg shadow-lg overflow-hidden"
                   style={{
-                    transform: "perspective(1000px) rotateY(-10deg)",
+                    transform: "perspective(1000px) rotateY(0deg)",
                   }}
                 >
                   <img
-                    src={value.image}
+                    src={value.image === "" ? NoDP : value.image}
                     alt="Department Head"
                     className="w-full h-full object-fit "
                   />

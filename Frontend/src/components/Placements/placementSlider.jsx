@@ -1,38 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import profile from "../../assets/profile.png";
+import NoDP from "../../assets/blankProfile.png";
 
+import { fetchCurrentTopPlacementsData } from "../../Features/TopplacementSlice";
 import { Link } from "react-router-dom";
 
-const placementData = [
-  {
-    name: "Kanav Phull",
-    company: "Rapidfort",
-    score: "30 LPA",
-    image:
-      "https://cdn.outsideonline.com/wp-content/uploads/2023/04/christopher-redman-daily-rally_s.jpg",
-  },
-  {
-    name: "Anubhav Gupta",
-    company: "Writesonic",
-    score: "27 LPA",
-    image: "",
-  },
-  {
-    name: "Ravi Kumar",
-    company: "Google",
-    score: "40 LPA",
-    image: "",
-  },
-  {
-    name: "Priya Sharma",
-    company: "Microsoft",
-    score: "35 LPA",
-    image: "",
-  },
-];
-
 const PlacementSlider = () => {
+  const dispatch = useDispatch();
+  const { CurrentTopPlacements, loading, error } = useSelector(
+    (state) => state.CurrentTopPlacementsData
+  );
+
+  useEffect(() => {
+    dispatch(fetchCurrentTopPlacementsData());
+  }, [dispatch]);
+
+  const placementData = useMemo(
+    () => CurrentTopPlacements,
+    [CurrentTopPlacements]
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cardsToShow, setCardsToShow] = useState(1);
 
@@ -142,7 +129,7 @@ const PlacementSlider = () => {
                   >
                     <div className="grid place-items-center">
                       <img
-                        src={placement.image || profile}
+                        src={placement.image === "" ? NoDP : placement.image}
                         alt={placement.name}
                         className="rounded-full w-40 4-20 border bg-blue-800 shadow-xl shadow-blue-500 hover:rotate-6"
                       />
@@ -160,9 +147,9 @@ const PlacementSlider = () => {
                       <p className="text-sm sm:text-base text-gray-600">
                         {placement.company}
                       </p>
-                      {placement.score && (
+                      {placement.lpa && (
                         <p className="text-lg sm:text-xl font-bold text-gray-800">
-                          {placement.score}
+                          {placement.lpa}
                         </p>
                       )}
                     </div>
@@ -192,7 +179,7 @@ const PlacementSlider = () => {
           </div>
           <div>
             <div className="flex justify-center mt-6">
-              <Link href="/placements">
+              <Link to="/placements/top-placements">
                 <a className="text-sm sm:text-base font-semibold text-blue-600 hover:underline">
                   View More
                 </a>

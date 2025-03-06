@@ -104,10 +104,15 @@ function PhdScholars() {
     }
 
     const formData = new FormData();
-    Object.entries(uploadForm).forEach(([key, value]) => {
-      if (key !== "file" && value) formData.append(key, value);
-    });
-    if (uploadForm.file) formData.append("image", uploadForm.file);
+    formData.append("name", uploadForm.name || "");
+    formData.append("email", uploadForm.email || "");
+    formData.append("mobile", uploadForm.mobile || "");
+    formData.append("linkedin", uploadForm.linkedin || "");
+    formData.append("googleScholars", uploadForm.googleScholars || "");
+    formData.append("researchGate", uploadForm.researchGate || "");
+    formData.append("personallink", uploadForm.personallink || "");
+    formData.append("others", uploadForm.others || "");
+    formData.append("file", uploadForm.file || "");
 
     try {
       const loadingToast = toast.loading("Uploading scholar...");

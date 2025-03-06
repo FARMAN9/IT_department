@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchHodData } from "../../Features/HodSlice";
 import Loading from "../UtilityCompoments/Loading";
 import Errors from "../UtilityCompoments/Errors";
+import NoDP from "../../assets/blankProfile.png";
 
 const HodCard = () => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const HodCard = () => {
       <div className="flex items-center mb-4">
         <div className="w-40 h-40 mr-4 rounded-full bg-blue-300">
           <img
-            src={value.image}
+            src={value.image === "" ? NoDP : value.image}
             alt={value.name}
             className="w-full h-full rounded-full object-cover border-2 border-blue-300 border-dashed animation-border"
           />

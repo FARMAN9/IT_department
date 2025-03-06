@@ -50,6 +50,7 @@ import AdminStudents from "./components/Admin/People/Students.jsx";
 import AdminPhdScholars from "./components/Admin/People/PhdScholars.jsx";
 import AdminStaff from "./components/Admin/People/Staffs.jsx";
 import TopPlacements from "./components/Admin/People/TopPlacements.jsx";
+import TopPlacementCard from "./components/Placements/TopPlacementCard.jsx";
 
 const router = createBrowserRouter([
   {
@@ -163,6 +164,10 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <SignupForm />,
+      },
+      {
+        path: "/placements/top-placements",
+        element: <TopPlacementCard />,
       },
     ],
   },

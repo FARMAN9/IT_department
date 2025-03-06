@@ -21,6 +21,7 @@ const DepartmentsLabsSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    
     Incharge:{
         type: String,
         required: false
