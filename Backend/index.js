@@ -22,6 +22,7 @@ import Userrouter from "./Routers/Userrouter.js";
 import PhdScholarsRouter from "./Routers/PhdScholarsrouter.js";
 import StaffsRouter from "./Routers/Staffsrouter.js";
 import CurrentTopPlacementsRouter from "./Routers/CurrentTopPlacementrouter.js";
+import ResearchArearouter from "./Routers/ResearchArearouter.js";
 import path from "path";
 
 
@@ -40,7 +41,8 @@ connectToMongoDB().catch((error) => console.log(error));
 
 
 app.use(cors({
-  origin: "*", // Your frontend URL
+  origin: "http://localhost:5173", // Your frontend URL
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
 const swaggerOptions = {
@@ -95,6 +97,7 @@ app.use("/api", StudentsRouter);
 app.use("/api", PhdScholarsRouter);
 app.use("/api", StaffsRouter);
 app.use("/api", CurrentTopPlacementsRouter);
+app.use("/api", ResearchArearouter);
 
 // Start the server
 app.listen(PORT, () => {

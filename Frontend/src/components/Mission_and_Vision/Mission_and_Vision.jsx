@@ -62,7 +62,7 @@ const MissionAndVision = () => {
             <h2 className="text-sm sm:text-base lg:text-lg font-semibold text-gray-800 text-center">
               Our Vision
             </h2>
-            <div className="text-gray-600 mt-2">
+            <div className="text-gray-600 mt-2 leading-relaxed text-justify">
               {visions.length > 0 ? (
                 visions.map((item, index) => (
                   <li key={index} className="mb-2">

@@ -6,25 +6,25 @@ const Welcome = () => {
     {
       lang: "en",
       message: "Department of Information Technology Welcomes You",
-      style: "text-3xl"
+      style: "text-3xl",
     },
     {
       lang: "ur",
       message: "انفارمیشن ٹیکنالوجی کا شعبہ آپ کا استقبال کرتا ہے",
       style: "text-2xl",
-      rtl: true
+      rtl: true,
     },
     {
-      lang: "hi", 
+      lang: "hi",
       message: "सूचना प्रौद्योगिकी विभाग आपका स्वागत करता है",
-      style: "text-2xl"
+      style: "text-2xl",
     },
     {
       lang: "ks",
       message: "اطلاعات ٹیکنالوجی محکمہ چھہ توہند خیر مقدم",
       style: "text-2xl",
-      rtl: true
-    }
+      rtl: true,
+    },
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -35,44 +35,52 @@ const Welcome = () => {
     const animateMessage = async () => {
       const current = welcomeRef[currentIndex];
       const heading = headingRef.current;
-      
+
       // Clear previous content
       gsap.killTweensOf(heading);
       heading.innerHTML = current.message;
-      heading.style.direction = current.rtl ? 'rtl' : 'ltr';
-      heading.style.fontFamily = current.rtl ? "'Noto Naskh Arabic', sans-serif" : 'inherit';
+      heading.style.direction = current.rtl ? "rtl" : "ltr";
+      heading.style.fontFamily = current.rtl
+        ? "'Noto Naskh Arabic', sans-serif"
+        : "inherit";
 
       // Split text into spans
       const letters = current.message.split("");
-      heading.innerHTML = letters.map(l => `<span>${l}</span>`).join("");
+      heading.innerHTML = letters.map((l) => `<span>${l}</span>`).join("");
 
       // Animate in
-      await gsap.fromTo(heading.children, {
-        opacity: 0,
-        y: 20,
-        rotateX: -45
-      }, {
-        opacity: 1,
-        y: 0,
-        rotateX: 0,
-        stagger: 0.03,
-        duration: 0.8,
-        ease: "power3.out"
-      }).then(() => {
-        // Wait 3 seconds then animate out
-        timeoutRef.current = setTimeout(() => {
-          gsap.to(heading.children, {
+      await gsap
+        .fromTo(
+          heading.children,
+          {
             opacity: 0,
-            y: -20,
+            y: 20,
+            rotateX: -45,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            rotateX: 0,
             stagger: 0.03,
-            duration: 0.6,
-            ease: "power3.in",
-            onComplete: () => {
-              setCurrentIndex((prev) => (prev + 1) % welcomeRef.length);
-            }
-          });
-        }, 3000);
-      });
+            duration: 0.8,
+            ease: "power3.out",
+          }
+        )
+        .then(() => {
+          // Wait 3 seconds then animate out
+          timeoutRef.current = setTimeout(() => {
+            gsap.to(heading.children, {
+              opacity: 0,
+              y: -20,
+              stagger: 0.03,
+              duration: 0.7,
+              ease: "power3.in",
+              onComplete: () => {
+                setCurrentIndex((prev) => (prev + 1) % welcomeRef.length);
+              },
+            });
+          }, 3000);
+        });
     };
 
     animateMessage();
@@ -84,10 +92,10 @@ const Welcome = () => {
   }, [currentIndex]);
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 ">
+    <div className="flex flex-col items-center justify-center p-3 m-5">
       <h1
         ref={headingRef}
-        className={`${welcomeRef[currentIndex].style} font-bold text-center text-transparent bg-clip-text bg-gradient-to-br from-green-400 to-blue-600`}
+        className={`${welcomeRef[currentIndex].style} font-bold text-sm   md:text-4xl lg:text-5xl text-center text-transparent bg-clip-text bg-gradient-to-br from-green-400 to-blue-600 leading-relaxed`}
       />
     </div>
   );

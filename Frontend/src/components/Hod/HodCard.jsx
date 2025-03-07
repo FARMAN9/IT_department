@@ -44,13 +44,13 @@ const HodCard = () => {
         </h2>
       </div>
       <div className="m-2 items-center grid">
-        <p className="font-sans  text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed">
+        <p className="font-sans  text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed text-justify">
           {value.HodMessage || " HodMessage is not available"}
         </p>
         <div className="self-start mt-4">
           <NavLink to="/about/hod-message">
-            <button className="btn btn-outline btn-sm  sm:btn-sm md:btn-md lg:btn-lg btn-info hover:cursor">
-              More
+            <button className="btn btn-active lg:text-lg md:text-base text-white btn-info">
+              View Message
             </button>
           </NavLink>
         </div>

@@ -40,7 +40,7 @@ function DepartmentOfItInfo() {
             {value.name || "Department of IT"}
           </h2>
           <div className="scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100 no-bar">
-            <p className="text-gray-700 text-sm sm:text-base lg:text-lg mt-6 max-h-72 sm:max-h-96 overflow-y-auto">
+            <p className="text-gray-700 text-sm sm:text-base lg:text-lg mt-6 max-h-72 sm:max-h-96 overflow-y-auto leading-relaxed text-justify">
               {value.description || "Description not found"}
             </p>
           </div>

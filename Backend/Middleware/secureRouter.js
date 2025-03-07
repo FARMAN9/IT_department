@@ -4,12 +4,14 @@ import User from "../Models/UserModel.js";
 
 const secureRouter = async (req, res, next) => {
     try {
-        console.log(req.cookies)
+        console.log(req.headers)
+        console.log(req.cookies.Uid)
         const token = req.cookies.Uid;
         if (!token) {
             return res.status(401).json({ message: "Unauthorized" });
         }
         const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+        console.log("decoded",decoded)
         if (!decoded) {
             return res.status(401).json({ message: "Unauthorized" });
         }

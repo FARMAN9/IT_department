@@ -77,7 +77,7 @@ const PlacementSlider = () => {
           <p className="text-2xl lg:text-3xl  text-center text-white bg-blue-400 block rounded-lg  ">
             Top Placements
           </p>
-          <p className="text-sm sm:text-base text-center px-4 sm:px-44 text-gray-600">
+          <p className="text-lg lg:text-xl  text-center px-4 sm:px-44 text-gray-600">
             See our students' amazing achievements and opportunities for you.
           </p>
         </div>
@@ -131,7 +131,7 @@ const PlacementSlider = () => {
                       <img
                         src={placement.image === "" ? NoDP : placement.image}
                         alt={placement.name}
-                        className="rounded-full w-40 4-20 border bg-blue-800 shadow-xl shadow-blue-500 hover:rotate-6"
+                        className="mask mask-circle w-40 h-40 object-cover border bg-blue-800 shadow-xl shadow-blue-500 hover:rotate-6"
                       />
                     </div>
                     <div className="space-y-2">
@@ -180,9 +180,9 @@ const PlacementSlider = () => {
           <div>
             <div className="flex justify-center mt-6">
               <Link to="/placements/top-placements">
-                <a className="text-sm sm:text-base font-semibold text-blue-600 hover:underline">
-                  View More
-                </a>
+                <button className="btn btn-active lg:text-lg md:text-base text-white btn-info">
+                  View All
+                </button>
               </Link>
             </div>
           </div>

@@ -17,14 +17,14 @@ import {
 const VisionItem = React.memo(({ children }) => (
   <div className="flex gap-4 items-start">
     <Lightbulb className="w-6 h-6 text-teal-600 flex-shrink-0 mt-1" />
-    <p className="text-gray-700 leading-relaxed">{children}</p>
+    <p className="text-gray-700 leading-relaxed text-justify">{children}</p>
   </div>
 ));
 
 const MissionItem = React.memo(({ children }) => (
   <div className="flex gap-4 items-start">
     <Lightbulb className="w-6 h-6 text-teal-600 flex-shrink-0 mt-1" />
-    <p className="text-gray-700 leading-relaxed">{children}</p>
+    <p className="text-gray-700 leading-relaxed text-justify">{children}</p>
   </div>
 ));
 

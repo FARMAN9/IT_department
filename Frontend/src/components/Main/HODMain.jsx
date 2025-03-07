@@ -95,7 +95,7 @@ function Main() {
 
               <div className="bg-white shadow-md rounded-lg border-l-4 border-teal-600">
                 <div className="p-6">
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-gray-700 leading-relaxed text-justify">
                     {value.HodMessage || "No message available."}
                   </p>
                 </div>

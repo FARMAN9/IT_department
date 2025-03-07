@@ -4,7 +4,7 @@ import {asFiletoCloud} from "../Utility/Utility.js";
 
 export const GetAllCurrentTopPlacements = async (req, res) => {
     try {
-        const CurrentTopPlacements = await CurrentTopPlacementsModel.find({}).sort({'createdAt':-1}||{'updatedAt':-1});
+        const CurrentTopPlacements = await CurrentTopPlacementsModel.find({}).sort({'lpa':-1});
         res.status(200).json({data:CurrentTopPlacements,
             message:"CurrentTopPlacements Fetched Successfully"
         });

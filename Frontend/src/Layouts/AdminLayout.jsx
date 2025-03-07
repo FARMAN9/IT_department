@@ -140,7 +140,7 @@ const Layout = () => {
         { label: "Faculty", link: "/people/faculty" },
         { label: "PhD Scholars", link: "/admin/academic/phd-scholars" },
         { label: "Students", link: "/admin/academic/students" },
-        { label: "Alumni", link: "/people/alumni" },
+        { label: "Alumni", link: "YHIOYHOI" },
         { label: "Staff", link: "/admin/academic/staff" },
         {
           label: "Current Top Placements",
@@ -154,7 +154,7 @@ const Layout = () => {
       id: "research",
       link: "/research",
       submenu: [
-        { label: "Research Areas", link: "/research/areas" },
+        { label: "Research Areas ", link: "/admin/labs/research-areas" },
         { label: "Department Labs", link: "/research/labs" },
         { label: "Publications", link: "/research/publications" },
         { label: "Projects", link: "/research/projects" },
@@ -197,7 +197,8 @@ const Layout = () => {
               animate="visible"
               exit="hidden"
               variants={navVariants}
-              className="w-full shadow-md z-50 bg-white">
+              className="w-full shadow-md z-50 bg-white"
+            >
               <NavAdmin />
             </motion.div>
           )}
@@ -213,11 +214,13 @@ const Layout = () => {
           animate="animate"
           whileHover="hover"
           whileTap="tap"
-          aria-label="Toggle admin menu">
+          aria-label="Toggle admin menu"
+        >
           <motion.span
             variants={arrowVariants}
             animate={isMenuVisible ? "up" : "down"}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}>
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          >
             {isMenuVisible ? (
               <IoIosArrowUp size={18} className="text-white" />
             ) : (

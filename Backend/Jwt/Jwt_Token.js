@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 
 
 
+
 const createTokenAndSave = async (User, res) => {
   if (!res) {
     console.error('Response object is undefined');
@@ -9,11 +10,11 @@ const createTokenAndSave = async (User, res) => {
   }
 
   const token = jwt.sign({ userId: User._id, role: User.role }, process.env.JWT_SECRET , {
-    expiresIn: "8h",
+    expiresIn: "50m",
   });
   
  res.cookie("Uid", token, {
-  httpOnly: true,
+  httpOnly:false,
   secure: process.env.NODE_ENV === "production", // Secure in production only
   sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Adjust based on environment
   maxAge: 3600000

@@ -16,7 +16,7 @@ const AdminGallery = () => {
     (state) => state.GalleryData
   );
 
-  const token = Cookies.get("token");
+  const token = Cookies.get("Uid");
   console.log("token", token);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -69,6 +69,7 @@ const AdminGallery = () => {
         "http://localhost:4000/api/uplaodGalleryImages",
         formData,
         {
+          withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
@@ -109,9 +110,10 @@ const AdminGallery = () => {
         `http://localhost:4000/api/updateGalleryImages/${selectedImage._id}`,
         formData,
         {
+          withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -136,8 +138,9 @@ const AdminGallery = () => {
       await axios.delete(
         `http://localhost:4000/api/deleteGalleryImages/${selectedImage._id}`,
         {
+          withCredentials: true,
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );

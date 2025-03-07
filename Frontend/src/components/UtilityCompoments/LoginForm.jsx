@@ -27,7 +27,9 @@ const LoginForm = () => {
     console.log("data sent:", data);
 
     try {
-      const res = await axios.post(`http://localhost:4000/api/signIn`, data);
+      const res = await axios.post(`http://localhost:4000/api/signIn`, data, {
+        withCredentials: true,
+      });
       console.log(res.data.message); //
 
       if (from === "Admin login" && res.data.data.role === "user") {

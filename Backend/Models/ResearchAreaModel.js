@@ -22,7 +22,7 @@ const ResearchAreaSchema = new mongoose.Schema({
     
 }, { timestamps: true })
 
-const ResearchAreaModel = mongoose.model('ResearchArea', ResearchAreaSchema);
+const ResearchAreasModel = mongoose.model('ResearchArea', ResearchAreaSchema);
 
-export default ResearchAreaModel
+export default ResearchAreasModel
 

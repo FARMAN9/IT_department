@@ -452,7 +452,7 @@ Note: Only valid YouTube embed links work. Other formats or extra characters may
                     <h2 className="text-2xl font-bold mb-4">
                       {MainDepartmentInfo.name}
                     </h2>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-gray-700 leading-relaxed text-justify">
                       {MainDepartmentInfo.description}
                     </p>
                   </div>

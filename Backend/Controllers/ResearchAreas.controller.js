@@ -1,4 +1,5 @@
-import  ResearchAreasModel  from "../Models/ResearchAreasModel.js";
+import ResearchAreasModel from '../Models/ResearchAreaModel.js';
+
 import {asFiletoCloud} from "../Utility/Utility.js";
 
 
@@ -65,7 +66,7 @@ export const UpdateResearchAreas = async (req, res) => {
     }
 };
 
-export const DeleteResearchArea = async (req, res) => {
+export const DeleteResearchAreas = async (req, res) => {
     try {
         const deletedResearchAreas = await ResearchAreasModel.findByIdAndDelete(req.params.id);
         if (!deletedResearchAreas) {
@@ -78,3 +79,23 @@ export const DeleteResearchArea = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const removeResearchAreasImage = async (req, res) => {
+    try {
+        const updatedResearchAreas = await ResearchAreasModel.findByIdAndUpdate(
+            req.params.id,
+            { image: "" },
+            { new: true }
+        );
+        if (!updatedResearchAreas) {
+            return res.status(404).json({ error: "ResearchAreas not found" });
+        }
+        res.status(200).json({
+            data: updatedResearchAreas,
+            message: "Image removed successfully",
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
