@@ -21,6 +21,10 @@ const DepartmentsLabsSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    lab_manual:{
+        type: String,
+        required: false
+    },
     
     Incharge:{
         type: String,
@@ -31,5 +35,5 @@ const DepartmentsLabsSchema = new mongoose.Schema({
 
 
 
-const DepartmentsLabs = mongoose.model('DepartmentsLabs', DepartmentsLabsSchema);
-export default DepartmentsLabs;
+const DepartmentsLabsModel = mongoose.model('DepartmentsLabs', DepartmentsLabsSchema);
+export default DepartmentsLabsModel;

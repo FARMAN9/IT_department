@@ -155,7 +155,7 @@ const Layout = () => {
       link: "/research",
       submenu: [
         { label: "Research Areas ", link: "/admin/labs/research-areas" },
-        { label: "Department Labs", link: "/research/labs" },
+        { label: "Department Labs", link: "/admin/labs/departments-labs" },
         { label: "Publications", link: "/research/publications" },
         { label: "Projects", link: "/research/projects" },
         { label: "Consultancy", link: "/research/consultancy" },

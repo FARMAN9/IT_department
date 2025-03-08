@@ -15,7 +15,7 @@ import MainCard from "../../Activites/MainCard";
 import Loading from "../../UtilityCompoments/Loading";
 import Errors from "../../UtilityCompoments/Errors";
 
-function ResearchAreas() {
+function DepartmentsLabs() {
   const dispatch = useDispatch();
   const { researchAreas, loading, error } = useSelector(
     (state) => state.ResearchAreaData
@@ -313,7 +313,7 @@ function ResearchAreas() {
       {showUploadModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-lg font-bold mb-4">Add New Research Area</h3>
+            <h3 className="text-lg font-bold mb-4">Add New Lab</h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Name</label>
@@ -384,7 +384,7 @@ function ResearchAreas() {
       {showEditModal && selectedArea && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-lg font-bold mb-4">Edit Research Area</h3>
+            <h3 className="text-lg font-bold mb-4">Edit Lab </h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Name</label>
@@ -456,7 +456,7 @@ function ResearchAreas() {
         </div>
       )}
 
-      <MainCard title="Research Areas">
+      <MainCard title="Departments Labs">
         <div className="min-h-auto flex m-0">
           <main className="flex-1">
             <div className="mx-auto">
@@ -495,7 +495,7 @@ function ResearchAreas() {
                     className="btn btn-sm btn-warning rounded-lg"
                   >
                     <HiPencil className="w-5 h-5" />
-                    Add New Area
+                    Add New Lab
                   </button>
                 </div>
 
@@ -515,6 +515,9 @@ function ResearchAreas() {
                         </th>
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
                           Location
+                        </th>
+                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
+                          Lab Manual
                         </th>
                         <th className="py-3 px-4 text-center text-sm font-medium text-gray-700 uppercase">
                           Actions
@@ -636,4 +639,4 @@ function ResearchAreas() {
   );
 }
 
-export default ResearchAreas;
+export default DepartmentsLabs;

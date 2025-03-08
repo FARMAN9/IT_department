@@ -52,6 +52,7 @@ import AdminStaff from "./components/Admin/People/Staffs.jsx";
 import TopPlacements from "./components/Admin/People/TopPlacements.jsx";
 import TopPlacementCard from "./components/Placements/TopPlacementCard.jsx";
 import ResearchAreaAdmin from "./components/Admin/ResearchAndLabs/ResearchAreas.jsx";
+import DepartmentsLabs from "./components/Admin/ResearchAndlabs/DepartmentsLabs.jsx";
 
 const router = createBrowserRouter([
   {
@@ -247,6 +248,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/labs/research-areas",
         element: <ResearchAreaAdmin />,
+      },
+      {
+        path: "/admin/labs/departments-labs",
+        element: <DepartmentsLabs />,
       },
     ],
   },
