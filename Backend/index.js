@@ -25,6 +25,7 @@ import CurrentTopPlacementsRouter from "./Routers/CurrentTopPlacementrouter.js";
 import ResearchArearouter from "./Routers/ResearchArearouter.js";
 import ResponseTimeRouter from "./Routers/Resppncetime.js";
 import DepartmentsLabrouter from "./Routers/DepartmentsLabrouter.js";
+import ProjectsRouter from "./Routers/Projectsrouter.js";
 import path from "path";
 
 
@@ -102,6 +103,7 @@ app.use("/api", CurrentTopPlacementsRouter);
 app.use("/api", ResearchArearouter);
 app.use("/api", ResponseTimeRouter);
 app.use("/api", DepartmentsLabrouter);
+app.use("/api", ProjectsRouter);
 
 // Start the server
 app.listen(PORT, () => {

@@ -54,6 +54,7 @@ export const UpdateResearchAreas = async (req, res) => {
             const {fileUrl,appwriteFile} = await asFiletoCloud(file)
             updatedResearchAreas.image = fileUrl;
         }
+        await updatedResearchAreas.save();
 
         if (!updatedResearchAreas) {
             return res.status(404).json({ error: "ResearchAreas not found" });

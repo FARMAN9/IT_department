@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchResearchAreasData } from "../../../Features/ResearchAreaSlice";
+import { fetchProjects } from "../../../Features/ProjectsSlice";
 import {
   HiChevronLeft,
   HiChevronRight,
@@ -8,17 +8,16 @@ import {
   HiPencil,
   HiTrash,
 } from "react-icons/hi";
-import { MdImageNotSupported } from "react-icons/md";
 import axios from "axios";
 import toast from "react-hot-toast";
 import MainCard from "../../Activites/MainCard";
 import Loading from "../../UtilityCompoments/Loading";
 import Errors from "../../UtilityCompoments/Errors";
 
-function ResearchAreas() {
+function Projects() {
   const dispatch = useDispatch();
-  const { researchAreas, loading, error } = useSelector(
-    (state) => state.ResearchAreaData
+  const { projects, loading, error } = useSelector(
+    (state) => state.ProjectsData
   );
 
   // State Management
@@ -28,29 +27,28 @@ function ResearchAreas() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showRemoveImageModal, setShowRemoveImageModal] = useState(false);
-  const [selectedArea, setSelectedArea] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
 
   // Form States
   const [uploadForm, setUploadForm] = useState({
-    name: "",
-    description: "",
-    location: "",
-    file: null,
+    title: "",
+    year_of_sanction: "",
+    funding_agency: "",
+    sanction_amount: "",
+    link: "",
   });
   const [editForm, setEditForm] = useState({
-    name: "",
-    description: "",
-    location: "",
-    file: null,
+    title: "",
+    year_of_sanction: "",
+    funding_agency: "",
+    sanction_amount: "",
+    link: "",
   });
 
-  // Fetch data on mount
   useEffect(() => {
-    dispatch(fetchResearchAreasData());
+    dispatch(fetchProjects());
   }, [dispatch]);
 
-  // Error handling
   const handleApiError = (err, action) => {
     const errorMessage =
       err.response?.error || err.error || `${action} failed. Please try again.`;
@@ -59,55 +57,28 @@ function ResearchAreas() {
 
   // Upload Handler
   const handleUpload = async () => {
-    if (!uploadForm.name) {
-      return toast.error("Name is required");
-    }
-    if (!uploadForm.location) {
-      return toast.error("Location is required");
-    }
-    if (!uploadForm.description) {
-      return toast.error("Description is required");
-    }
-
-    const MAX_SIZE_MB = 5;
-    if (uploadForm.file) {
-      if (!uploadForm.file.type.startsWith("image/")) {
-        setUploadForm({ ...uploadForm, file: null });
-        return toast.error("Please upload an image file (JPEG, PNG, etc.)");
-      }
-      if (uploadForm.file.size > MAX_SIZE_MB * 1024 * 1024) {
-        setUploadForm({ ...uploadForm, file: null });
-        return toast.error(`File size exceeds ${MAX_SIZE_MB}MB limit`);
-      }
-    }
-
-    const formData = new FormData();
-    formData.append("name", uploadForm.name);
-    formData.append("description", uploadForm.description);
-    formData.append("location", uploadForm.location);
-    formData.append("image", uploadForm.file || "");
+    if (!uploadForm.title) return toast.error("Title is required");
+    if (!uploadForm.year_of_sanction) return toast.error("Year is required");
+    if (!uploadForm.funding_agency) return toast.error("Agency is required");
+    if (!uploadForm.sanction_amount) return toast.error("Amount is required");
 
     try {
-      const loadingToast = toast.loading("Uploading research area...");
-      await axios.post(
-        "http://localhost:4000/api/uploadResearchAreas",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const loadingToast = toast.loading("Uploading project...");
+      await axios.post("http://localhost:4000/api/uploadProjects", uploadForm, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
-      await dispatch(fetchResearchAreasData());
-      toast.success("Research area uploaded successfully!");
+      await dispatch(fetchProjects());
+      toast.success("Project uploaded successfully!");
       setShowUploadModal(false);
       setUploadForm({
-        name: "",
-        description: "",
-        location: "",
-        file: null,
+        title: "",
+        year_of_sanction: "",
+        funding_agency: "",
+        sanction_amount: "",
+        link: "",
       });
       toast.dismiss(loadingToast);
     } catch (err) {
@@ -117,38 +88,20 @@ function ResearchAreas() {
 
   // Update Handler
   const handleUpdate = async () => {
-    const MAX_SIZE_MB = 5;
-    if (editForm.file) {
-      if (!editForm.file.type.startsWith("image/")) {
-        setEditForm({ ...editForm, file: null });
-        return toast.error("Please upload an image file (JPEG, PNG, etc.)");
-      }
-      if (editForm.file.size > MAX_SIZE_MB * 1024 * 1024) {
-        setEditForm({ ...editForm, file: null });
-        return toast.error(`File size exceeds ${MAX_SIZE_MB}MB limit`);
-      }
-    }
-    const formData = new FormData();
-    formData.append("name", editForm.name);
-    formData.append("description", editForm.description);
-    formData.append("location", editForm.location);
-    if (editForm.file) formData.append("image", editForm.file);
-
     try {
-      const loadingToast = toast.loading("Updating research area...");
+      const loadingToast = toast.loading("Updating project...");
       await axios.put(
-        `http://localhost:4000/api/updateResearchAreas/${selectedArea._id}`,
-        formData,
+        `http://localhost:4000/api/updateProjects/${selectedProject._id}`,
+        editForm,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
 
-      await dispatch(fetchResearchAreasData());
-      toast.success("Research area updated successfully!");
+      await dispatch(fetchProjects());
+      toast.success("Project updated successfully!");
       setShowEditModal(false);
       toast.dismiss(loadingToast);
     } catch (err) {
@@ -159,9 +112,9 @@ function ResearchAreas() {
   // Delete Handler
   const handleDelete = async () => {
     try {
-      const loadingToast = toast.loading("Deleting research area...");
+      const loadingToast = toast.loading("Deleting project...");
       await axios.delete(
-        `http://localhost:4000/api/deleteResearchAreas/${selectedArea._id}`,
+        `http://localhost:4000/api/deleteProjects/${selectedProject._id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -169,73 +122,63 @@ function ResearchAreas() {
         }
       );
 
-      await dispatch(fetchResearchAreasData());
-      toast.success("Research area deleted successfully!");
+      await dispatch(fetchProjects());
+      toast.success("Project deleted successfully!");
       setShowDeleteModal(false);
-      setSelectedArea(null);
+      setSelectedProject(null);
       toast.dismiss(loadingToast);
     } catch (err) {
       handleApiError(err, "Delete");
     }
   };
 
-  const handleRemoveImage = async () => {
-    try {
-      const loadingToast = toast.loading("Removing image...");
-      await axios.put(
-        `http://localhost:4000/api/removeResearchAreasImage/${selectedArea._id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      await dispatch(fetchResearchAreasData());
-      toast.success("Image removed successfully!");
-      setShowRemoveImageModal(false);
-      toast.dismiss(loadingToast);
-    } catch (err) {
-      handleApiError(err, "Remove Image");
-    }
-  };
-
   // Search and Pagination
-  const filteredAreas = useMemo(() => {
+  const filteredProjects = useMemo(() => {
     const lowerSearch = search.toLowerCase();
-    return researchAreas.filter((item) =>
+    return projects.filter((item) =>
       Object.values(item).some((value) =>
         value?.toString().toLowerCase().includes(lowerSearch)
       )
     );
-  }, [search, researchAreas]);
+  }, [search, projects]);
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const totalPages = Math.ceil(filteredAreas.length / rowsPerPage);
-  const currentRows = filteredAreas.slice(indexOfFirstRow, indexOfLastRow);
+  const totalPages = Math.ceil(filteredProjects.length / rowsPerPage);
+  const currentRows = filteredProjects.slice(indexOfFirstRow, indexOfLastRow);
 
   // Mobile Card Component
   const MobileCard = ({ item }) => (
-    <div className="card bg-base-100 max-w-xs shadow-xl">
-      <figure className="px-10 pt-10">
-        <img
-          src={item.image}
-          alt={item.name}
-          className="w-60 h-60 rounded-md object-cover border-2 border-teal-600 border-dashed"
-        />
-      </figure>
-      <div className="card-body items-center text-center">
-        <h2 className="card-title">{item.name}</h2>
-        <div className="text-sm">
-          <p className="font-semibold">Location: {item.location || "N/A"}</p>
-          <p className="mt-2">{item.description || "N/A"}</p>
+    <div className="card bg-base-100 shadow-xl mb-4">
+      <div className="card-body">
+        <h2 className="card-title">{item.title}</h2>
+        <div className="text-sm space-y-2">
+          <p>
+            <strong>Year:</strong> {item.year_of_sanction || "N/A"}
+          </p>
+          <p>
+            <strong>Agency:</strong> {item.funding_agency || "N/A"}
+          </p>
+          <p>
+            <strong>Amount:</strong>{" "}
+            {item.sanction_amount ? `${item.sanction_amount} L` : "N/A"}
+          </p>
+          {item.link && (
+            <a
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link link-primary"
+            >
+              View Details
+            </a>
+          )}
         </div>
-        <div className="card-actions mt-4">
+        <div className="card-actions mt-4 justify-end">
           <button
             onClick={() => {
-              setSelectedArea(item);
-              setEditForm({ ...item, file: null });
+              setSelectedProject(item);
+              setEditForm({ ...item });
               setShowEditModal(true);
             }}
             className="btn btn-sm btn-warning"
@@ -244,21 +187,12 @@ function ResearchAreas() {
           </button>
           <button
             onClick={() => {
-              setSelectedArea(item);
+              setSelectedProject(item);
               setShowDeleteModal(true);
             }}
             className="btn btn-sm btn-error"
           >
             <HiTrash className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => {
-              setSelectedArea(item);
-              setShowRemoveImageModal(true);
-            }}
-            className="btn btn-sm btn-info"
-          >
-            <MdImageNotSupported className="w-4 h-4" />
           </button>
         </div>
       </div>
@@ -271,25 +205,6 @@ function ResearchAreas() {
   return (
     <>
       {/* Modals */}
-      {showRemoveImageModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-6 max-w-sm w-full">
-            <h3 className="text-lg font-bold mb-4">Confirm Image Removal</h3>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setShowRemoveImageModal(false)}
-                className="btn btn-ghost"
-              >
-                Cancel
-              </button>
-              <button onClick={handleRemoveImage} className="btn btn-error">
-                Remove Image
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg p-6 max-w-sm w-full">
@@ -312,56 +227,78 @@ function ResearchAreas() {
       {showUploadModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-lg font-bold mb-4">Add New Research Area</h3>
+            <h3 className="text-lg font-bold mb-4">Add New Project</h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Name</label>
+                <label className="block text-sm font-medium mb-1">Title</label>
                 <input
                   type="text"
                   className="w-full p-2 border rounded-md"
-                  value={uploadForm.name}
+                  value={uploadForm.title}
                   onChange={(e) =>
-                    setUploadForm({ ...uploadForm, name: e.target.value })
+                    setUploadForm({ ...uploadForm, title: e.target.value })
                   }
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Description
+                  Year of Sanction
                 </label>
-                <textarea
+                <input
+                  type="number"
                   className="w-full p-2 border rounded-md"
-                  value={uploadForm.description}
+                  value={uploadForm.year_of_sanction}
                   onChange={(e) =>
                     setUploadForm({
                       ...uploadForm,
-                      description: e.target.value,
+                      year_of_sanction: e.target.value,
                     })
                   }
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Location
+                  Funding Agency
                 </label>
                 <input
                   type="text"
                   className="w-full p-2 border rounded-md"
-                  value={uploadForm.location}
+                  value={uploadForm.funding_agency}
                   onChange={(e) =>
-                    setUploadForm({ ...uploadForm, location: e.target.value })
+                    setUploadForm({
+                      ...uploadForm,
+                      funding_agency: e.target.value,
+                    })
                   }
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Image</label>
+                <label className="block text-sm font-medium mb-1">
+                  Funding Amount (₹ in Lakh)
+                </label>
                 <input
-                  type="file"
-                  className="file-input file-input-bordered w-full"
+                  type="number"
+                  className="w-full p-2 border rounded-md"
+                  value={uploadForm.sanction_amount}
                   onChange={(e) =>
-                    setUploadForm({ ...uploadForm, file: e.target.files[0] })
+                    setUploadForm({
+                      ...uploadForm,
+                      sanction_amount: e.target.value,
+                    })
                   }
-                  accept="image/*"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Project Link
+                </label>
+                <input
+                  type="url"
+                  className="w-full p-2 border rounded-md"
+                  value={uploadForm.link}
+                  onChange={(e) =>
+                    setUploadForm({ ...uploadForm, link: e.target.value })
+                  }
                 />
               </div>
               <div className="flex justify-end gap-3 mt-4">
@@ -380,63 +317,78 @@ function ResearchAreas() {
         </div>
       )}
 
-      {showEditModal && selectedArea && (
+      {showEditModal && selectedProject && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-lg font-bold mb-4">Edit Research Area</h3>
+            <h3 className="text-lg font-bold mb-4">Edit Project</h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Name</label>
+                <label className="block text-sm font-medium mb-1">Title</label>
                 <input
                   type="text"
                   className="w-full p-2 border rounded-md"
-                  value={editForm.name}
+                  value={editForm.title}
                   onChange={(e) =>
-                    setEditForm({ ...editForm, name: e.target.value })
+                    setEditForm({ ...editForm, title: e.target.value })
                   }
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Description
+                  Year of Sanction
                 </label>
-                <textarea
+                <input
+                  type="number"
                   className="w-full p-2 border rounded-md"
-                  value={editForm.description}
+                  value={editForm.year_of_sanction}
                   onChange={(e) =>
-                    setEditForm({ ...editForm, description: e.target.value })
+                    setEditForm({
+                      ...editForm,
+                      year_of_sanction: e.target.value,
+                    })
                   }
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Location
+                  Funding Agency
                 </label>
                 <input
                   type="text"
                   className="w-full p-2 border rounded-md"
-                  value={editForm.location}
+                  value={editForm.funding_agency}
                   onChange={(e) =>
-                    setEditForm({ ...editForm, location: e.target.value })
+                    setEditForm({ ...editForm, funding_agency: e.target.value })
                   }
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Image</label>
-                {selectedArea.image && (
-                  <img
-                    src={selectedArea.image}
-                    alt="Current"
-                    className="w-full h-32 object-cover mb-2"
-                  />
-                )}
+                <label className="block text-sm font-medium mb-1">
+                  Funding Amount (₹ in Lakh)
+                </label>
                 <input
-                  type="file"
-                  className="file-input file-input-bordered w-full"
+                  type="number"
+                  className="w-full p-2 border rounded-md"
+                  value={editForm.sanction_amount}
                   onChange={(e) =>
-                    setEditForm({ ...editForm, file: e.target.files[0] })
+                    setEditForm({
+                      ...editForm,
+                      sanction_amount: e.target.value,
+                    })
                   }
-                  accept="image/*"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Project Link
+                </label>
+                <input
+                  type="url"
+                  className="w-full p-2 border rounded-md"
+                  value={editForm.link}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, link: e.target.value })
+                  }
                 />
               </div>
               <div className="flex justify-end gap-3 mt-4">
@@ -455,7 +407,7 @@ function ResearchAreas() {
         </div>
       )}
 
-      <MainCard title="Research Areas">
+      <MainCard title="Projects">
         <div className="min-h-auto flex m-0">
           <main className="flex-1">
             <div className="mx-auto">
@@ -472,30 +424,28 @@ function ResearchAreas() {
                     <HiSearch className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="flex items-center">
-                      <select
-                        className="border rounded-lg px-3 py-1"
-                        value={rowsPerPage}
-                        onChange={(e) => {
-                          setRowsPerPage(Number(e.target.value));
-                          setCurrentPage(1);
-                        }}
-                      >
-                        {[5, 10, 25, 50].map((value) => (
-                          <option key={value} value={value}>
-                            {value}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                    <select
+                      className="border rounded-lg px-3 py-1"
+                      value={rowsPerPage}
+                      onChange={(e) => {
+                        setRowsPerPage(Number(e.target.value));
+                        setCurrentPage(1);
+                      }}
+                    >
+                      {[5, 10, 25, 50].map((value) => (
+                        <option key={value} value={value}>
+                          {value}
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      onClick={() => setShowUploadModal(true)}
+                      className="btn btn-sm btn-warning rounded-lg"
+                    >
+                      <HiPencil className="w-5 h-5" />
+                      Add New Project
+                    </button>
                   </div>
-                  <button
-                    onClick={() => setShowUploadModal(true)}
-                    className="btn btn-sm btn-warning rounded-lg"
-                  >
-                    <HiPencil className="w-5 h-5" />
-                    Add New Area
-                  </button>
                 </div>
 
                 {/* Desktop Table */}
@@ -504,16 +454,19 @@ function ResearchAreas() {
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          Image
+                          Project Title
                         </th>
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          Name
+                          Year
                         </th>
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          Description
+                          Funding Agency
                         </th>
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          Location
+                          Amount (₹ L)
+                        </th>
+                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
+                          Link
                         </th>
                         <th className="py-3 px-4 text-center text-sm font-medium text-gray-700 uppercase">
                           Actions
@@ -523,25 +476,35 @@ function ResearchAreas() {
                     <tbody className="divide-y divide-gray-200">
                       {currentRows.map((item) => (
                         <tr key={item._id} className="hover:bg-gray-50">
+                          <td className="py-3 px-4 font-medium text-wrap text-justify">
+                            {item.title}
+                          </td>
+                          <td className="py-3 px-4 text-wrap text-justify">
+                            {item.year_of_sanction}
+                          </td>
+                          <td className="py-3 px-4 text-wrap text-justify">
+                            {item.funding_agency}
+                          </td>
                           <td className="py-3 px-4">
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="w-90 h-60 rounded-md object-fit border-2 border-teal-600 border-dashed break-all "
-                            />
+                            {item.sanction_amount} L
                           </td>
-                          <td className="py-3 px-4 font-medium text-sm break-all text-justify">
-                            {item.name}
+                          <td className="py-3 px-4">
+                            {item.link && (
+                              <a
+                                href={item.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-teal-600 hover:underline"
+                              >
+                                View
+                              </a>
+                            )}
                           </td>
-                          <td className="py-3 px-4 max-w-xs break-all overflow-hidden">
-                            {item.description}
-                          </td>
-                          <td className="py-3 px-4">{item.location}</td>
                           <td className="py-3 px-4 flex justify-center gap-2">
                             <button
                               onClick={() => {
-                                setSelectedArea(item);
-                                setEditForm({ ...item, file: null });
+                                setSelectedProject(item);
+                                setEditForm({ ...item });
                                 setShowEditModal(true);
                               }}
                               className="btn btn-sm btn-warning"
@@ -550,22 +513,12 @@ function ResearchAreas() {
                             </button>
                             <button
                               onClick={() => {
-                                setSelectedArea(item);
+                                setSelectedProject(item);
                                 setShowDeleteModal(true);
                               }}
                               className="btn btn-sm btn-error"
                             >
                               <HiTrash className="w-5 h-5" />
-                            </button>
-
-                            <button
-                              onClick={() => {
-                                setSelectedArea(item);
-                                setShowRemoveImageModal(true);
-                              }}
-                              className="btn btn-sm btn-info"
-                            >
-                              <MdImageNotSupported className="w-5 h-5" />
                             </button>
                           </td>
                         </tr>
@@ -585,8 +538,8 @@ function ResearchAreas() {
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4">
                   <div className="text-sm text-gray-600">
                     Showing {indexOfFirstRow + 1} to{" "}
-                    {Math.min(indexOfLastRow, filteredAreas.length)} of{" "}
-                    {filteredAreas.length} entries
+                    {Math.min(indexOfLastRow, filteredProjects.length)} of{" "}
+                    {filteredProjects.length} entries
                   </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -635,4 +588,4 @@ function ResearchAreas() {
   );
 }
 
-export default ResearchAreas;
+export default Projects;

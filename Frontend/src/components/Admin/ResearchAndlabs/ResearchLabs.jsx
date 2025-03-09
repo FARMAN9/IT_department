@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchResearchAreasData } from "../../../Features/ResearchAreaSlice";
 import {
@@ -16,7 +16,7 @@ import MainCard from "../../Activites/MainCard";
 import Loading from "../../UtilityCompoments/Loading";
 import Errors from "../../UtilityCompoments/Errors";
 
-function DepartmentsLabs() {
+function ResearchLabs() {
   const dispatch = useDispatch();
   const { researchAreas, loading, error } = useSelector(
     (state) => state.ResearchAreaData
@@ -611,7 +611,7 @@ function DepartmentsLabs() {
         </div>
       )}
 
-      <MainCard title="Departments Labs">
+      <MainCard title="Research Labs">
         <div className="min-h-auto flex m-0">
           <main className="flex-1">
             <div className="mx-auto">
@@ -827,4 +827,4 @@ function DepartmentsLabs() {
   );
 }
 
-export default DepartmentsLabs;
+export default ResearchLabs;

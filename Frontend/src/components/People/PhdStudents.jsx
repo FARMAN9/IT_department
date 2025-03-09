@@ -155,6 +155,81 @@ function PhdStudents() {
                           </span>
                         </a>
                       )}
+                      {faculty.googleScholars === "" ||
+                      faculty.googleScholars === null ? (
+                        <div className="flex items-center gap-2">
+                          <FaGoogleScholar className="h-5 w-5 text-gray-400" />
+                          <span className="text-gray-400 text-sm">
+                            Not Available
+                          </span>
+                        </div>
+                      ) : (
+                        <a
+                          href={faculty.googleScholars}
+                          className="flex  items-center gap-2 hover:text-teal-600 transition duration-300"
+                        >
+                          <FaGoogleScholar className="h-5 w-5" />
+                          <span className="text-sm break-all">
+                            {faculty.googleScholars}
+                          </span>
+                        </a>
+                      )}
+                      {faculty.researchGate === "" ||
+                      faculty.researchGate === null ? (
+                        <div className="flex items-center gap-2">
+                          <FaResearchgate className="h-5 w-5 text-gray-400" />
+                          <span className="text-gray-400 text-sm">
+                            Not Available
+                          </span>
+                        </div>
+                      ) : (
+                        <a
+                          href={faculty.researchGate}
+                          className="flex  items-center gap-2 hover:text-teal-600 transition duration-300"
+                        >
+                          <FaResearchgate className="h-5 w-5" />
+                          <span className="text-sm break-all">
+                            {faculty.researchGate}
+                          </span>
+                        </a>
+                      )}
+                      {faculty.personallink === "" ||
+                      faculty.personallink === null ? (
+                        <div className="flex items-center gap-2">
+                          <FaGlobe className="h-5 w-5 text-gray-400" />
+                          <span className="text-gray-400 text-sm">
+                            Not Available
+                          </span>
+                        </div>
+                      ) : (
+                        <a
+                          href={faculty.personallink}
+                          className="flex  items-center gap-2 hover:text-teal-600 transition duration-300"
+                        >
+                          <FaGlobe className="h-5 w-5" />
+                          <span className="text-sm break-all">
+                            {faculty.personallink}
+                          </span>
+                        </a>
+                      )}
+                      {faculty.others === "" || faculty.others === null ? (
+                        <div className="flex items-center gap-2">
+                          <FaLink className="h-5 w-5 text-gray-400" />
+                          <span className="text-gray-400 text-sm">
+                            Not Available
+                          </span>
+                        </div>
+                      ) : (
+                        <a
+                          href={faculty.others}
+                          className="flex  items-center gap-2 hover:text-teal-600 transition duration-300"
+                        >
+                          <FaLink className="h-5 w-5" />
+                          <span className="text-sm break-all">
+                            {faculty.others}
+                          </span>
+                        </a>
+                      )}
                     </FacultyCard>
                   </div>
                 ))}
