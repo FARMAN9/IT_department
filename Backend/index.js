@@ -27,9 +27,7 @@ import ResponseTimeRouter from "./Routers/Resppncetime.js";
 import DepartmentsLabrouter from "./Routers/DepartmentsLabrouter.js";
 import ProjectsRouter from "./Routers/Projectsrouter.js";
 import path from "path";
-
-
-
+import { fileURLToPath } from "url";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -38,16 +36,19 @@ const URI = process.env.MongoDB_URI;
 app.use(express.json());
 app.use(cookieParser());
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 connectToMongoDB().catch((error) => console.log(error));
 
-
-app.use(cors({
-  origin: "http://localhost:5173", // Your frontend URL
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Your frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
@@ -72,18 +73,22 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // Define a route
 app.post("/", (req, res) => {
   res.status(200).json({
-   farman :'farman'
-  })
+    farman: "farman",
+  });
 });
-
-
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: 'Internal Server Error', error: err.message });
+  res
+    .status(500)
+    .json({ message: "Internal Server Error", error: err.message });
   next();
-})
+});
 
+app.use((req, res, next) => {
+  req.uploadStartTime = process.hrtime.bigint();
+  next();
+});
 
 app.use("/api", Userrouter);
 app.use("/api", MainImagesRouter);
@@ -108,5 +113,4 @@ app.use("/api", ProjectsRouter);
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  
 });
