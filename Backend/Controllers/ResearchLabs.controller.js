@@ -1,15 +1,15 @@
-import DepartmentsLabsModel from "../Models/DepartmentsLabsModel.js";
+import ResearchLabsModel from "../Models/ResearchLabsModel.js";
 
 import { asFiletoCloud } from "../Utility/Utility.js";
 
-export const GetAllDepartmentsLabs = async (req, res) => {
+export const GetAllResearchLabs = async (req, res) => {
   try {
-    const DepartmentsLabs = await DepartmentsLabsModel.find({}).sort(
+    const ResearchLabs = await ResearchLabsModel.find({}).sort(
       { createdAt: -1 } || { updatedAt: -1 }
     );
     res.status(200).json({
-      data: DepartmentsLabs,
-      message: "DepartmentsLabs Fetched Successfully",
+      data: ResearchLabs,
+      message: "ResearchLabs Fetched Successfully",
     });
   } catch (error) {
     console.log(error);
@@ -17,7 +17,7 @@ export const GetAllDepartmentsLabs = async (req, res) => {
   }
 };
 
-export const PostDepartmentsLabs = async (req, res) => {
+export const PostResearchLabs = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "Image is required" });
@@ -27,7 +27,7 @@ export const PostDepartmentsLabs = async (req, res) => {
     });
     const { fileUrl, appwriteFile } = await asFiletoCloud(file);
 
-    const newDepartmentsLabs = await DepartmentsLabsModel.create({
+    const newResearchLabs = await ResearchLabsModel.create({
       name: req.body.name,
       description: req.body.description,
       image: fileUrl,
@@ -35,8 +35,8 @@ export const PostDepartmentsLabs = async (req, res) => {
       location: req.body.location,
     });
     res.status(201).json({
-      data: newDepartmentsLabs,
-      message: "DepartmentsLabs Created Successfully",
+      data: newResearchLabs,
+      message: "ResearchLabs Created Successfully",
     });
   } catch (error) {
     console.log(error);
@@ -44,9 +44,9 @@ export const PostDepartmentsLabs = async (req, res) => {
   }
 };
 
-export const UpdateDepartmentsLabs = async (req, res) => {
+export const UpdateResearchLabs = async (req, res) => {
   try {
-    const updatedDepartmentsLabs = await DepartmentsLabsModel.findByIdAndUpdate(
+    const updatedResearchLabs = await ResearchLabsModel.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
@@ -56,53 +56,53 @@ export const UpdateDepartmentsLabs = async (req, res) => {
         type: req.file.mimetype,
       });
       const { fileUrl, appwriteFile } = await asFiletoCloud(file);
-      updatedDepartmentsLabs.image = fileUrl;
+      updatedResearchLabs.image = fileUrl;
     }
-    await updatedDepartmentsLabs.save();
+    await updatedResearchLabs.save();
 
 
-    if (!updatedDepartmentsLabs) {
-      return res.status(404).json({ error: "DepartmentsLabs not found" });
+    if (!updatedResearchLabs) {
+      return res.status(404).json({ error: "ResearchLabs not found" });
     }
     res.status(200).json({
-      data: updatedDepartmentsLabs,
-      message: "DepartmentsLabs Updated Successfully",
+      data: updatedResearchLabs,
+      message: "ResearchLabs Updated Successfully",
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-export const DeleteDepartmentsLabs = async (req, res) => {
+export const DeleteResearchLabs = async (req, res) => {
   try {
-    const deletedDepartmentsLabs = await DepartmentsLabsModel.findByIdAndDelete(
+    const deletedResearchLabs = await ResearchLabsModel.findByIdAndDelete(
       req.params.id
     );
-    if (!deletedDepartmentsLabs) {
-      return res.status(404).json({ error: "DepartmentsLabs not found" });
+    if (!deletedResearchLabs) {
+      return res.status(404).json({ error: "ResearchLabs not found" });
     }
 
     res.status(200).json({
-      data: deletedDepartmentsLabs,
-      message: "DepartmentsLabs Deleted Successfully",
+      data: deletedResearchLabs,
+      message: "ResearchLabs Deleted Successfully",
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-export const removeDepartmentsLabsImage = async (req, res) => {
+export const removeResearchLabsImage = async (req, res) => {
   try {
-    const updatedDepartmentsLabs = await DepartmentsLabsModel.findByIdAndUpdate(
+    const updatedResearchLabs = await ResearchLabsModel.findByIdAndUpdate(
       req.params.id,
       { image: "" },
       { new: true }
     );
-    if (!updatedDepartmentsLabs) {
-      return res.status(404).json({ error: "DepartmentsLabs not found" });
+    if (!updatedResearchLabs) {
+      return res.status(404).json({ error: "ResearchLabs not found" });
     }
     res.status(200).json({
-      data: updatedDepartmentsLabs,
+      data: updatedResearchLabs,
       message: "Image removed successfully",
     });
   } catch (error) {
@@ -110,7 +110,7 @@ export const removeDepartmentsLabsImage = async (req, res) => {
   }
 };
 
-export const putLabManual = async (req, res) => {
+export const putResearchLabsManual = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "Lab manual is required" });
@@ -119,13 +119,13 @@ export const putLabManual = async (req, res) => {
       type: req.file.mimetype,
     });
     const { fileUrl, appwriteFile } = await asFiletoCloud(file);
-    const updatedLabManual = await DepartmentsLabsModel.findByIdAndUpdate(
+    const updatedLabManual = await ResearchLabsModel.findByIdAndUpdate(
       req.params.id,
       { lab_manual: fileUrl },
       { new: true }
     );
     if (!updatedLabManual) {
-      return res.status(404).json({ error: "DepartmentsLabs not found" });
+      return res.status(404).json({ error: "ResearchLabs not found" });
     }
     res.status(200).json({
       data: updatedLabManual,
@@ -136,18 +136,18 @@ export const putLabManual = async (req, res) => {
   }
 };
 
-export const removeLabManual = async (req, res) => {
+export const removeResearchLabsManual = async (req, res) => {
   try {
-    const updatedLabManual = await DepartmentsLabsModel.findByIdAndUpdate(
+    const updatedResearchLabsManual = await ResearchLabsModel.findByIdAndUpdate(
       req.params.id,
       { lab_manual: "" },
       { new: true }
     );
-    if (!updatedLabManual) {
-      return res.status(404).json({ error: "DepartmentsLabs not found" });
+    if (!updatedResearchLabsManual) {
+      return res.status(404).json({ error: "ResearchLabs not found" });
     }
     res.status(200).json({
-      data: updatedLabManual,
+      data: updatedResearchLabsManual,
       message: "Lab manual removed successfully",
     });
   } catch (error) {

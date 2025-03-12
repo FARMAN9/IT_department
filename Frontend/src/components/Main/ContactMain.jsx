@@ -23,11 +23,19 @@ function Main() {
   console.log("MainINFODATA", MainDepartmentInfo);
 
   if (loading) {
-    return <Loading />;
+    return (
+      <MainCard title="Contact Us">
+        <Loading />
+      </MainCard>
+    );
   }
 
   if (error) {
-    return <Errors error={error.error || "Something went wrong"} />;
+    return (
+      <MainCard title="Contact Us">
+        <Errors error={error.error || "Something went wrong"} />
+      </MainCard>
+    );
   }
 
   return (

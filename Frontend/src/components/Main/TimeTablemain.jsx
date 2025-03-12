@@ -84,8 +84,18 @@ function Timetable() {
     </div>
   );
 
-  if (loading) return <Loading />;
-  if (error) return <Errors error={error} />;
+  if (loading)
+    return (
+      <MainCard title="TimeTable">
+        <Loading />
+      </MainCard>
+    );
+  if (error)
+    return (
+      <MainCard title="TimeTable">
+        <Errors error={error} />
+      </MainCard>
+    );
 
   return (
     <>

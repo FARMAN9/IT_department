@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchResearchAreasData } from "../../../Features/ResearchAreaSlice";
+import { fetchResearchLabsData } from "../../../Features/ResearchLabsSlice";
 import {
   HiChevronLeft,
   HiChevronRight,
@@ -9,6 +9,7 @@ import {
   HiTrash,
   HiUpload,
 } from "react-icons/hi";
+import { FaFilePdf } from "react-icons/fa6";
 import { MdImageNotSupported } from "react-icons/md";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -18,8 +19,8 @@ import Errors from "../../UtilityCompoments/Errors";
 
 function ResearchLabs() {
   const dispatch = useDispatch();
-  const { researchAreas, loading, error } = useSelector(
-    (state) => state.ResearchAreaData
+  const { researchLabs, loading, error } = useSelector(
+    (state) => state.ResearchLabsData
   );
 
   // State Management
@@ -43,17 +44,19 @@ function ResearchLabs() {
     description: "",
     location: "",
     file: null,
+    Incharge: "",
   });
   const [editForm, setEditForm] = useState({
     name: "",
     description: "",
     location: "",
     file: null,
+    Incharge: "",
   });
 
   // Fetch data on mount
   useEffect(() => {
-    dispatch(fetchResearchAreasData());
+    dispatch(fetchResearchLabsData());
   }, [dispatch]);
 
   // Error handling
@@ -68,12 +71,22 @@ function ResearchLabs() {
     if (!uploadForm.name) {
       return toast.error("Name is required");
     }
-    if (!uploadForm.location) {
-      return toast.error("Location is required");
-    }
+  
     if (!uploadForm.description) {
       return toast.error("Description is required");
     }
+  
+    if (!uploadForm.Incharge) {
+      return toast.error("Incharge is required");
+
+    }
+    if (!uploadForm.location) {
+      return toast.error("Location is required");
+    }
+    if (!uploadForm.file) {
+      return toast.error("Image is required");
+    }
+
 
     const MAX_SIZE_MB = 5;
     if (uploadForm.file) {
@@ -91,12 +104,13 @@ function ResearchLabs() {
     formData.append("name", uploadForm.name);
     formData.append("description", uploadForm.description);
     formData.append("location", uploadForm.location);
-    formData.append("image", uploadForm.file || "");
+    formData.append("Incharge", uploadForm.Incharge);
+    formData.append("image", uploadForm.file );
 
     try {
       const loadingToast = toast.loading("Uploading research area...");
       await axios.post(
-        "http://localhost:4000/api/uploadResearchAreas",
+        "http://localhost:4000/api/uploadResearchLabs",
         formData,
         {
           headers: {
@@ -106,13 +120,14 @@ function ResearchLabs() {
         }
       );
 
-      await dispatch(fetchResearchAreasData());
-      toast.success("Research area uploaded successfully!");
+      await dispatch(fetchResearchLabsData());
+      toast.success("Research Lab uploaded successfully!");
       setShowUploadModal(false);
       setUploadForm({
         name: "",
         description: "",
         location: "",
+        Incharge: "",
         file: null,
       });
       toast.dismiss(loadingToast);
@@ -139,12 +154,13 @@ function ResearchLabs() {
     formData.append("name", editForm.name);
     formData.append("description", editForm.description);
     formData.append("location", editForm.location);
+    formData.append("Incharge", editForm.Incharge);
     if (editForm.file) formData.append("image", editForm.file);
 
     try {
-      const loadingToast = toast.loading("Updating research area...");
+      const loadingToast = toast.loading("Updating Research Lab ...");
       await axios.put(
-        `http://localhost:4000/api/updateResearchArea/${selectedArea._id}`,
+        `http://localhost:4000/api/updateResearchLabs/${selectedArea._id}`,
         formData,
         {
           headers: {
@@ -154,8 +170,8 @@ function ResearchLabs() {
         }
       );
 
-      await dispatch(fetchResearchAreasData());
-      toast.success("Research area updated successfully!");
+      await dispatch(fetchResearchLabsData());
+      toast.success("Research Lab updated successfully!");
       setShowEditModal(false);
       toast.dismiss(loadingToast);
     } catch (err) {
@@ -166,9 +182,9 @@ function ResearchLabs() {
   // Delete Handler
   const handleDelete = async () => {
     try {
-      const loadingToast = toast.loading("Deleting research area...");
+      const loadingToast = toast.loading("Deleting Research Lab ...");
       await axios.delete(
-        `http://localhost:4000/api/deleteResearchArea/${selectedArea._id}`,
+        `http://localhost:4000/api/deleteResearchLabs/${selectedArea._id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -176,8 +192,8 @@ function ResearchLabs() {
         }
       );
 
-      await dispatch(fetchResearchAreasData());
-      toast.success("Research area deleted successfully!");
+      await dispatch(fetchResearchLabsData());
+      toast.success("Research Lab deleted successfully!");
       setShowDeleteModal(false);
       setSelectedArea(null);
       toast.dismiss(loadingToast);
@@ -190,7 +206,7 @@ function ResearchLabs() {
     try {
       const loadingToast = toast.loading("Removing image...");
       await axios.put(
-        `http://localhost:4000/api/removeResearchAreaImage/${selectedArea._id}`,
+        `http://localhost:4000/api/removeResearchLabsImage/${selectedArea._id}`,
         {},
         {
           headers: {
@@ -198,7 +214,7 @@ function ResearchLabs() {
           },
         }
       );
-      await dispatch(fetchResearchAreasData());
+      await dispatch(fetchResearchLabsData());
       toast.success("Image removed successfully!");
       setShowRemoveImageModal(false);
       toast.dismiss(loadingToast);
@@ -218,12 +234,12 @@ function ResearchLabs() {
     }
 
     const formData = new FormData();
-    formData.append("labManual", labManualFile);
+    formData.append("pdf", labManualFile);
 
     try {
       const loadingToast = toast.loading("Uploading lab manual...");
       await axios.put(
-        `http://localhost:4000/api/uploadLabManual/${selectedArea._id}`,
+        `http://localhost:4000/api/uploadResearchLabsManual/${selectedArea._id}`,
         formData,
         {
           headers: {
@@ -233,7 +249,7 @@ function ResearchLabs() {
         }
       );
 
-      await dispatch(fetchResearchAreasData());
+      await dispatch(fetchResearchLabsData());
       toast.success("Lab manual uploaded successfully!");
       setShowUploadLabManualModal(false);
       setLabManualFile(null);
@@ -248,7 +264,7 @@ function ResearchLabs() {
     try {
       const loadingToast = toast.loading("Removing lab manual...");
       await axios.put(
-        `http://localhost:4000/api/removeLabManual/${selectedArea._id}`,
+        `http://localhost:4000/api/removeResearchLabsManual/${selectedArea._id}`,
         {},
         {
           headers: {
@@ -257,7 +273,7 @@ function ResearchLabs() {
         }
       );
 
-      await dispatch(fetchResearchAreasData());
+      await dispatch(fetchResearchLabsData());
       toast.success("Lab manual removed successfully!");
       setShowRemoveLabManualModal(false);
       toast.dismiss(loadingToast);
@@ -269,12 +285,12 @@ function ResearchLabs() {
   // Search and Pagination
   const filteredAreas = useMemo(() => {
     const lowerSearch = search.toLowerCase();
-    return researchAreas.filter((item) =>
+    return researchLabs.filter((item) =>
       Object.values(item).some((value) =>
         value?.toString().toLowerCase().includes(lowerSearch)
       )
     );
-  }, [search, researchAreas]);
+  }, [search, researchLabs]);
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -294,6 +310,7 @@ function ResearchLabs() {
       <div className="card-body items-center text-center">
         <h2 className="card-title">{item.name}</h2>
         <div className="text-sm">
+          <p className="font-semibold">Incharge: {item.Incharge || "N/A"}</p>
           <p className="font-semibold">Location: {item.location || "N/A"}</p>
           <p className="mt-2">
             {" "}
@@ -370,18 +387,30 @@ function ResearchLabs() {
     </div>
   );
 
-  if (loading) return <Loading />;
-  if (error) return <Errors error={error} />;
+  if (loading) return  (<MainCard title="Research Labs"> <Loading /> </MainCard>) ;
+  if (error) return  (<MainCard title="Research Labs"> <Errors error={error} /> </MainCard>) ;
 
   return (
     <>
       {/* Modals */}
       {/* Upload Lab Manual Modal */}
-      {showUploadLabManualModal && (
+      {showUploadLabManualModal && selectedArea && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg p-6 max-w-sm w-full">
-            <h3 className="text-lg font-bold mb-4">Upload Lab Manual</h3>
+            <h3 className="text-lg font-bold mb-4">Upload and update lab manual</h3>
             <div className="space-y-4">
+            <label className="block text-sm font-medium mb-1">
+                  Lab Manual{" "}
+                  <div className="text-red-500 border border-gray-300 p-2 flex rounded-md w-full flex-wrap overflow-hidden">
+                    <p className="text-xs w-full">
+                      <a href={selectedArea.lab_manual}>
+                        <FaFilePdf size={20} /> {selectedArea.lab_manual}
+                      </a>
+                    </p>
+                  </div>
+                </label>
+               
+           
               <input
                 type="file"
                 className="file-input file-input-bordered w-full"
@@ -408,10 +437,11 @@ function ResearchLabs() {
       )}
 
       {/* Remove Lab Manual Modal */}
-      {showRemoveLabManualModal && (
+      {showRemoveLabManualModal && selectedArea &&  (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg p-6 max-w-sm w-full">
             <h3 className="text-lg font-bold mb-4">Remove Lab Manual</h3>
+
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowRemoveLabManualModal(false)}
@@ -498,6 +528,19 @@ function ResearchLabs() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
+                  Incharge
+                </label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded-md"
+                  value={uploadForm.Incharge}
+                  onChange={(e) =>
+                    setUploadForm({ ...uploadForm, Incharge: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
                   Location
                 </label>
                 <input
@@ -561,6 +604,19 @@ function ResearchLabs() {
                   value={editForm.description}
                   onChange={(e) =>
                     setEditForm({ ...editForm, description: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Incharge
+                </label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded-md"
+                  value={editForm.Incharge}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, Incharge: e.target.value })
                   }
                 />
               </div>
@@ -669,6 +725,9 @@ function ResearchLabs() {
                           Description
                         </th>
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
+                          Incharge
+                        </th>
+                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
                           Location
                         </th>
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
@@ -692,14 +751,17 @@ function ResearchLabs() {
                           <td className="py-3 px-4 font-medium text-sm break-all text-justify">
                             {item.name}
                           </td>
-                          <td className="py-3 px-4 max-w-xs break-all overflow-hidden">
-                            {item.description}
+                          <td className="py-3 px-4 max-w-xs ">
+                            <div className="max-w-auto  overflow-y-auto h-96 text-justify  ">
+                              {item.description}
+                            </div>
                           </td>
+                          <td className="py-3 px-4">{item.Incharge}</td>
                           <td className="py-3 px-4">{item.location}</td>
                           <td className="py-3 px-4">
-                            {item.labManual ? (
+                            {item.lab_manual ? (
                               <a
-                                href={item.labManual}
+                                href={item.lab_manual}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-teal-600 hover:underline"

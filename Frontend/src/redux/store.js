@@ -14,6 +14,8 @@ import StaffsSlice from '../Features/StaffsSlice'
 import CurrentTopPlacementsSlice from '../Features/TopplacementSlice'
 import ResearchAreaSlice from '../Features/ResearchAreaSlice'
 import ProjectsSlice from '../Features/ProjectsSlice'
+import DepartmentsLabsSlice from '../Features/DepartmentsLabsSlice'
+import ResearchLabsSlice from '../Features/ResearchLabsSlice'
 
 export const store = configureStore({
   reducer: {
@@ -31,7 +33,9 @@ export const store = configureStore({
     StaffsData: StaffsSlice,
     CurrentTopPlacementsData: CurrentTopPlacementsSlice,
     ResearchAreaData: ResearchAreaSlice,
-    ProjectsData: ProjectsSlice
+    ProjectsData: ProjectsSlice,
+    DepartmentsLabsData: DepartmentsLabsSlice,
+    ResearchLabsData: ResearchLabsSlice
 
   }
 })

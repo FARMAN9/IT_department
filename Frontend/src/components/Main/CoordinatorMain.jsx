@@ -79,8 +79,18 @@ function AcademicCord() {
     </div>
   );
 
-  if (loading) return <Loading />;
-  if (error) return <Errors error={error} />;
+  if (loading)
+    return (
+      <MainCard title="Academic Coordinator">
+        <Loading />
+      </MainCard>
+    );
+  if (error)
+    return (
+      <MainCard title="Academic Coordinator">
+        <Errors error={error} />
+      </MainCard>
+    );
 
   return (
     <>

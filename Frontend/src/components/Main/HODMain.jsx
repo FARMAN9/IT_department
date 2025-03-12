@@ -3,6 +3,9 @@ import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchHodData } from "../../Features/HodSlice";
 import NoDP from "../../assets/blankProfile.png";
+import MainCard from "../Activites/MainCard";
+import Loading from "../UtilityCompoments/Loading";
+import Errors from "../UtilityCompoments/Errors";
 
 function Main() {
   document.title = "HOD Message";
@@ -17,13 +20,18 @@ function Main() {
 
   console.log("HOD MAIN DeBUG", HodInfo);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (loading)
+    return (
+      <MainCard title="HOD Message">
+        <Loading />
+      </MainCard>
+    );
+  if (error)
+    return (
+      <MainCard title="HOD Message">
+        <Errors error={error} />
+      </MainCard>
+    );
 
   return (
     <>

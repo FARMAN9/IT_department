@@ -1,106 +1,226 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMainData } from "../../Features/MainImages";
+import { debounce } from "lodash";
 
-function ImageSlider() {
+const ImageSlider = () => {
   const dispatch = useDispatch();
   const { imageSlider, loading, error } = useSelector(
     (state) => state.MainImagesData
   );
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const touchStartX = useRef(0);
+  const sliderRef = useRef(null);
+  const intervalRef = useRef(null);
+  const [isAnimating, setIsAnimating] = useState(true);
 
+  // Configuration
+  const ASPECT_RATIO = 0;
+  const MOBILE_BREAKPOINT = 768;
+  const VISIBLE_ITEMS = 1;
+
+  // Fetch data
   useEffect(() => {
     if (imageSlider.length === 0) {
-      dispatch(fetchMainData()); // Dispatch the API call on component mount if data is not present
+      dispatch(fetchMainData());
     }
-  }, [dispatch, imageSlider]);
+  }, [dispatch, imageSlider.length]);
 
-  const value = useMemo(() => imageSlider, [imageSlider]);
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const intervalRef = useRef(null);
-
-  // Function to handle moving to the next image
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % value.length);
-  };
-
-  // Function to handle moving to the previous image
-  const handlePrev = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? value.length - 1 : prevIndex - 1
-    );
-  };
-
-  // Start auto-slide interval
-  const startAutoSlide = () => {
-    intervalRef.current = setInterval(handleNext, 2000); // Slide every 2 seconds
-  };
-
-  // Stop auto-slide interval
-  const stopAutoSlide = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-  };
-
-  // Start auto-slide on mount
-  useEffect(() => {
-    startAutoSlide();
-
-    return () => stopAutoSlide(); // Cleanup interval on unmount
+  // Responsive checks
+  const checkResponsive = useCallback(() => {
+    setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
   }, []);
 
+  useEffect(() => {
+    checkResponsive();
+    const debouncedResize = debounce(checkResponsive, 100);
+    window.addEventListener("resize", debouncedResize);
+    return () => window.removeEventListener("resize", debouncedResize);
+  }, [checkResponsive]);
+
+  // Duplicate images three times for seamless infinite scroll
+  const allImages = useMemo(() => {
+    return imageSlider.length
+      ? [...imageSlider, ...imageSlider, ...imageSlider]
+      : [];
+  }, [imageSlider]);
+
+  // Initialize slider index to start at the middle copy
+  useEffect(() => {
+    if (imageSlider.length) {
+      setCurrentIndex(imageSlider.length);
+      setIsAnimating(true);
+    }
+  }, [imageSlider.length]);
+
+  // Handle continuous scroll: if index goes out of middle copy, reset it
+  const handleContinuousScroll = useCallback(() => {
+    if (!imageSlider.length) return;
+
+    // Forward: if we have advanced past the middle copy
+    if (currentIndex >= imageSlider.length * 2) {
+      setIsAnimating(false);
+      setTimeout(() => {
+        setCurrentIndex(currentIndex - imageSlider.length);
+        setTimeout(() => setIsAnimating(true), 50);
+      }, 0);
+    }
+    // Backward: if we move before the middle copy
+    else if (currentIndex < imageSlider.length) {
+      setIsAnimating(false);
+      setTimeout(() => {
+        setCurrentIndex(currentIndex + imageSlider.length);
+        setTimeout(() => setIsAnimating(true), 50);
+      }, 0);
+    }
+  }, [currentIndex, imageSlider.length]);
+
+  useEffect(() => {
+    handleContinuousScroll();
+  }, [currentIndex, handleContinuousScroll]);
+
+  // Navigation: update currentIndex based on direction
+  const navigateSlide = useCallback(
+    (direction) => {
+      setCurrentIndex((prev) => {
+        const newIndex = direction === "next" ? prev + 1 : prev - 1;
+        return (newIndex + allImages.length) % allImages.length;
+      });
+    },
+    [allImages.length]
+  );
+
+  // Auto-slide management
+  const startAutoSlide = useCallback(() => {
+    if (!intervalRef.current) {
+      intervalRef.current = setInterval(() => navigateSlide("next"), 3000);
+    }
+  }, [navigateSlide]);
+
+  const stopAutoSlide = useCallback(() => {
+    clearInterval(intervalRef.current);
+    intervalRef.current = null;
+  }, []);
+
+  // Touch handling
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    stopAutoSlide();
+  };
+
+  const handleTouchEnd = (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const deltaX = touchStartX.current - touchEndX;
+    if (Math.abs(deltaX) > 50) {
+      deltaX > 0 ? navigateSlide("next") : navigateSlide("prev");
+    }
+    startAutoSlide();
+  };
+
+  // Visibility observer to auto-start/stop when in/out of viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => (entry.isIntersecting ? startAutoSlide() : stopAutoSlide()),
+      { threshold: 0.75 }
+    );
+    if (sliderRef.current) observer.observe(sliderRef.current);
+    return () => observer.disconnect();
+  }, [startAutoSlide, stopAutoSlide]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "ArrowLeft") navigateSlide("prev");
+      if (e.key === "ArrowRight") navigateSlide("next");
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [navigateSlide]);
+
+  if (loading) return <div className="aspect-video animate-pulse rounded-lg" />;
+  if (error)
+    return <div className="text-red-500 p-4">Error loading images</div>;
+
   return (
-    <div
-      className="relative justify-center items-center w-full h-[300px] perspective-[50px] border  rounded-md shadow-lg "
-      onMouseEnter={stopAutoSlide}
-      onMouseLeave={startAutoSlide}
-    >
-      {/* Slider Wrapper */}
-      <div className="relative w-full h-full overflow-hidden">
+    <div className="flex w-full h-[40vh] overflow-hidden border-l-4 border-teal-600 rounded-xl">
+      <div
+        ref={sliderRef}
+        className="relative "
+        onMouseEnter={stopAutoSlide}
+        onMouseLeave={startAutoSlide}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        role="region"
+        aria-label="Image reel"
+      >
+        {/* Slides container */}
         <div
-          className="absolute inset-0 flex transition-transform duration-700"
+          className="flex"
           style={{
-            transform: `translateX(-${currentIndex * 100}%)`,
+            transform: `translateX(-${
+              (currentIndex * 100) / (isMobile ? 1 : VISIBLE_ITEMS)
+            }%)`,
+            transition: isAnimating
+              ? "transform 600ms cubic-bezier(0.4, 0, 0.2, 1)"
+              : "none",
+            willChange: "transform",
           }}
         >
-          {value.map((src, index) => (
-            <div
+          {allImages.map((slide, index) => {
+            const realIndex = index % imageSlider.length;
+            const isActive = currentIndex % imageSlider.length === realIndex;
+            return (
+              <div
+                key={`${slide.id}-${index}`}
+                className="relative flex-shrink-0"
+                style={{
+                  width: `calc(${100 / (isMobile ? 1 : VISIBLE_ITEMS)}%)`,
+                  transition: "all 600ms cubic-bezier(0.4, 0, 0.2, 1)",
+                }}
+                aria-hidden={!isActive}
+              >
+                <img
+                  src={slide.image}
+                  alt={`Slide ${realIndex + 1}`}
+                  className="w-full h-full object-contain "
+                  loading={index < VISIBLE_ITEMS ? "eager" : "lazy"}
+                  decoding="async"
+                />
+                {slide.caption && (
+                  <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-2 text-white text-center text-sm">
+                    {slide.caption}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Progress indicators */}
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
+          {imageSlider.map((_, index) => (
+            <button
               key={index}
-              className="min-w-full h-full transform transition-all duration-700  rounded-md shadow-lg"
-              style={{
-                transform: `rotateY(${(index - currentIndex) * 30}deg) scale(${
-                  index === currentIndex ? 1 : 0.9
-                })`,
-                zIndex: index === currentIndex ? 10 : 5,
-              }}
-            >
-              <img
-                src={src.image}
-                alt={`Slide ${index + 1}`}
-                className="w-full h-full object-cover rounded-md shadow-lg bg-blue-200 "
-              />
-            </div>
+              onClick={() => setCurrentIndex(imageSlider.length + index)}
+              className={`h-1 rounded-full transition-all duration-300 ${
+                currentIndex % imageSlider.length === index
+                  ? "bg-white w-6"
+                  : "bg-white/30 w-3"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
           ))}
         </div>
       </div>
-
-      {/* Navigation Buttons */}
-      <button
-        onClick={handlePrev}
-        className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full p-2"
-      >
-        ‹
-      </button>
-      <button
-        onClick={handleNext}
-        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full p-2"
-      >
-        ›
-      </button>
     </div>
   );
-}
+};
 
 export default React.memo(ImageSlider);

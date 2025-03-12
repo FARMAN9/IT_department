@@ -26,6 +26,7 @@ import ResearchArearouter from "./Routers/ResearchArearouter.js";
 import ResponseTimeRouter from "./Routers/Resppncetime.js";
 import DepartmentsLabrouter from "./Routers/DepartmentsLabrouter.js";
 import ProjectsRouter from "./Routers/Projectsrouter.js";
+import ResearchLabsRouter from "./Routers/ResearchLabrouter.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -109,6 +110,7 @@ app.use("/api", ResearchArearouter);
 app.use("/api", ResponseTimeRouter);
 app.use("/api", DepartmentsLabrouter);
 app.use("/api", ProjectsRouter);
+app.use("/api", ResearchLabsRouter);
 
 // Start the server
 app.listen(PORT, () => {

@@ -75,8 +75,18 @@ function Syllabus() {
     </div>
   );
 
-  if (loading) return <Loading />;
-  if (error) return <Errors error={error} />;
+  if (loading)
+    return (
+      <MainCard title="Syllabus">
+        <Loading />
+      </MainCard>
+    );
+  if (error)
+    return (
+      <MainCard title="Syllabus">
+        <Errors error={error} />
+      </MainCard>
+    );
 
   return (
     <>

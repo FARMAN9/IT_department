@@ -20,7 +20,7 @@ export async function asFiletoCloud(file) {
     const appwriteFile = await storage.createFile([BUCKET_ID], ID.unique(),file);
         
     
-    console.log(appwriteFile)
+  
     const fileUrl =`https://cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${appwriteFile.$id}/view?project=${PROJECT_ID}&project=${PROJECT_ID}&mode=admin`;
     return( {fileUrl,appwriteFile} )
 }

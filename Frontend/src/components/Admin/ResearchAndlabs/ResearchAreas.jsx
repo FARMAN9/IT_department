@@ -68,6 +68,9 @@ function ResearchAreas() {
     if (!uploadForm.description) {
       return toast.error("Description is required");
     }
+    if (!uploadForm.file) {
+      return toast.error("Image is required");
+    }
 
     const MAX_SIZE_MB = 5;
     if (uploadForm.file) {
@@ -382,7 +385,7 @@ function ResearchAreas() {
 
       {showEditModal && selectedArea && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+          <div className="bg-white rounded-lg p-6 lg:max-w-2xl w-full">
             <h3 className="text-lg font-bold mb-4">Edit Research Area</h3>
             <div className="space-y-4">
               <div>
@@ -401,7 +404,7 @@ function ResearchAreas() {
                   Description
                 </label>
                 <textarea
-                  className="w-full p-2 border rounded-md"
+                  className="w-full h-full p-2 border rounded-md"
                   value={editForm.description}
                   onChange={(e) =>
                     setEditForm({ ...editForm, description: e.target.value })
@@ -533,8 +536,10 @@ function ResearchAreas() {
                           <td className="py-3 px-4 font-medium text-sm break-all text-justify">
                             {item.name}
                           </td>
-                          <td className="py-3 px-4 max-w-xs break-all overflow-hidden">
-                            {item.description}
+                          <td className="py-3 px-4 max-w-xs ">
+                            <div className="max-w-auto  overflow-y-auto h-96 text-justify  ">
+                              {item.description}
+                            </div>
                           </td>
                           <td className="py-3 px-4">{item.location}</td>
                           <td className="py-3 px-4 flex justify-center gap-2">

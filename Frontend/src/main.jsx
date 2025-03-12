@@ -55,6 +55,7 @@ import ResearchAreaAdmin from "./components/Admin/ResearchAndLabs/ResearchAreas.
 import DepartmentsLabs from "./components/Admin/ResearchAndlabs/DepartmentsLabs.jsx";
 import ResearchLabsAdmin from "./components/Admin/ResearchAndlabs/ResearchLabs.jsx";
 import ProjectsAdmin from "./components/Admin/ResearchAndlabs/Projects.jsx";
+import LabDetails from "./components/ResearchAndLabs/LabDetails.jsx";
 
 const router = createBrowserRouter([
   {
@@ -160,6 +161,10 @@ const router = createBrowserRouter([
       {
         path: "/people/:id",
         element: <PersonDetials />,
+      },
+      {
+        path: "/labs/lab-details/:id",
+        element: <LabDetails />,
       },
       {
         path: "/login",

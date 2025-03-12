@@ -1,7 +1,9 @@
+/* eslint-disable react/jsx-key */
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchResearchAreasData } from "../../Features/ResearchAreaSlice";
 import { HiChevronLeft, HiChevronRight, HiSearch } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 import MainCard from "../Activites/MainCard";
 import LabCard from "../Activites/LabCard";
@@ -40,8 +42,18 @@ function ResearchAreas() {
 
   // Mobile Card Component
 
-  if (loading) return <Loading />;
-  if (error) return <Errors error={error} />;
+  if (loading)
+    return (
+      <MainCard title="Research Areas">
+        <Loading />
+      </MainCard>
+    );
+  if (error)
+    return (
+      <MainCard title="Research Areas">
+        <Errors error={error} />
+      </MainCard>
+    );
 
   return (
     <>
@@ -84,7 +96,22 @@ function ResearchAreas() {
                 {/* Desktop Table */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
                   {currentRows.map((item) => (
-                    <LabCard key={item._id} item={item} />
+                    <Link key={item._id}
+                      to={`/labs/lab-details/${encodeURIComponent(
+                        JSON.stringify(item)
+                      )}`}
+                      replace
+                      state={{
+                        name: item.name,
+                        description: item.description,
+                        location: item.location,
+                      lab_manual: item.lab_manual,
+                        updatedAt: item.updatedAt,
+                        image: item.image,
+                      }}
+                    >
+                      <LabCard key={item._id} item={item} />
+                    </Link>
                   ))}
                 </div>
 
