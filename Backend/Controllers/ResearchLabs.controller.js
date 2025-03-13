@@ -1,10 +1,10 @@
-import ResearchLabsModel from "../Models/ResearchLabsModel.js";
+import ResearchlabsModel from "../Models/ResearchlabsModel.js";
 
 import { asFiletoCloud } from "../Utility/Utility.js";
 
 export const GetAllResearchLabs = async (req, res) => {
   try {
-    const ResearchLabs = await ResearchLabsModel.find({}).sort(
+    const ResearchLabs = await ResearchlabsModel.find({}).sort(
       { createdAt: -1 } || { updatedAt: -1 }
     );
     res.status(200).json({
@@ -27,7 +27,7 @@ export const PostResearchLabs = async (req, res) => {
     });
     const { fileUrl, appwriteFile } = await asFiletoCloud(file);
 
-    const newResearchLabs = await ResearchLabsModel.create({
+    const newResearchLabs = await ResearchlabsModel.create({
       name: req.body.name,
       description: req.body.description,
       image: fileUrl,
@@ -46,7 +46,7 @@ export const PostResearchLabs = async (req, res) => {
 
 export const UpdateResearchLabs = async (req, res) => {
   try {
-    const updatedResearchLabs = await ResearchLabsModel.findByIdAndUpdate(
+    const updatedResearchLabs = await ResearchlabsModel.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
@@ -75,7 +75,7 @@ export const UpdateResearchLabs = async (req, res) => {
 
 export const DeleteResearchLabs = async (req, res) => {
   try {
-    const deletedResearchLabs = await ResearchLabsModel.findByIdAndDelete(
+    const deletedResearchLabs = await ResearchlabsModel.findByIdAndDelete(
       req.params.id
     );
     if (!deletedResearchLabs) {
@@ -93,7 +93,7 @@ export const DeleteResearchLabs = async (req, res) => {
 
 export const removeResearchLabsImage = async (req, res) => {
   try {
-    const updatedResearchLabs = await ResearchLabsModel.findByIdAndUpdate(
+    const updatedResearchLabs = await ResearchlabsModel.findByIdAndUpdate(
       req.params.id,
       { image: "" },
       { new: true }
@@ -119,7 +119,7 @@ export const putResearchLabsManual = async (req, res) => {
       type: req.file.mimetype,
     });
     const { fileUrl, appwriteFile } = await asFiletoCloud(file);
-    const updatedLabManual = await ResearchLabsModel.findByIdAndUpdate(
+    const updatedLabManual = await ResearchlabsModel.findByIdAndUpdate(
       req.params.id,
       { lab_manual: fileUrl },
       { new: true }
@@ -138,7 +138,7 @@ export const putResearchLabsManual = async (req, res) => {
 
 export const removeResearchLabsManual = async (req, res) => {
   try {
-    const updatedResearchLabsManual = await ResearchLabsModel.findByIdAndUpdate(
+    const updatedResearchLabsManual = await ResearchlabsModel.findByIdAndUpdate(
       req.params.id,
       { lab_manual: "" },
       { new: true }
