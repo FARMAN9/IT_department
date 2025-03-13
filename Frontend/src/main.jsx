@@ -1,7 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Main from "./components/Main/main.jsx";
 import Layout from "./Layouts/Layout.jsx";
@@ -51,7 +50,7 @@ import AdminPhdScholars from "./components/Admin/People/PhdScholars.jsx";
 import AdminStaff from "./components/Admin/People/Staffs.jsx";
 import TopPlacements from "./components/Admin/People/TopPlacements.jsx";
 import TopPlacementCard from "./components/Placements/TopPlacementCard.jsx";
-import ResearchAreaAdmin from "./components/Admin/ResearchAndLabs/ResearchAreas.jsx";
+import ResearchAreaAdmin from "./components/Admin/ResearchAndLabs/ResearchAreas";
 import DepartmentsLabs from "./components/Admin/ResearchAndlabs/DepartmentsLabs.jsx";
 import ResearchLabsAdmin from "./components/Admin/ResearchAndlabs/ResearchLabs.jsx";
 import ProjectsAdmin from "./components/Admin/ResearchAndlabs/Projects.jsx";
