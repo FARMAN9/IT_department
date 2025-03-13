@@ -25,7 +25,6 @@ dist-ssr
 *.sw?
 Frontend/.env
 Backend/.env
-
 Frontend/node_modules
 Backend/node_modules
 .qodo
