@@ -8,7 +8,7 @@ router.get("/getPhdScholars",GetPhdscholars);
 router.delete("/deletePhdScholars/:id", DeletePhdscholars );
 router.put("/updatePhdScholars/:id", handleUpload, UpdatePhdscholars);
 router.put("/removePhdscholarsImage/:id", removePhdscholarsImage);
-
+//update phd scholars
 
 
 export default router;
