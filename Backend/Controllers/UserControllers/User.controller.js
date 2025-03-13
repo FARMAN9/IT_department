@@ -7,7 +7,7 @@ import { asFiletoCloud } from "../../Utility/Utility.js";
 
 export const signUpForUsers = async (req, res) => {
     try {
-        const { name, email, password, designation, mobile } = req.body;
+        const { name, email, password, designation } = req.body;
         const user = await UserModel.findOne({ email });
         if (user) {
             return res.status(400).json({ message: "User already exists" });
@@ -21,8 +21,7 @@ export const signUpForUsers = async (req, res) => {
             email,
             password: hashedPassword,
             role:'user',
-            designation,
-            mobile
+            designation
         });
         if (req.file) {
             const {fileUrl,appwriteFile} = await asFiletoCloud(new File([req.file.buffer], req.file.originalname, {
@@ -158,3 +157,35 @@ export const logout = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
+
+export const getFaculty = async (req, res) => {
+    try {
+        const users = await UserModel.find({ role: 'user' });
+        res.status(200).json({
+            success: true,
+            data: users,
+            message: "Faculty fetched successfully"
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+export const getAdmin = async (req, res) => {
+    try {
+        const users = await UserModel.find({ role: 'Admin' });
+        res.status(200).json({
+            success: true,
+            data: users,
+            message: "Admin fetched successfully"
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message });
+    }
+};
+

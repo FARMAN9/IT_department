@@ -78,11 +78,7 @@ const Layout = () => {
           label: "Department Information",
           link: "/admin/department-information",
         },
-        {
-          label: "Hod Information",
-          link: "/admin/hod-info",
-        },
-
+        
         { label: "About Us", link: "/admin/contact-us" },
         { label: "Our Mission", link: "/" },
         { label: "Our Vision", link: "/admin/vision" },
@@ -131,7 +127,7 @@ const Layout = () => {
       id: "people",
       link: "/people",
       submenu: [
-        { label: "Faculty", link: "/people/faculty" },
+        { label: "Faculty", link: "/admin/people/faculty" },
         { label: "PhD Scholars", link: "/admin/academic/phd-scholars" },
         { label: "Students", link: "/admin/academic/students" },
         { label: "Alumni", link: "YHIOYHOI" },
