@@ -37,12 +37,14 @@ function AcademicCord() {
     batch: "",
     semester: "",
     coordinators: "",
+    type : "",
     session: "",
   });
   const [editForm, setEditForm] = useState({
     programme: "",
     batch: "",
     semester: "",
+    type : "",
     coordinators: "",
     session: "",
   });
@@ -68,7 +70,8 @@ function AcademicCord() {
       !uploadForm.batch ||
       !uploadForm.semester ||
       !uploadForm.coordinators ||
-      !uploadForm.session
+      !uploadForm.session||
+      !uploadForm.name
     ) {
       return toast.error("Please fill all required fields");
     }
@@ -79,6 +82,7 @@ function AcademicCord() {
     formData.append("Semester", uploadForm.semester);
     formData.append("Coordinators", uploadForm.coordinators);
     formData.append("Session", uploadForm.session);
+    formData.append("Name", uploadForm.name);
     // Ensure the file is included
 
     try {
@@ -104,9 +108,10 @@ function AcademicCord() {
         programme: "",
         batch: "",
         semester: "",
-
+        type : "",
         coordinators: "",
         session: "",
+        name: ""
       });
 
       toast.dismiss(loadingToast);
@@ -128,6 +133,7 @@ function AcademicCord() {
     formData.append("Semester", editForm.semester);
     formData.append("Coordinators", editForm.coordinators);
     formData.append("Session", editForm.session);
+    formData.append("Name", editForm.name);
 
     try {
       const loadingToast = toast.loading("Updating Academic Coordinator...");
@@ -149,6 +155,7 @@ function AcademicCord() {
         programme: "",
         batch: "",
         semester: "",
+        name : "",
         coordinators: "",
         session: "",
       });
@@ -203,17 +210,24 @@ function AcademicCord() {
 
   // Mobile Card Component
   const MobileCard = ({ item }) => (
-    <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-teal-600 mb-3">
+    <div className="bg-white p-1 rounded-lg shadow-sm  border-l-4 border-teal-600 ">
       <div className="space-y-2">
         <div className="flex justify-between items-start">
           <h3 className="font-semibold text-gray-800">{item.Programe}</h3>
+          <span className="text-sm bg-gray-400 rounded-md p-1 text-black">
+            Created: {new Date(item.createdAt).toLocaleString()} <br />
+            Updated: {new Date(item.updatedAt).toLocaleString()}
+          </span>
         </div>
-        <span className="text-sm text-teal-800 flex-wrap rounded">
+        <span className="text-sm text-teal-800 flex-wrap rounded p-2">
           Batch : {item.Batch} <br />
           Semester : {item.Semester}
           <br />
           Session : {item.Session} <br />
-          Coordinator : {item.Coordinators}
+        
+          Coordinators (type) : {item.Coordinators}
+          <br />
+          Name : {item.Name}
         </span>
         <div className="mt-2 flex justify-between items-center">
           <div className="flex items-end gap-2">
@@ -221,11 +235,13 @@ function AcademicCord() {
               onClick={() => {
                 setSelectedAcademicCoordinator(item);
                 setEditForm({
-                  programme: item.Programme,
+                  programme: item.Programe,
                   batch: item.Batch,
                   semester: item.Semester,
-                  coordinators: item.Coordinators,
                   session: item.Session,
+                  coordinators: item.Coordinators,
+                  name: item.Name
+                  
                 });
                 setShowEditModal(true);
               }}
@@ -248,8 +264,8 @@ function AcademicCord() {
     </div>
   );
 
-  if (loading) return <Loading />;
-  if (error) return <Errors error={error} />;
+  if (loading) return <MainCard title="academic coordinators" ><Loading /></MainCard>;
+  if (error) return <MainCard title="academic coordinators" ><Errors error={error} /></MainCard>;
 
   return (
     <>
@@ -336,16 +352,29 @@ function AcademicCord() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Coordinator
+                  Coordinators <span className="text-sm  bold bg-gray-400 rounded-md p-1 text-black">Type</span>
                 </label>
                 <input
                   type="text"
                   className="w-full p-2 border rounded-md"
                   value={uploadForm.coordinators}
                   onChange={(e) =>
+                    setUploadForm({ ...uploadForm, coordinators: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded-md"
+                  value={uploadForm.name}
+                  onChange={(e) =>
                     setUploadForm({
                       ...uploadForm,
-                      coordinators: e.target.value,
+                      name: e.target.value,
                     })
                   }
                 />
@@ -427,7 +456,7 @@ function AcademicCord() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Coordinator
+                Coordinators <span className="text-sm  bold bg-gray-400 rounded-md p-1 text-black">Type</span>
                 </label>
                 <input
                   type="text"
@@ -435,6 +464,19 @@ function AcademicCord() {
                   value={editForm.coordinators}
                   onChange={(e) =>
                     setEditForm({ ...editForm, coordinators: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded-md"
+                  value={editForm.name}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, name: e.target.value })
                   }
                 />
               </div>
@@ -454,7 +496,7 @@ function AcademicCord() {
         </div>
       )}
 
-      <MainCard title="Academic Coordinator">
+      <MainCard title="Academic Coordinators">
         <div className="min-h-auto flex m-0">
           <main className="flex-1">
             <div className="mx-auto">
@@ -502,7 +544,7 @@ function AcademicCord() {
                     className="btn btn-sm btn-warning rounded-lg"
                   >
                     <HiPencil className="w-5 h-5" />
-                    Upload New
+                    Add New Academic Coordinator
                   </button>
                 </div>
 
@@ -511,6 +553,9 @@ function AcademicCord() {
                   <table className="min-w-full">
                     <thead className="bg-gray-50">
                       <tr>
+                      <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
+                          Date
+                        </th>
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
                           Programme
                         </th>
@@ -525,7 +570,10 @@ function AcademicCord() {
                           Session
                         </th>
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          Coordinator
+                          Coordinators <span className="text-sm  bold bg-gray-400 rounded-md p-1 text-black">Type</span>
+                        </th>
+                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
+                          Name
                         </th>
                         <th className="py-3 px-4 text-center text-sm font-medium text-gray-700 uppercase">
                           Actions
@@ -535,21 +583,32 @@ function AcademicCord() {
                     <tbody className="divide-y divide-gray-200">
                       {currentRows.map((item, index) => (
                         <tr key={index} className="hover:bg-gray-50">
+                          <td className="py-3 px-4 text-gray-900 flex flex-col">
+                           
+                            <span className="text-md  bold bg-gray-400 rounded-md p-1 text-black"> Created At: {new Date(item.createdAt).toLocaleString()}</span>
+                            <br className="m-1" />
+                            <span className="text-md  bold bg-gray-400 rounded-md p-1 text-black"> Updated At: {new Date(item.updatedAt).toLocaleString()}</span>
+
+                          </td>
+                          
                           <td className="py-3 px-4 text-gray-900">
                             {item.Programe}
                           </td>
                           <td className="py-3 px-4 text-gray-900">
-                            Batch {item.Batch}
+                            {item.Batch}
                           </td>
 
                           <td className="py-3 px-4 text-gray-900">
-                            Semester {item.Semester}
+                            {item.Semester}
                           </td>
                           <td className="py-3 px-4 text-gray-900">
-                            Session {item.Session}
+                            {item.Session}
                           </td>
                           <td className="py-3 px-4 text-gray-900">
-                            coordinator {item.Coordinators}
+                            {item.Coordinators}
+                          </td>
+                          <td className="py-3 px-4 text-gray-900">
+                            {item.Name}
                           </td>
                           <td className="py-3 px-4 text-center flex justify-center items-center gap-4">
                             <button
@@ -561,6 +620,7 @@ function AcademicCord() {
                                   semester: item.Semester,
                                   session: item.Session,
                                   coordinators: item.Coordinators,
+                                  name: item.Name
                                 });
                                 setShowEditModal(true);
                               }}
@@ -585,7 +645,7 @@ function AcademicCord() {
                 </div>
 
                 {/* Mobile Cards */}
-                <div className="md:hidden space-y-3">
+                <div className="md:hidden space-y-3 *:">
                   {currentRows.map((item, index) => (
                     <MobileCard key={index} item={item} />
                   ))}

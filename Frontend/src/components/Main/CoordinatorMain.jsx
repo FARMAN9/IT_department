@@ -73,6 +73,8 @@ function AcademicCord() {
           <br />
           Session : {item.Session} <br />
           Coordinator : {item.Coordinators}
+          <br />
+          Name : {item.Name}
         </span>
         <div className="mt-2 flex justify-between items-center"></div>
       </div>
@@ -81,13 +83,13 @@ function AcademicCord() {
 
   if (loading)
     return (
-      <MainCard title="Academic Coordinator">
+      <MainCard title="Academic Coordinators">
         <Loading />
       </MainCard>
     );
   if (error)
     return (
-      <MainCard title="Academic Coordinator">
+      <MainCard title="Academic Coordinators">
         <Errors error={error} />
       </MainCard>
     );
@@ -96,7 +98,7 @@ function AcademicCord() {
     <>
       {/* Edit Modal */}
 
-      <MainCard title="Academic Coordinator">
+      <MainCard title="Academic Coordinators">
         <div className="min-h-auto flex m-0">
           <main className="flex-1">
             <div className="mx-auto">
@@ -145,7 +147,10 @@ function AcademicCord() {
                 <div className="hidden md:block overflow-x-auto rounded-lg border">
                   <table className="min-w-full">
                     <thead className="bg-gray-50">
+
                       <tr>
+
+
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
                           Programme
                         </th>
@@ -162,6 +167,9 @@ function AcademicCord() {
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
                           Coordinator
                         </th>
+                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
+                          Name
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -171,17 +179,20 @@ function AcademicCord() {
                             {item.Programe}
                           </td>
                           <td className="py-3 px-4 text-gray-900">
-                            Batch {item.Batch}
+                            {item.Batch}
                           </td>
 
                           <td className="py-3 px-4 text-gray-900">
-                            Semester {item.Semester}
+                            {item.Semester}
                           </td>
                           <td className="py-3 px-4 text-gray-900">
-                            Session {item.Session}
+                            {item.Session}
                           </td>
                           <td className="py-3 px-4 text-gray-900">
-                            coordinator {item.Coordinators}
+                            {item.Coordinators}
+                          </td>
+                          <td className="py-3 px-4 text-gray-900">
+                            {item.Name}
                           </td>
                         </tr>
                       ))}

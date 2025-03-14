@@ -18,6 +18,7 @@ import DepartmentsLabsSlice from '../Features/DepartmentsLabsSlice'
 import ResearchLabsSlice from '../Features/ResearchLabsSlice'
 import FacultySlice from '../Features/UserSlice'
 import AdminSlice from '../Features/AdminSlice'
+import ActivitiesAndStudentNotificationsSlice from '../Features/ActivitiesAndStudentNotificationsSlice'
 
 export const store = configureStore({
   reducer: {
@@ -39,7 +40,8 @@ export const store = configureStore({
     DepartmentsLabsData: DepartmentsLabsSlice,
     ResearchLabsData: ResearchLabsSlice,
     FacultyData: FacultySlice,
-    AdminData: AdminSlice
+    AdminData: AdminSlice,
+    ActivitiesAndStudentNotificationsData: ActivitiesAndStudentNotificationsSlice
 
   }
 })

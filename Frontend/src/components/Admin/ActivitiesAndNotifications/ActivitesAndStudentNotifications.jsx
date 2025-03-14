@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchResearchAreasData } from "../../../Features/ResearchAreaSlice";
+import { fetchActivitiesAndStudentNotificationsData } from "../../../Features/ActivitiesAndStudentNotificationsSlice";
 import {
   HiChevronLeft,
   HiChevronRight,
@@ -15,10 +15,10 @@ import MainCard from "../../Activites/MainCard";
 import Loading from "../../UtilityCompoments/Loading";
 import Errors from "../../UtilityCompoments/Errors";
 
-function ResearchAreas() {
+function ActivitesAndStudentNotifications() {
   const dispatch = useDispatch();
-  const { researchAreas, loading, error } = useSelector(
-    (state) => state.ResearchAreaData
+  const {ActivitiesAndStudentNotifications, loading, error } = useSelector(
+    (state) => state.ActivitiesAndStudentNotificationsData
   );
 
   // State Management
@@ -28,135 +28,176 @@ function ResearchAreas() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showRemoveImageModal, setShowRemoveImageModal] = useState(false);
   const [selectedArea, setSelectedArea] = useState(null);
 
   // Form States
   const [uploadForm, setUploadForm] = useState({
     name: "",
-    description: "",
-    location: "",
+    link: "",
     file: null,
   });
   const [editForm, setEditForm] = useState({
     name: "",
-    description: "",
-    location: "",
+    link: "",
     file: null,
   });
 
   // Fetch data on mount
   useEffect(() => {
-    dispatch(fetchResearchAreasData());
+    dispatch(fetchActivitiesAndStudentNotificationsData());
   }, [dispatch]);
 
   // Error handling
   const handleApiError = (err, action) => {
     const errorMessage =
-      err.response?.error || err.error || `${action} failed. Please try again.`;
+      err.response?.error || err.error || err.response?.data?.message || `${action} failed. Please try again.`;
     toast.error(errorMessage);
   };
-
   // Upload Handler
   const handleUpload = async () => {
     if (!uploadForm.name) {
       return toast.error("Name is required");
     }
-    if (!uploadForm.location) {
-      return toast.error("Location is required");
+    if (!uploadForm.link && !uploadForm.file) {
+      return toast.error("Link or file is required");
     }
-    if (!uploadForm.description) {
-      return toast.error("Description is required");
-    }
-    if (!uploadForm.file) {
-      return toast.error("Image is required");
-    }
-
     const MAX_SIZE_MB = 5;
     if (uploadForm.file) {
-      if (!uploadForm.file.type.startsWith("image/")) {
-        setUploadForm({ ...uploadForm, file: null });
-        return toast.error("Please upload an image file (JPEG, PNG, etc.)");
-      }
       if (uploadForm.file.size > MAX_SIZE_MB * 1024 * 1024) {
         setUploadForm({ ...uploadForm, file: null });
         return toast.error(`File size exceeds ${MAX_SIZE_MB}MB limit`);
       }
+      const formData = new FormData();
+      formData.append("name", uploadForm.name);
+      formData.append("file", uploadForm.file);
+      try {
+        const loadingToast = toast.loading("Uploading Activities and Student Notifications...");
+        await axios.post(
+          "http://localhost:4000/api/uploadActivitiesAndStudentsNotifications",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        await dispatch(fetchActivitiesAndStudentNotificationsData());
+        toast.success("Activities and Student Notifications uploaded successfully!");
+        setShowUploadModal(false);
+        setUploadForm({
+          name: "",
+          link: "",
+          file: null,
+        });
+        toast.dismiss(loadingToast);
+      } catch (err) {
+        handleApiError(err, "Upload");
+      }
+      
+
     }
-
-    const formData = new FormData();
-    formData.append("name", uploadForm.name);
-    formData.append("description", uploadForm.description);
-    formData.append("location", uploadForm.location);
-    formData.append("image", uploadForm.file || "");
-
-    try {
-      const loadingToast = toast.loading("Uploading research area...");
-      await axios.post(
-        "http://localhost:4000/api/uploadResearchAreas",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      await dispatch(fetchResearchAreasData());
-      toast.success("Research area uploaded successfully!");
-      setShowUploadModal(false);
-      setUploadForm({
-        name: "",
-        description: "",
-        location: "",
-        file: null,
-      });
-      toast.dismiss(loadingToast);
-    } catch (err) {
-      handleApiError(err, "Upload");
+    if (uploadForm.link) {
+      const formData = new FormData();
+      formData.append("name", uploadForm.name);
+      formData.append("link", uploadForm.link);
+      try {
+        const loadingToast = toast.loading("Uploading Activities and Student Notifications...");
+        await axios.post(
+          "http://localhost:4000/api/uploadActivitiesAndStudentsNotifications",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        await dispatch(fetchActivitiesAndStudentNotificationsData());
+        toast.success("Activities and Student Notifications uploaded successfully!");
+        setShowUploadModal(false);
+        setUploadForm({
+          name: "",
+          link: "",
+          file: null,
+        });
+        toast.dismiss(loadingToast);
+      } catch (err) {
+        handleApiError(err, "Upload");
+      }
     }
   };
 
   // Update Handler
   const handleUpdate = async () => {
+    try {
     const MAX_SIZE_MB = 5;
     if (editForm.file) {
-      if (!editForm.file.type.startsWith("image/")) {
-        setEditForm({ ...editForm, file: null });
-        return toast.error("Please upload an image file (JPEG, PNG, etc.)");
-      }
       if (editForm.file.size > MAX_SIZE_MB * 1024 * 1024) {
         setEditForm({ ...editForm, file: null });
         return toast.error(`File size exceeds ${MAX_SIZE_MB}MB limit`);
       }
+      const formData = new FormData();
+      formData.append("name", editForm.name || "");
+      formData.append("file", editForm.file);
+      try {
+        const loadingToast = toast.loading("Updating Activities and Student Notifications...");
+        await axios.put(
+          `http://localhost:4000/api/updateActivitiesAndStudentsNotifications/${selectedArea._id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        await dispatch(fetchActivitiesAndStudentNotificationsData());
+        toast.success("Activities and Student Notifications updated successfully!");
+        setShowEditModal(false);
+        setEditForm({
+          name: "",
+          link: "",
+          file: null,
+        });
+        toast.dismiss(loadingToast);
+      } catch (err) {
+        handleApiError(err, "Update");
+      }
     }
-    const formData = new FormData();
-    formData.append("name", editForm.name);
-    formData.append("description", editForm.description);
-    formData.append("location", editForm.location);
-    if (editForm.file) formData.append("image", editForm.file);
-
-    try {
-      const loadingToast = toast.loading("Updating research area...");
-      await axios.put(
-        `http://localhost:4000/api/updateResearchAreas/${selectedArea._id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      await dispatch(fetchResearchAreasData());
-      toast.success("Research area updated successfully!");
-      setShowEditModal(false);
-      toast.dismiss(loadingToast);
-    } catch (err) {
-      handleApiError(err, "Update");
+    if (editForm.link) {
+      const formData = new FormData();
+      formData.append("name", editForm.name || "");
+      formData.append("link", editForm.link);
+      try {
+        const loadingToast = toast.loading("Updating Activities and Student Notifications...");
+        await axios.put(
+          `http://localhost:4000/api/updateActivitiesAndStudentsNotifications/${selectedArea._id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        await dispatch(fetchActivitiesAndStudentNotificationsData());
+        toast.success("Activities and Student Notifications updated successfully!");
+        setShowEditModal(false);
+        setEditForm({
+          name: "",
+          link: "",
+          file: null,
+        });
+        toast.dismiss(loadingToast);
+      } catch (err) {
+        handleApiError(err, "Update");
+      }
     }
+  } catch (err) {
+    handleApiError(err, "Update");
+  }
+ 
   };
 
   // Delete Handler
@@ -164,7 +205,7 @@ function ResearchAreas() {
     try {
       const loadingToast = toast.loading("Deleting research area...");
       await axios.delete(
-        `http://localhost:4000/api/deleteResearchAreas/${selectedArea._id}`,
+        `http://localhost:4000/api/deleteActivitiesAndStudentsNotifications/${selectedArea._id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -172,8 +213,8 @@ function ResearchAreas() {
         }
       );
 
-      await dispatch(fetchResearchAreasData());
-      toast.success("Research area deleted successfully!");
+      await dispatch(fetchActivitiesAndStudentNotificationsData());
+      toast.success("Deleted Activities and Student Notifications successfully!");
       setShowDeleteModal(false);
       setSelectedArea(null);
       toast.dismiss(loadingToast);
@@ -182,36 +223,17 @@ function ResearchAreas() {
     }
   };
 
-  const handleRemoveImage = async () => {
-    try {
-      const loadingToast = toast.loading("Removing image...");
-      await axios.put(
-        `http://localhost:4000/api/removeResearchAreasImage/${selectedArea._id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      await dispatch(fetchResearchAreasData());
-      toast.success("Image removed successfully!");
-      setShowRemoveImageModal(false);
-      toast.dismiss(loadingToast);
-    } catch (err) {
-      handleApiError(err, "Remove Image");
-    }
-  };
+
 
   // Search and Pagination
   const filteredAreas = useMemo(() => {
     const lowerSearch = search.toLowerCase();
-    return researchAreas.filter((item) =>
+    return ActivitiesAndStudentNotifications.filter((item) =>
       Object.values(item).some((value) =>
         value?.toString().toLowerCase().includes(lowerSearch)
       )
     );
-  }, [search, researchAreas]);
+  }, [search, ActivitiesAndStudentNotifications]);
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -219,20 +241,16 @@ function ResearchAreas() {
   const currentRows = filteredAreas.slice(indexOfFirstRow, indexOfLastRow);
 
   // Mobile Card Component
+  // eslint-disable-next-line react/prop-types
   const MobileCard = ({ item }) => (
     <div className="card bg-base-100 max-w-xs shadow-xl">
-      <figure className="px-10 pt-10">
-        <img
-          src={item.image}
-          alt={item.name}
-          className="w-60 h-60 rounded-md object-cover border-2 border-teal-600 border-dashed"
-        />
-      </figure>
-      <div className="card-body items-center text-center">
-        <h2 className="card-title">{item.name}</h2>
-        <div className="text-sm">
-          <p className="font-semibold">Location: {item.location || "N/A"}</p>
-          <p className="mt-2">{item.description || "N/A"}</p>
+      <div className="card-body items-center">
+        <a className="font-semibold text-sm text-gray-700 text-decoration-none text-justify" href={item.link} target="_blank" rel="noopener noreferrer">{item.name}</a>
+        
+        <div className="text-sm text-justify ">
+         
+          <p className="text-justify"> Created At: {item.createdAt} </p>
+          <p className="text-justify"> Updated At: {item.updatedAt} </p>
         </div>
         <div className="card-actions mt-4">
           <button
@@ -241,62 +259,35 @@ function ResearchAreas() {
               setEditForm({ ...item, file: null });
               setShowEditModal(true);
             }}
-            className="btn btn-sm btn-warning"
+            className="btn btn-sm btn-warning rounded-lg"
           >
-            <HiPencil className="w-4 h-4" />
+            <HiPencil size={20} />
           </button>
           <button
             onClick={() => {
               setSelectedArea(item);
               setShowDeleteModal(true);
             }}
-            className="btn btn-sm btn-error"
+            className="btn btn-sm btn-error rounded-lg"
           >
-            <HiTrash className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => {
-              setSelectedArea(item);
-              setShowRemoveImageModal(true);
-            }}
-            className="btn btn-sm btn-info"
-          >
-            <MdImageNotSupported className="w-4 h-4" />
+            <HiTrash size={20} />
           </button>
         </div>
       </div>
     </div>
   );
 
-  if (loading) return <Loading />;
-  if (error) return <Errors error={error} />;
+  if (loading) return <MainCard title="Activities and Student Notifications"><Loading /></MainCard>;
+  if (error) return <MainCard title="Activities and Student Notifications"><Errors error={error} /></MainCard>;
 
   return (
     <>
       {/* Modals */}
-      {showRemoveImageModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-6 max-w-sm w-full">
-            <h3 className="text-lg font-bold mb-4">Confirm Image Removal</h3>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setShowRemoveImageModal(false)}
-                className="btn btn-ghost"
-              >
-                Cancel
-              </button>
-              <button onClick={handleRemoveImage} className="btn btn-error">
-                Remove Image
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg p-6 max-w-sm w-full">
-            <h3 className="text-lg font-bold mb-4">Confirm Delete</h3>
+            <h3 className="text-lg font-bold mb-4">Confirm Delete Activities and Student Notifications</h3>
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
@@ -315,7 +306,7 @@ function ResearchAreas() {
       {showUploadModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-lg font-bold mb-4">Add New Research Area</h3>
+            <h3 className="text-lg font-bold mb-4">Add New Activities and Student Notifications </h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Name</label>
@@ -328,43 +319,34 @@ function ResearchAreas() {
                   }
                 />
               </div>
+
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Description
+                  Link
                 </label>
-                <textarea
+                <input
+                  type="url"
                   className="w-full p-2 border rounded-md"
-                  value={uploadForm.description}
+                  value={uploadForm.link}
                   onChange={(e) =>
                     setUploadForm({
                       ...uploadForm,
-                      description: e.target.value,
+                      link: e.target.value,
                     })
                   }
                 />
               </div>
+              <div className="divider">OR</div>
+
               <div>
-                <label className="block text-sm font-medium mb-1">
-                  Location
-                </label>
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded-md"
-                  value={uploadForm.location}
-                  onChange={(e) =>
-                    setUploadForm({ ...uploadForm, location: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Image</label>
+                <label className="block text-sm font-medium mb-1">File</label>
                 <input
                   type="file"
                   className="file-input file-input-bordered w-full"
                   onChange={(e) =>
                     setUploadForm({ ...uploadForm, file: e.target.files[0] })
                   }
-                  accept="image/*"
+                  accept=".pdf,.xlsx,.xls,.csv,.jpg,.jpeg,.png,.webp,.svg"
                 />
               </div>
               <div className="flex justify-end gap-3 mt-4">
@@ -386,7 +368,7 @@ function ResearchAreas() {
       {showEditModal && selectedArea && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex z-50 items-center justify-center p-4">
           <div className="bg-white rounded-lg p-6 lg:max-w-2xl w-full">
-            <h3 className="text-lg font-bold mb-4">Edit Research Area</h3>
+            <h3 className="text-lg font-bold mb-4">Edit Activities and Student Notifications</h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Name</label>
@@ -399,47 +381,32 @@ function ResearchAreas() {
                   }
                 />
               </div>
+
+
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Description
-                </label>
-                <textarea
-                  className="w-full h-full p-2 border rounded-md"
-                  value={editForm.description}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, description: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Location
+                  Link
                 </label>
                 <input
-                  type="text"
+                  type="url"
                   className="w-full p-2 border rounded-md"
-                  value={editForm.location}
+                  value={editForm.link}
                   onChange={(e) =>
-                    setEditForm({ ...editForm, location: e.target.value })
+                    setEditForm({ ...editForm, link: e.target.value })
                   }
+                  accept=".pdf,.xlsx,.xls,.csv,.jpg,.jpeg,.png,.webp,.svg"
                 />
               </div>
+              <div className="divider">OR</div>
               <div>
-                <label className="block text-sm font-medium mb-1">Image</label>
-                {selectedArea.image && (
-                  <img
-                    src={selectedArea.image}
-                    alt="Current"
-                    className="w-full h-32 object-cover mb-2"
-                  />
-                )}
+                <label className="block text-sm font-medium mb-1">File</label>
                 <input
                   type="file"
                   className="file-input file-input-bordered w-full"
                   onChange={(e) =>
                     setEditForm({ ...editForm, file: e.target.files[0] })
                   }
-                  accept="image/*"
+                   accept=".pdf,.xlsx,.xls,.csv,.jpg,.jpeg,.png,.webp,.svg"
                 />
               </div>
               <div className="flex justify-end gap-3 mt-4">
@@ -458,7 +425,7 @@ function ResearchAreas() {
         </div>
       )}
 
-      <MainCard title="Research Areas">
+      <MainCard title="Activities and Student Notifications">
         <div className="min-h-auto flex m-0">
           <main className="flex-1">
             <div className="mx-auto">
@@ -497,7 +464,7 @@ function ResearchAreas() {
                     className="btn btn-sm btn-warning rounded-lg"
                   >
                     <HiPencil className="w-5 h-5" />
-                    Add New Area
+                    Add new Activities and Student Notifications
                   </button>
                 </div>
 
@@ -507,16 +474,13 @@ function ResearchAreas() {
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          Image
+                          Date
                         </th>
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
                           Name
                         </th>
                         <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          Description
-                        </th>
-                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 uppercase">
-                          Location
+                          Link
                         </th>
                         <th className="py-3 px-4 text-center text-sm font-medium text-gray-700 uppercase">
                           Actions
@@ -526,22 +490,33 @@ function ResearchAreas() {
                     <tbody className="divide-y divide-gray-200">
                       {currentRows.map((item) => (
                         <tr key={item._id} className="hover:bg-gray-50">
-                          <td className="py-3 px-4">
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="w-90 h-60 rounded-md object-fit border-2 border-teal-600 border-dashed break-all "
-                            />
+                          <td className="py-3 px-4  font-medium text-sm text-justify">
+                            <span className="block">Created At:</span>
+                            {new Date(item.createdAt).toLocaleString()}
+                            <br />
+                            <span className="block">Updated At:</span>
+                            {new Date(item.updatedAt).toLocaleString()}
                           </td>
                           <td className="py-3 px-4 font-medium text-sm break-all text-justify">
                             {item.name}
                           </td>
-                          <td className="py-3 px-4 max-w-xs ">
-                            <div className="max-w-auto  overflow-y-auto h-96 text-justify  ">
-                              {item.description}
-                            </div>
+                         
+                          <td className="py-3 px-4">
+                          {
+                            item.link ? (
+                              <a
+                                href={item.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:text-blue-800 break-all"
+                              >
+                                Visit
+                              </a>
+                            ):(
+                              <span className="text-gray-500">No Link</span>
+                            )
+                          }
                           </td>
-                          <td className="py-3 px-4">{item.location}</td>
                           <td className="py-3 px-4 flex justify-center gap-2">
                             <button
                               onClick={() => {
@@ -640,4 +615,4 @@ function ResearchAreas() {
   );
 }
 
-export default ResearchAreas;
+export default ActivitesAndStudentNotifications;

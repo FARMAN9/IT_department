@@ -75,13 +75,18 @@ const Layout = () => {
           secureRouter: true,
         },
         {
-          label: "Department Information",
-          link: "/admin/department-information",
+          label: "Activities & Student Notifications",
+          link: "/admin/activities-and-student-notifications",
+          secureRouter: true,
         },
+        {
+          label: "News & Highlights",
+          link: "/admin/department-information",
+          secureRouter: true,
+        },
+      
         
-        { label: "About Us", link: "/admin/contact-us" },
-        { label: "Our Mission", link: "/" },
-        { label: "Our Vision", link: "/admin/vision" },
+        
       ],
     },
     {

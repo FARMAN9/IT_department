@@ -21,7 +21,8 @@ export const PostAcademicCoordinators = async (req, res) => {
             Programe: req.body.Programe,
             Batch: req.body.Batch,
             Semester: req.body.Semester,
-            Session: req.body.Session
+            Session: req.body.Session,
+            Name: req.body.Name
         });
         res.status(201).json({data:newAcademicCoordinators,
             message:"Academic Coordinator Created Successfully"

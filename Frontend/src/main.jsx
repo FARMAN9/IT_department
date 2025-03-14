@@ -50,12 +50,13 @@ import AdminPhdScholars from "./components/Admin/People/PhdScholars.jsx";
 import AdminStaff from "./components/Admin/People/Staffs.jsx";
 import TopPlacements from "./components/Admin/People/TopPlacements.jsx";
 import TopPlacementCard from "./components/Placements/TopPlacementCard.jsx";
-import ResearchAreaAdmin from "./components/Admin/ResearchAndLabs/ResearchAreas";
 import DepartmentsLabs from "./components/Admin/ResearchAndlabs/DepartmentsLabs.jsx";
 import ResearchLabsAdmin from "./components/Admin/ResearchAndlabs/ResearchLabs.jsx";
 import ProjectsAdmin from "./components/Admin/ResearchAndlabs/Projects.jsx";
 import LabDetails from "./components/ResearchAndLabs/LabDetails.jsx";
 import AdminFaculty from "./components/Admin/People/Faculty.jsx";
+import ResearchAreasAdmin from "./components/Admin/ResearchAndlabs/ResearchAreasAdmin.jsx";
+import ActivitesAndStudentNotifications from "./components/Admin/ActivitiesAndNotifications/ActivitesAndStudentNotifications.jsx";
 
 const router = createBrowserRouter([
   {
@@ -254,7 +255,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/labs/research-areas",
-        element: <ResearchAreaAdmin />,
+        element: <ResearchAreasAdmin />,
       },
       {
         path: "/admin/labs/departments-labs",
@@ -271,6 +272,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/people/faculty",
         element: <AdminFaculty />,
+      },
+      {
+        path: "/admin/activities-and-student-notifications",
+        element: <ActivitesAndStudentNotifications />,
       },
     ],
   },

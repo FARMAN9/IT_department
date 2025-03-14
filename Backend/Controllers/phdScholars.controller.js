@@ -3,19 +3,6 @@ import { asFiletoCloud } from "../Utility/Utility.js";
 
 //rename phd scholars controller
 
-export const GetPhdScholarsBBBB = async (req, res) => {
-  try {
-    const PhdScholars = await PhdScholarsModel.find({}).sort(
-      { createdAt: -1 } || { updatedAt: -1 }
-    );
-    res
-      .status(200)
-      .json({ data: PhdScholars, message: "PhdScholars Fetched Successfully" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: error.message });
-  }
-};
 
 export const GetPhdscholars = async (req, res) => {
   try {

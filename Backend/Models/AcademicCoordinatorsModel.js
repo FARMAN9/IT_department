@@ -20,9 +20,11 @@ const AcademicCoordinatorsSchema = new mongoose.Schema({
     Session:{
         type: String,
         required: true
+    },
+    Name:{
+        type: String,
+        required: true
     }
-    
-    
 
 },{timestamps:true})
 

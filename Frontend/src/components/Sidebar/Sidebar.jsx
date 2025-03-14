@@ -76,8 +76,8 @@ const AcademicSidebar = ({ adminNavopen, menuItems }) => {
         transition={{ type: "tween", duration: 0.3 }}
       >
         <nav className="flex flex-col h-full p-2">
-          {menuItems.map((item) => (
-            <div key={item.id}>
+          {menuItems.map((item,index) => (
+            <div key={index}>
               <NavLink
                 to={item.link}
                 onClick={(e) => handleMenuItemClick(e, item)}
