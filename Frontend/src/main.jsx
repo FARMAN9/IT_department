@@ -1,6 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
+import { AuthProvider } from "./AuthContext/AuthContext";
+import ProtectedRoute  from "./ProtectedRoute/ProtectedRoute.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Main from "./components/Main/main.jsx";
 import Layout from "./Layouts/Layout.jsx";
@@ -57,7 +59,7 @@ import LabDetails from "./components/ResearchAndLabs/LabDetails.jsx";
 import AdminFaculty from "./components/Admin/People/Faculty.jsx";
 import ResearchAreasAdmin from "./components/Admin/ResearchAndlabs/ResearchAreasAdmin.jsx";
 import ActivitesAndStudentNotifications from "./components/Admin/ActivitiesAndNotifications/ActivitesAndStudentNotifications.jsx";
-
+import Dashboard from "./components/Facilities/Dashboard/Dashboard.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -187,7 +189,7 @@ const router = createBrowserRouter([
   }, //admin routes
   {
     path: "/admin",
-    element: <AdminLayout />,
+    element: <ProtectedRoute requiredRole="Admin" > <AdminLayout /> </ProtectedRoute>,
     children: [
       {
         path: "/admin",
@@ -281,13 +283,16 @@ const router = createBrowserRouter([
   },
   {
     path: "/faculty",
-    element: <FacilitiesLayout />,
+    element: <ProtectedRoute requiredRole="user" > <FacilitiesLayout /> </ProtectedRoute>,
     children: [
       {
         path: "/faculty",
-        element: <Main />,
+        element: <Dashboard />,
       },
-      {},
+      {
+        path: "/faculty/dashboard",
+        element: <Dashboard />,
+      },
     ],
   },
 ]);
@@ -295,13 +300,15 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
+    <AuthProvider>
       <RouterProvider
-        router={router}
+        router={router }
         future={{
           v7_startTransition: true,
         }}
       />
       {/* <App /> */}
+    </AuthProvider>
     </Provider>
   </StrictMode>
 );

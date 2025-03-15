@@ -28,6 +28,7 @@ import DepartmentsLabrouter from "./Routers/DepartmentsLabrouter.js";
 import ProjectsRouter from "./Routers/Projectsrouter.js";
 import ResearchLabsRouter from "./Routers/ResearchLabrouter.js";
 import ActivitiesAndStudentsNotificationsrouters from "./Routers/ActivitiesAndStudentsNotificationsrouters.js";
+import TokenValidatorRouter from "./Routers/TokenValidator.router.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -113,6 +114,7 @@ app.use("/api", DepartmentsLabrouter);
 app.use("/api", ProjectsRouter);
 app.use("/api", ResearchLabsRouter);
 app.use("/api", ActivitiesAndStudentsNotificationsrouters);
+app.use("/api", TokenValidatorRouter);
 
 // Start the server
 app.listen(PORT, () => {

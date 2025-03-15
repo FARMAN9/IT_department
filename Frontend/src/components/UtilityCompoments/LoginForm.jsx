@@ -1,20 +1,18 @@
 import React, { useState, memo } from "react";
 import { useForm } from "react-hook-form";
-import MainCard from "../Activites/MainCard";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import axios from "axios";
-import Alert from "../UtilityCompoments/Alert";
-import toast from "react-hot-toast";
 import { HiEye, HiEyeOff, HiMail } from "react-icons/hi";
+import toast from "react-hot-toast";
+import MainCard from "../Activites/MainCard";
+import { useAuth } from "../../AuthContext/AuthContext";
 
 const LoginForm = () => {
   const location = useLocation();
-  const from = location.state?.from ?? "Student login";
-  const [alert, setAlert] = useState(null);
-
-  const [error, setError] = useState("");
+  const from = location.state?.from ?? "login";
+  const { login } = useAuth(); // Using context
   const navigate = useNavigate();
-
+  const [alert, setAlert] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -24,43 +22,30 @@ const LoginForm = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log("data sent:", data);
-
     try {
       const res = await axios.post(`http://localhost:4000/api/signIn`, data, {
         withCredentials: true,
       });
-      console.log(res.data.message); //
 
       if (from === "Admin login" && res.data.data.role === "user") {
-        setAlert({ type: "error", message: "please check your credentials" });
-        toast.error("please check your credentials");
-        setTimeout(() => {
-          setAlert(null);
-        }, 3000);
+        setAlert({ type: "error", message: "Please check your credentials" });
+        toast.error("Please check your credentials");
       } else {
-        console.log(res.data.data);
+        login(res.data.data); // Store user in context
         setAlert({ type: "success", message: res.data.message });
-        toast.success(res.data.message);
-        setTimeout(() => {
-          setAlert(null);
-        }, 3000);
+        toast.success(res.data.message + `  welcome ${res.data.data.name}`);
+
+
+
 
         navigate(from === "Admin login" ? "/admin" : "/faculty");
       }
-
-      // navigate based on user type
-      // navigate(from === "Student login" ? "/student" : "/faculty");
     } catch (error) {
-      console.error("Login Error:", error); // Log full error for debugging
       setAlert({
         type: "error",
         message: error.response?.data?.message || "Something went wrong",
       });
       toast.error(error.response?.data?.message || "Something went wrong");
-      setTimeout(() => {
-        setAlert(null);
-      }, 3000);
     }
   };
 
@@ -71,7 +56,6 @@ const LoginForm = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             Sign In
           </h2>
-
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -81,10 +65,9 @@ const LoginForm = () => {
                 <input
                   type="email"
                   {...register("email", {
-                    required: true,
+                    required: "Email is required",
                     pattern: {
-                      value:
-                        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
+                      value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                       message: "Invalid email address",
                     },
                   })}
@@ -110,14 +93,10 @@ const LoginForm = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   {...register("password", {
-                    required: true,
+                    required: "Password is required",
                     minLength: {
                       value: 6,
-                      message: "Password must be at least 8 characters",
-                    },
-                    pattern: {
-                      value: /^[^\s]+$/,
-                      message: "Password should not contain spaces",
+                      message: "Password must be at least 6 characters",
                     },
                   })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
@@ -138,22 +117,13 @@ const LoginForm = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <label className="flex items-center"></label>
-              <a
-                href="#"
-                className="text-sm text-indigo-600 hover:text-indigo-500"
-              >
-                Forgot password?
-              </a>
-            </div>
-
             <button
               type="submit"
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors"
             >
               Sign In
             </button>
+
             {alert && (
               <div
                 className={`alert ${
@@ -166,9 +136,9 @@ const LoginForm = () => {
           </form>
 
           <div className="mt-6 text-center text-sm text-gray-600">
-            Don't have an account?
+            Don't have an account?{" "}
             {from === "Faculty login" ? (
-              <p> contact to admin</p>
+              <p>Contact the admin</p>
             ) : (
               <Link
                 to="/signup"
@@ -185,3 +155,4 @@ const LoginForm = () => {
 };
 
 export default memo(LoginForm);
+
